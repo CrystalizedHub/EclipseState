@@ -98,12 +98,8 @@
     pointer-events: none;
   }
 
-  /* Visitor counter — fixed top-right on desktop */
+  /* === VISITOR COUNTER === */
   .visitor-counter {
-    position: fixed;
-    top: 18px;
-    right: 22px;
-    z-index: 9999;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -116,8 +112,14 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   }
 
-  /* Wrapper used only on mobile to keep counter in-flow */
-  .visitor-wrap {
+  .visitor-counter.desktop {
+    position: fixed;
+    top: 18px;
+    right: 22px;
+    z-index: 9999;
+  }
+
+  .visitor-mobile-wrap {
     display: none;
     justify-content: center;
     margin: 14px 0 0;
@@ -125,14 +127,9 @@
     z-index: 3;
   }
 
-  /* On mobile: drop the counter into the flow between tabs and header */
   @media (max-width: 640px) {
-    .visitor-wrap { display: flex; }
-    .visitor-counter {
-      position: static;
-      top: auto; right: auto;
-      margin: 0;
-    }
+    .visitor-counter.desktop { display: none !important; }
+    .visitor-mobile-wrap     { display: flex; }
   }
 
   .visitor-dot {
@@ -156,9 +153,20 @@
     letter-spacing: 0.3px;
   }
 
-  .visitor-text span {
+  .visitor-text .visitor-count {
     color: var(--neon);
     font-weight: 800;
+    display: inline-block;
+    min-width: 1.4em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.25s ease, text-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .visitor-text .visitor-count.tweening {
+    color: #b4ffda;
+    text-shadow: 0 0 8px rgba(0,255,136,0.6);
+    transform: scale(1.04);
   }
 
   /* Content wrapper */
@@ -393,9 +401,9 @@
     word-break: break-all;
   }
 
-  .copy-btn {
-    position: absolute;
-    top: 12px; right: 12px;
+  /* Shared style for both copy buttons (main + invite) */
+  .copy-btn,
+  .copy-invite-btn {
     padding: 8px 16px;
     border-radius: 10px;
     border: 1px solid rgba(0,255,136,0.25);
@@ -404,19 +412,29 @@
     font-size: 0.8rem;
     font-weight: 700;
     transition: all 0.25s ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 12px; right: 12px;
     z-index: 5;
   }
 
-  .copy-btn:hover {
+  .copy-btn:hover,
+  .copy-invite-btn:hover {
     background: rgba(0,255,136,0.2);
     transform: scale(1.05);
     box-shadow: 0 0 16px rgba(0,255,136,0.2);
   }
 
-  .copy-btn.copied {
+  .copy-btn.copied,
+  .copy-invite-btn.copied {
     background: var(--neon);
     color: #000;
     border-color: var(--neon);
@@ -573,9 +591,19 @@
     position: relative;
   }
 
-  .status-fill.up { background: linear-gradient(90deg, #00c853, #00ff88); box-shadow: 0 0 10px rgba(0,255,136,0.3); }
-  .status-fill.warn { background: linear-gradient(90deg, #ffab00, #ffd740); box-shadow: 0 0 10px rgba(255,215,64,0.25); }
-  .status-fill.down { background: linear-gradient(90deg, #d50000, #ff5252); box-shadow: 0 0 10px rgba(255,82,82,0.25); }
+  /* Brighter, fully-green bars */
+  .status-fill.up   {
+    background: linear-gradient(90deg, #00ff88 0%, #5cffb0 100%);
+    box-shadow: 0 0 12px rgba(0,255,136,0.55), inset 0 0 6px rgba(255,255,255,0.15);
+  }
+  .status-fill.warn {
+    background: linear-gradient(90deg, #ffd740 0%, #ffe98a 100%);
+    box-shadow: 0 0 12px rgba(255,215,64,0.45);
+  }
+  .status-fill.down {
+    background: linear-gradient(90deg, #ff5252 0%, #ff8a8a 100%);
+    box-shadow: 0 0 12px rgba(255,82,82,0.45);
+  }
 
   .status-pct {
     text-align: right;
@@ -623,9 +651,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
     width: 100%;
-    max-width: 340px;
-    padding: 12px 18px;
+    max-width: 360px;
+    padding: 12px 14px 12px 18px;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(0,255,136,0.2);
     border-radius: 12px;
@@ -637,22 +666,26 @@
     font-weight: 700;
     font-size: 1rem;
     letter-spacing: 0.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .copy-invite-btn {
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: 1px solid rgba(0,255,136,0.25);
-    background: rgba(0,255,136,0.1);
-    color: var(--neon);
-    font-weight: 700;
-    font-size: 0.82rem;
-    transition: all 0.2s;
-    cursor: none;
-    white-space: nowrap;
+  /* Mobile: stack invite link on top, full-width copy button under it */
+  @media (max-width: 640px) {
+    .invite-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .invite-code { text-align: center; }
+    .invite-box .copy-invite-btn {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+    }
   }
-
-  .copy-invite-btn:hover { background: rgba(0,255,136,0.2); transform: scale(1.05); }
 
   .discord-btn {
     display: inline-flex;
@@ -734,6 +767,12 @@
 <!-- Interactive dots / click FX canvas -->
 <canvas id="fx-canvas"></canvas>
 
+<!-- DESKTOP visitor counter (fixed top-right) -->
+<div class="visitor-counter desktop">
+  <div class="visitor-dot"></div>
+  <div class="visitor-text"><span class="visitor-count">5</span> online now</div>
+</div>
+
 <!-- Tabs -->
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('main')">Main</button>
@@ -741,11 +780,11 @@
   <button class="tab-btn" onclick="showTab('info')">Information</button>
 </div>
 
-<!-- Visitor counter (in-flow wrapper used on mobile, fixed on desktop) -->
-<div class="visitor-wrap">
-  <div class="visitor-counter">
+<!-- MOBILE visitor counter (in-flow, between tabs and logo) -->
+<div class="visitor-mobile-wrap">
+  <div class="visitor-counter mobile">
     <div class="visitor-dot"></div>
-    <div class="visitor-text"><span id="visitor-count">5</span> online now</div>
+    <div class="visitor-text"><span class="visitor-count">5</span> online now</div>
   </div>
 </div>
 
@@ -846,11 +885,17 @@
           </div>
           <div class="game-body">
             <ul class="feature-list">
-              <li><span class="feature-check">✦</span> Silent Aimbot with FOV Circle</li>
-              <li><span class="feature-check">✦</span> Full Player / Item ESP</li>
-              <li><span class="feature-check">✦</span> Wallbang &amp; Bullet Redirect</li>
-              <li><span class="feature-check">✦</span> Auto Weapon Swap &amp; Rapid Fire</li>
-              <li><span class="feature-check">✦</span> Stream-Proof Overlay Mode</li>
+              <li><span class="feature-check">✦</span> Silent aim</li>
+              <li><span class="feature-check">✦</span> Aimbot</li>
+                            <li><span class="feature-check">✦</span> RageBot</li>
+                            <li><span class="feature-check">✦</span> TriggerBot</li>
+              <li><span class="feature-check">✦</span> Unlock all Skins</li>
+              <li><span class="feature-check">✦</span> Bullet Tracers</li>
+
+                            <li><span class="feature-check">✦</span> Player ESP</li>
+                                          <li><span class="feature-check">✦</span> Device Spoofing</li>
+                                          <li><span class="feature-check">✦</span> Configurations</li>
+                                                        <li><span class="feature-check">✦</span> So Much More Features To Explore</li>
             </ul>
           </div>
         </div>
@@ -866,11 +911,18 @@
           </div>
           <div class="game-body">
             <ul class="feature-list">
-              <li><span class="feature-check">✦</span> Auto Farm Resources</li>
-              <li><span class="feature-check">✦</span> Kill Aura &amp; God Swing</li>
-              <li><span class="feature-check">✦</span> Speed &amp; Fly Toggle</li>
-              <li><span class="feature-check">✦</span> Auto Craft &amp; Base Builder</li>
-              <li><span class="feature-check">✦</span> Player ESP &amp; Totem Finder</li>
+              <li><span class="feature-check">✦</span> Auto Farm Gold</li>
+              <li><span class="feature-check">✦</span> Kill Aura &amp; Killaura</li>
+              <li><span class="feature-check">✦</span> Speed &amp; Fly Auto Rebirth</li>
+              <li><span class="feature-check">✦</span> Auto Craft &amp; Esp</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; Critter Aura</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; Resource Aura</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; Auto Heal</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; Extra Fps</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; Disable D Rendering</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; Hipheight Walkspeed Jumpower Modifiers</li>
+              <li><span class="feature-check">✦</span> Configurations</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; So Much More Features To Explore</li>
             </ul>
           </div>
         </div>
@@ -886,11 +938,12 @@
           </div>
           <div class="game-body">
             <ul class="feature-list">
-              <li><span class="feature-check">✦</span> Auto Shoot with Trigger-Bot</li>
-              <li><span class="feature-check">✦</span> God Mode &amp; Infinite HP</li>
-              <li><span class="feature-check">✦</span> Infinite Ammo / No Reload</li>
-              <li><span class="feature-check">✦</span> Zombie ESP &amp; Radar</li>
-              <li><span class="feature-check">✦</span> Auto Cash Farm Loop</li>
+              <li><span class="feature-check">✦</span> Killaura</li>
+              <li><span class="feature-check">✦</span> Auto Class</li>
+              <li><span class="feature-check">✦</span> Do Inf Damage</li>
+              <li><span class="feature-check">✦</span> Configurations</li>
+              <li><span class="feature-check">✦</span> Inf Galatic Coins</li>
+              <li><span class="feature-check">✦</span> Player ESP &amp; So Much More Features To Explore</li>
             </ul>
           </div>
         </div>
@@ -915,10 +968,10 @@
         <div class="status-row">
           <div class="status-meta">
             <span class="status-name">Booga Booga</span>
-            <span class="status-tag warn">Degraded</span>
+            <span class="status-tag up">Operational</span>
           </div>
-          <div class="status-track"><div class="status-fill warn" id="bar2" data-w="94"></div></div>
-          <div class="status-pct">94.2% Uptime — reports from some users</div>
+          <div class="status-track"><div class="status-fill up" id="bar2" data-w="100"></div></div>
+          <div class="status-pct">100% Uptime</div>
         </div>
         <div class="status-row">
           <div class="status-meta">
@@ -944,7 +997,10 @@
       <div class="buy-buttons">
         <div class="invite-box">
           <span class="invite-code">discord.gg/crystalized</span>
-          <button class="copy-invite-btn" onclick="copyInvite()" id="copyInviteBtn">Copy Invite</button>
+          <button class="copy-invite-btn" id="copyInviteBtn" onclick="copyInvite()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Copy
+          </button>
         </div>
         <a href="https://discord.gg/crystalized" target="_blank" class="discord-btn" rel="noopener noreferrer" onclick="return tryDiscord()">
           <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
@@ -969,12 +1025,7 @@
           Privacy First
         </div>
         <div class="info-text">
-          <p>
-            quick one on privacy, we don't log anything. no IPs, no session tracking, none of that creepy stuff buried in 90% of websites' terms pages. i made this with a couple friends who actually use scripts ourselves so the last thing we want is a database sitting around with our own users in it lol. the servers wipe everything the second you close the tab and honestly that's pretty much the whole policy.
-          </p>
-          <p>
-            updates also go out basically every day, not the "we pushed one fix last month" thing some hubs pull. everything gets tested before it ships so silent aim isn't randomly locking onto walls, ESP doesn't tank your fps, and the bypass actually holds up because we put real hours into it. free users get the same working core as anyone who paid, locking basic stuff behind a paywall is kinda scummy imo. if you're sick of hubs breaking every other week you'll probably like it here.
-          </p>
+          <p>I dont log, this isint a rat, JNKIE is a keysystem platform.</p>
         </div>
       </div>
     </div>
@@ -1006,7 +1057,6 @@ const ring = document.getElementById('cursor-ring');
 const point = document.getElementById('cursor-point');
 
 if (IS_TOUCH) {
-  // Make sure they're truly gone on touch devices.
   ring.style.display = 'none';
   point.style.display = 'none';
 } else {
@@ -1033,48 +1083,78 @@ if (IS_TOUCH) {
   });
 }
 
-/* ================= VISITOR COUNTER (fake fluctuation + this-user bump) ================= */
+/* ================= VISITOR COUNTER (smooth count-up/down) ================= */
 (function(){
-  const el = document.getElementById('visitor-count');
-  // Random base 3-18, +1 because YOU just joined.
-  let current = Math.floor(Math.random() * 16) + 3 + 1;
-  el.textContent = current;
+  const els = document.querySelectorAll('.visitor-count');
+  let current = Math.floor(Math.random() * 16) + 3 + 1; // base + you just joined
+  let displayed = current;
+  let tweenId = null;
+
+  function paint(val){
+    const txt = String(val);
+    els.forEach(function(e){ e.textContent = txt; });
+  }
+  paint(current);
+
+  // Smooth eased tween between two integers
+  function tweenTo(target){
+    if(target === displayed) return;
+    if(tweenId) cancelAnimationFrame(tweenId);
+
+    const from = displayed;
+    const to   = target;
+    const diff = Math.abs(to - from);
+    // Duration scales a tiny bit with distance, capped so big jumps still feel snappy
+    const duration = Math.min(1200, 350 + diff * 90);
+    const start = performance.now();
+
+    els.forEach(function(e){ e.classList.add('tweening'); });
+
+    function step(now){
+      const t = Math.min(1, (now - start) / duration);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.round(from + (to - from) * eased);
+      if(val !== displayed){
+        displayed = val;
+        paint(displayed);
+      }
+      if(t < 1){
+        tweenId = requestAnimationFrame(step);
+      } else {
+        tweenId = null;
+        displayed = to;
+        paint(displayed);
+        setTimeout(function(){
+          els.forEach(function(e){ e.classList.remove('tweening'); });
+        }, 200);
+      }
+    }
+    tweenId = requestAnimationFrame(step);
+  }
 
   function updateVisitors(){
     const roll = Math.random();
     let change;
-    if(roll < 0.15) change = Math.floor(Math.random() * 5) + 2;
-    else if(roll < 0.30) change = -(Math.floor(Math.random() * 4) + 1);
+    if(roll < 0.15) change = Math.floor(Math.random() * 5) + 2;   // +2..+6
+    else if(roll < 0.30) change = -(Math.floor(Math.random() * 4) + 1); // -1..-4
     else if(roll < 0.70) change = 1;
     else if(roll < 0.85) change = -1;
     else change = 0;
 
     const next = current + change;
-    if(next >= 2 && next <= 30){
-      current = next;
-    } else {
-      current = Math.max(2, Math.min(30, next));
-    }
-    el.textContent = current;
+    current = Math.max(2, Math.min(30, next));
+    tweenTo(current);
   }
 
   function scheduleNext(){
     const delay = Math.floor(Math.random() * 10000) + 4000;
-    setTimeout(function(){
-      updateVisitors();
-      scheduleNext();
-    }, delay);
+    setTimeout(function(){ updateVisitors(); scheduleNext(); }, delay);
   }
   scheduleNext();
 })();
 
-/* ================= GLOBAL STAT COUNTERS =================
-   - Executions:  persisted server-side (shared across all visitors).
-                  Increments only when someone copies the script.
-   - Keys/Discord: deterministic, time-based growth anchored to NOW
-                   so the displayed value is the same for every visitor
-                   and grows from a sensible baseline.
-================================================================= */
+/* ================= GLOBAL STAT COUNTERS ================= */
 (function(){
   const NS  = 'crystalized-hub-v1';
   const API = 'https://abacus.jasoncameron.dev';
@@ -1088,7 +1168,7 @@ if (IS_TOUCH) {
 
   function bump(el){
     el.classList.remove('bump');
-    void el.offsetWidth; // restart animation
+    void el.offsetWidth;
     el.classList.add('bump');
     setTimeout(function(){ el.classList.remove('bump'); }, 700);
   }
@@ -1098,7 +1178,6 @@ if (IS_TOUCH) {
     if(animate) bump(el);
   }
 
-  /* ---------- localStorage fallback ---------- */
   function lsGet(k, def){
     try { const v = parseInt(localStorage.getItem('crys_' + k), 10); return isFinite(v) ? v : def; }
     catch(e){ return def; }
@@ -1107,7 +1186,7 @@ if (IS_TOUCH) {
     try { localStorage.setItem('crys_' + k, String(v)); } catch(e){}
   }
 
-  /* ---------- EXECUTIONS (server-persisted) ---------- */
+  /* EXECUTIONS — server-persisted */
   let executions = lsGet('executions', EXEC_INIT);
   setValue(execEl, executions, false);
 
@@ -1121,7 +1200,7 @@ if (IS_TOUCH) {
         lsSet('executions', executions);
         setValue(execEl, executions, false);
       }
-    } catch(e){ /* offline / blocked */ }
+    } catch(e){}
   })();
 
   window.__incrementExecutions = async function(){
@@ -1136,15 +1215,12 @@ if (IS_TOUCH) {
         lsSet('executions', executions);
         setValue(execEl, executions, false);
       }
-    } catch(e){ /* keep optimistic */ }
+    } catch(e){}
   };
 
-  /* ---------- KEYS CREATED ----------
-     Base 3,950. +1 every 17 min. Anchored to TODAY so it
-     stays around 4k and grows naturally from here.
-  ------------------------------------- */
+  /* KEYS: base 3,950, +1 every 17 min */
   const KEYS_BASE    = 3950;
-  const KEYS_EPOCH   = Date.UTC(2026, 4, 26, 0, 0, 0); // 2026-05-26 00:00 UTC
+  const KEYS_EPOCH   = Date.UTC(2026, 4, 26, 0, 0, 0);
   const KEYS_STEP_MS = 17 * 60 * 1000;
   function computeKeys(){
     const elapsed = Date.now() - KEYS_EPOCH;
@@ -1152,10 +1228,7 @@ if (IS_TOUCH) {
     return KEYS_BASE + Math.floor(elapsed / KEYS_STEP_MS);
   }
 
-  /* ---------- DISCORD MEMBERS ----------
-     Base 2,290. +2 every 13 min (averages 2 every 6-20 min as requested).
-     Same epoch as keys so it grows from current 2.3k.
-  --------------------------------------- */
+  /* DISCORD: base 2,290, +2 every 13 min */
   const DISC_BASE    = 2290;
   const DISC_EPOCH   = Date.UTC(2026, 4, 26, 0, 0, 0);
   const DISC_STEP_MS = 13 * 60 * 1000;
@@ -1222,21 +1295,24 @@ function copyScript(){
 function copyInvite(){
   var text = 'discord.gg/crystalized';
   var btn = document.getElementById('copyInviteBtn');
-  var orig = btn.textContent;
-  function done(){
-    btn.textContent = 'Copied!';
-    btn.style.background = 'rgba(0,255,136,0.25)';
-    setTimeout(function(){ btn.textContent = orig; btn.style.background = ''; }, 2000);
+  var originalHTML = btn.innerHTML;
+  function finish(){
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+    setTimeout(function(){
+      btn.innerHTML = originalHTML;
+      btn.classList.remove('copied');
+    }, 2000);
   }
   if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(text).then(done);
+    navigator.clipboard.writeText(text).then(finish).catch(finish);
   } else {
     var ta = document.createElement('textarea');
     ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
     document.body.appendChild(ta); ta.select();
     try{ document.execCommand('copy'); }catch(e){}
     document.body.removeChild(ta);
-    done();
+    finish();
   }
 }
 
@@ -1291,7 +1367,6 @@ const dots = [];
 const DOT_COUNT = 85;
 
 for(let i=0;i<DOT_COUNT;i++){
-  // Slowed ~3x from original
   let vx = (Math.random()-0.5)*0.4;
   let vy = (Math.random()-0.5)*0.4;
   if(Math.abs(vx)<0.08) vx = vx<0 ? -0.1 : 0.1;
@@ -1389,8 +1464,7 @@ function animate(){
 animate();
 
 window.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; });
-// Click bursts work on both desktop click and mobile tap
 window.addEventListener('click', function(e){ bursts.push(new Burst(e.clientX,e.clientY)); });
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02034a50d8bd06a',t:'MTc3OTgzNDQzMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
