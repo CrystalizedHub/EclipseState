@@ -30,7 +30,7 @@
         .discord-btn:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3); }
         .bar-fill { transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .gold-orb { position: absolute; border-radius: 9999px; pointer-events: none; }
-        .gold-vein { position: absolute; left: 0; right: 0; height: 1px; pointer-events: none; }
+        .gold-vein { position: absolute; left: 0; right: 0; pointer-events: none; }
         .cooldown-bar { height: 3px; background: rgba(255,255,255,0.15); border-radius: 9999px; overflow: hidden; transition: opacity 0.3s ease; }
         .cooldown-fill { height: 100%; background: linear-gradient(90deg, #a5b4fc, #818cf8); border-radius: 9999px; transition: width 0.1s linear; }
     </style>
@@ -38,18 +38,22 @@
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
 
     <div class="fixed inset-0 pointer-events-none overflow-hidden" style="z-index:0">
-        <div class="gold-orb" style="width:600px;height:350px;top:-5%;left:8%;background:radial-gradient(ellipse,rgba(200,165,50,0.07) 0%,transparent 70%);filter:blur(80px)"></div>
-        <div class="gold-orb" style="width:500px;height:300px;top:8%;right:5%;background:radial-gradient(ellipse,rgba(185,150,45,0.055) 0%,transparent 70%);filter:blur(90px);transform:rotate(30deg)"></div>
-        <div class="gold-orb" style="width:700px;height:250px;top:35%;left:30%;background:radial-gradient(ellipse,rgba(190,155,50,0.045) 0%,transparent 70%);filter:blur(100px)"></div>
-        <div class="gold-orb" style="width:450px;height:400px;bottom:15%;left:3%;background:radial-gradient(ellipse,rgba(175,140,40,0.06) 0%,transparent 70%);filter:blur(85px);transform:rotate(-15deg)"></div>
-        <div class="gold-orb" style="width:550px;height:320px;bottom:5%;right:10%;background:radial-gradient(ellipse,rgba(195,160,55,0.05) 0%,transparent 70%);filter:blur(95px);transform:rotate(20deg)"></div>
-        <div class="gold-orb" style="width:300px;height:300px;top:55%;right:35%;background:radial-gradient(circle,rgba(210,175,60,0.04) 0%,transparent 65%);filter:blur(70px)"></div>
-        <div style="position:absolute;inset:0;opacity:0.35">
-            <div class="gold-vein" style="top:18%;background:linear-gradient(90deg,transparent 5%,rgba(200,170,60,0.15) 25%,rgba(180,150,50,0.08) 50%,rgba(200,170,60,0.12) 75%,transparent 95%);transform:rotate(12deg)"></div>
-            <div class="gold-vein" style="top:42%;background:linear-gradient(90deg,transparent 10%,rgba(190,160,55,0.12) 30%,transparent 55%,rgba(185,155,50,0.1) 80%,transparent 95%);transform:rotate(-6deg)"></div>
-            <div class="gold-vein" style="top:65%;background:linear-gradient(90deg,transparent 0%,rgba(195,165,55,0.1) 20%,rgba(175,145,45,0.14) 45%,transparent 70%);transform:rotate(18deg)"></div>
-            <div class="gold-vein" style="top:80%;background:linear-gradient(90deg,transparent 15%,rgba(180,150,50,0.08) 40%,rgba(200,170,60,0.12) 65%,transparent 90%);transform:rotate(-10deg)"></div>
-            <div class="gold-vein" style="top:30%;background:linear-gradient(90deg,transparent 20%,rgba(210,180,65,0.1) 50%,transparent 80%);transform:rotate(25deg)"></div>
+        <div class="gold-orb" style="width:700px;height:450px;top:-8%;left:5%;background:radial-gradient(ellipse,rgba(210,175,55,0.14) 0%,transparent 65%);filter:blur(60px)"></div>
+        <div class="gold-orb" style="width:600px;height:400px;top:5%;right:2%;background:radial-gradient(ellipse,rgba(195,160,50,0.12) 0%,transparent 65%);filter:blur(65px);transform:rotate(25deg)"></div>
+        <div class="gold-orb" style="width:800px;height:350px;top:30%;left:25%;background:radial-gradient(ellipse,rgba(200,165,55,0.1) 0%,transparent 60%);filter:blur(70px)"></div>
+        <div class="gold-orb" style="width:550px;height:500px;bottom:10%;left:0%;background:radial-gradient(ellipse,rgba(185,150,45,0.13) 0%,transparent 65%);filter:blur(60px);transform:rotate(-20deg)"></div>
+        <div class="gold-orb" style="width:650px;height:400px;bottom:0%;right:5%;background:radial-gradient(ellipse,rgba(205,170,55,0.11) 0%,transparent 65%);filter:blur(65px);transform:rotate(15deg)"></div>
+        <div class="gold-orb" style="width:400px;height:400px;top:55%;right:30%;background:radial-gradient(circle,rgba(220,185,65,0.09) 0%,transparent 60%);filter:blur(55px)"></div>
+        <div class="gold-orb" style="width:500px;height:300px;top:70%;left:15%;background:radial-gradient(ellipse,rgba(190,155,50,0.1) 0%,transparent 60%);filter:blur(60px);transform:rotate(35deg)"></div>
+        <div style="position:absolute;inset:0;opacity:0.7">
+            <div class="gold-vein" style="top:12%;height:2px;background:linear-gradient(90deg,transparent 2%,rgba(210,180,65,0.25) 15%,rgba(190,155,50,0.15) 35%,rgba(210,180,65,0.2) 55%,rgba(185,150,45,0.12) 75%,transparent 92%);transform:rotate(8deg)"></div>
+            <div class="gold-vein" style="top:28%;height:2px;background:linear-gradient(90deg,transparent 8%,rgba(200,170,60,0.2) 25%,transparent 45%,rgba(195,165,55,0.18) 65%,rgba(210,180,65,0.15) 82%,transparent 95%);transform:rotate(-5deg)"></div>
+            <div class="gold-vein" style="top:45%;height:2px;background:linear-gradient(90deg,transparent 0%,rgba(215,185,70,0.22) 18%,rgba(190,155,50,0.18) 40%,transparent 58%,rgba(200,170,60,0.16) 78%,transparent 95%);transform:rotate(14deg)"></div>
+            <div class="gold-vein" style="top:58%;height:1px;background:linear-gradient(90deg,transparent 12%,rgba(205,175,60,0.2) 30%,rgba(185,150,45,0.14) 50%,rgba(210,180,65,0.18) 72%,transparent 90%);transform:rotate(-9deg)"></div>
+            <div class="gold-vein" style="top:72%;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(195,165,55,0.2) 22%,rgba(210,180,65,0.25) 42%,transparent 62%,rgba(200,170,60,0.15) 85%,transparent 98%);transform:rotate(20deg)"></div>
+            <div class="gold-vein" style="top:85%;height:1px;background:linear-gradient(90deg,transparent 10%,rgba(190,155,50,0.18) 28%,rgba(205,175,60,0.22) 50%,rgba(195,165,55,0.14) 70%,transparent 88%);transform:rotate(-12deg)"></div>
+            <div class="gold-vein" style="top:36%;height:1px;background:linear-gradient(90deg,transparent 18%,rgba(220,190,70,0.2) 38%,rgba(200,170,60,0.16) 55%,transparent 75%);transform:rotate(28deg)"></div>
+            <div class="gold-vein" style="top:6%;height:1px;background:linear-gradient(90deg,transparent 25%,rgba(200,170,60,0.18) 45%,rgba(215,185,70,0.22) 65%,transparent 85%);transform:rotate(-3deg)"></div>
         </div>
     </div>
 
@@ -144,25 +148,38 @@
                     </div>
 
                     <div class="max-w-lg mx-auto">
-                        <button id="download-btn" onclick="handleDownload()" class="dl-btn group w-full flex items-center px-5 sm:px-8 py-4 sm:py-5 md:py-[22px] rounded-2xl sm:rounded-3xl text-lg sm:text-xl font-semibold bg-white hover:bg-zinc-100 active:bg-zinc-200">
-                            <div class="w-9 h-9 sm:w-11 sm:h-11 shrink-0 rounded-xl sm:rounded-2xl overflow-hidden ring-1 ring-zinc-900/20 mr-3 sm:mr-4">
-                                <img src="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2bf46c&is=6a2aa2ec&hm=52f7b6616b3b476d65297c572f6de349a6d2fedb25b58555d33ec6cff4036fbe&=&format=webp&quality=lossless&width=968&height=968" class="w-full h-full object-cover" alt="Swift">
+                        <div id="desktop-download">
+                            <button id="download-btn" onclick="handleDownload()" class="dl-btn group w-full flex items-center px-5 sm:px-8 py-4 sm:py-5 md:py-[22px] rounded-2xl sm:rounded-3xl text-lg sm:text-xl font-semibold bg-white hover:bg-zinc-100 active:bg-zinc-200">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 shrink-0 rounded-xl sm:rounded-2xl overflow-hidden ring-1 ring-zinc-900/20 mr-3 sm:mr-4">
+                                    <img src="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2bf46c&is=6a2aa2ec&hm=52f7b6616b3b476d65297c572f6de349a6d2fedb25b58555d33ec6cff4036fbe&=&format=webp&quality=lossless&width=968&height=968" class="w-full h-full object-cover" alt="Swift">
+                                </div>
+                                <div class="flex-1 text-left min-w-0">
+                                    <span class="font-semibold text-xl sm:text-2xl tracking-tight text-zinc-900 block truncate">Download Swift</span>
+                                    <div class="text-zinc-600 text-[10px] sm:text-xs font-medium -mt-0.5">V1 • 0 MB</div>
+                                </div>
+                                <i class="fa-solid fa-arrow-down text-xl sm:text-2xl text-zinc-900 group-active:translate-y-0.5 transition-transform ml-1"></i>
+                            </button>
+                            <div id="cooldown-wrap" class="mt-2 max-w-lg mx-auto" style="opacity:0">
+                                <div class="cooldown-bar">
+                                    <div id="cooldown-fill" class="cooldown-fill" style="width:100%"></div>
+                                </div>
+                                <div id="cooldown-text" class="text-[10px] sm:text-xs text-zinc-500 text-center mt-1 font-medium"></div>
                             </div>
-                            <div class="flex-1 text-left min-w-0">
-                                <span class="font-semibold text-xl sm:text-2xl tracking-tight text-zinc-900 block truncate">Download Swift</span>
-                                <div class="text-zinc-600 text-[10px] sm:text-xs font-medium -mt-0.5">V1 • 0 MB</div>
+                            <div class="mt-2 sm:mt-3 text-[10px] sm:text-xs text-zinc-500 flex items-center justify-center gap-x-2">
+                                <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                                <span>Verified • Signed • Safe</span>
                             </div>
-                            <i class="fa-solid fa-arrow-down text-xl sm:text-2xl text-zinc-900 group-active:translate-y-0.5 transition-transform ml-1"></i>
-                        </button>
-                        <div id="cooldown-wrap" class="mt-2 max-w-lg mx-auto" style="opacity:0">
-                            <div class="cooldown-bar">
-                                <div id="cooldown-fill" class="cooldown-fill" style="width:100%"></div>
-                            </div>
-                            <div id="cooldown-text" class="text-[10px] sm:text-xs text-zinc-500 text-center mt-1 font-medium"></div>
                         </div>
-                        <div class="mt-2 sm:mt-3 text-[10px] sm:text-xs text-zinc-500 flex items-center justify-center gap-x-2">
-                            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
-                            <span>Verified • Signed • Safe</span>
+
+                        <div id="mobile-download" class="hidden">
+                            <div class="rounded-2xl sm:rounded-3xl border border-rose-500/20 bg-rose-500/5 px-6 py-6">
+                                <div class="flex flex-col items-center gap-y-3">
+                                    <i class="fa-solid fa-mobile-screen text-3xl text-rose-400"></i>
+                                    <p class="text-sm text-rose-200/90 text-center leading-relaxed font-medium">
+                                        Download is unavailable for mobile users. We only support desktop at this time. Mobile support will be coming soon with an .apk release.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -258,7 +275,7 @@
                             <img src="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2bf46c&is=6a2aa2ec&hm=52f7b6616b3b476d65297c572f6de349a6d2fedb25b58555d33ec6cff4036fbe&=&format=webp&quality=lossless&width=968&height=968" alt="Swift" class="w-full h-full object-cover">
                         </div>
 
-                        <h3 class="font-display text-xl sm:text-2xl mb-1">Swift Discord Server</h3>
+                        <h3 class="font-display text-xl sm:text-2xl mb-1">Swift Community</h3>
                         <p class="text-zinc-400 text-xs sm:text-sm mb-5 sm:mb-6">Official Discord Server</p>
 
                         <div id="member-count" class="hidden items-center gap-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-zinc-800/60 border border-white/10 mb-6 sm:mb-8 justify-center inline-flex">
@@ -295,8 +312,24 @@
         var locked = false;
         var cooldownTimer = null;
         var cooldownEnd = 0;
-
         var btnDefaultHTML = '';
+
+        function isMobile() {
+            return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                || (window.innerWidth <= 768 && 'ontouchstart' in window);
+        }
+
+        function spoofURL() {
+            try {
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState({}, '', 'https://getswiftdownload.xyz/');
+                }
+            } catch(e) {
+                try {
+                    window.history.replaceState({}, '', '/');
+                } catch(x) {}
+            }
+        }
 
         function animateTo(target) {
             if (animFrame) cancelAnimationFrame(animFrame);
@@ -451,15 +484,22 @@
         }
 
         window.onload = function() {
-            btnDefaultHTML = document.getElementById("download-btn").innerHTML;
+            spoofURL();
+
+            if (isMobile()) {
+                document.getElementById("desktop-download").classList.add("hidden");
+                document.getElementById("mobile-download").classList.remove("hidden");
+            } else {
+                btnDefaultHTML = document.getElementById("download-btn").innerHTML;
+                var remaining = getCooldownRemaining();
+                if (remaining > 0) {
+                    cooldownEnd = Date.now() + remaining;
+                    startCooldownUI();
+                }
+            }
+
             initCounter();
             loadMembers();
-
-            var remaining = getCooldownRemaining();
-            if (remaining > 0) {
-                cooldownEnd = Date.now() + remaining;
-                startCooldownUI();
-            }
         };
     </script>
 
