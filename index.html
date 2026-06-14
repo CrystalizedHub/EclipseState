@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
+        body { font-family: 'Inter', system-ui, sans-serif; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
         .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
         .section { display: none; }
         .section.active { display: block; animation: fadeIn 0.4s ease forwards; }
@@ -111,7 +111,6 @@
                             <div id="counter-display" class="counter-num font-display text-[56px] sm:text-[80px] md:text-[110px] tracking-[-4px] sm:tracking-[-6px] text-white leading-none">0</div>
                             <div class="text-xs sm:text-sm text-zinc-500 mt-1 font-medium">total downloads worldwide</div>
                         </div>
-
                         <div class="pt-5 sm:pt-7 border-t border-white/10">
                             <div class="flex flex-col md:flex-row items-start md:items-end justify-center gap-y-6 sm:gap-y-8 gap-x-8 max-w-[620px] mx-auto px-1 sm:px-2">
                                 <div class="w-full md:w-auto">
@@ -170,7 +169,6 @@
                                 <span>Verified • Signed • Safe</span>
                             </div>
                         </div>
-
                         <div id="mobile-download" class="hidden">
                             <div class="rounded-2xl sm:rounded-3xl border border-rose-500/20 bg-rose-500/5 px-6 py-6">
                                 <div class="flex flex-col items-center gap-y-3">
@@ -199,7 +197,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="mt-6 sm:mt-8 text-[9px] sm:text-[10px] text-zinc-500 font-medium tracking-wider">
                         Swift is not affiliated with Roblox Corporation in any way.
                     </div>
@@ -212,56 +209,16 @@
                     <p class="text-zinc-400 mt-2 sm:mt-3 text-sm sm:text-base">What we offer.</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 max-w-6xl mx-auto">
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-search text-xl sm:text-2xl text-indigo-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Decompiler</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Full bytecode decompiler with clean output.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-layer-group text-xl sm:text-2xl text-sky-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">MultiInstance</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Run multiple instances simultaneously.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-user-secret text-xl sm:text-2xl text-emerald-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Undetected</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Advanced anti-detection system.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-sync text-xl sm:text-2xl text-violet-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Always Updated</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Weekly updates with new features.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-sliders-h text-xl sm:text-2xl text-amber-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">QOL Changes</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Quality of life improvements everywhere.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-cog text-xl sm:text-2xl text-rose-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Settings</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Deep customization options.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-plug text-xl sm:text-2xl text-teal-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Script Hub</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Built-in verified script library.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-shield-alt text-xl sm:text-2xl text-orange-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Memory Protection</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Advanced memory shielding.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-terminal text-xl sm:text-2xl text-lime-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Console</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Powerful built-in developer console.</p>
-                    </div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default">
-                        <i class="fa-solid fa-globe text-xl sm:text-2xl text-blue-400 mb-3 sm:mb-4 block"></i>
-                        <h4 class="font-semibold text-lg sm:text-xl mb-1">Auto-Update</h4>
-                        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Seamless background updates.</p>
-                    </div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-search text-xl sm:text-2xl text-indigo-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Decompiler</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Full bytecode decompiler with clean output.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-layer-group text-xl sm:text-2xl text-sky-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">MultiInstance</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Run multiple instances simultaneously.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-user-secret text-xl sm:text-2xl text-emerald-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Undetected</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Advanced anti-detection system.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-sync text-xl sm:text-2xl text-violet-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Always Updated</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Weekly updates with new features.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-sliders-h text-xl sm:text-2xl text-amber-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">QOL Changes</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Quality of life improvements everywhere.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-cog text-xl sm:text-2xl text-rose-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Settings</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Deep customization options.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-plug text-xl sm:text-2xl text-teal-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Script Hub</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Built-in verified script library.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-shield-alt text-xl sm:text-2xl text-orange-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Memory Protection</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Advanced memory shielding.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-terminal text-xl sm:text-2xl text-lime-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Console</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Powerful built-in developer console.</p></div>
+                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-globe text-xl sm:text-2xl text-blue-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Auto-Update</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Seamless background updates.</p></div>
                 </div>
             </div>
 
@@ -269,15 +226,12 @@
                 <div class="max-w-xl mx-auto text-center">
                     <h2 class="font-display text-4xl sm:text-5xl md:text-6xl tracking-[-2px] sm:tracking-[-2.5px] mb-2 sm:mb-3">Get support.</h2>
                     <p class="text-zinc-400 mb-8 sm:mb-10 text-sm sm:text-base">Join the community for help, updates, and more.</p>
-
                     <div class="rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.07]">
                         <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-5 sm:mb-6 rounded-2xl sm:rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
                             <img src="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2e976c&is=6a2d45ec&hm=0a1dd39235a1da0a9ab5fe5646a1b77b89d8bd84dbcc33d9bb53cbb5bc48b56a&=&format=webp&quality=lossless&width=968&height=968" alt="Swift" class="w-full h-full object-cover">
                         </div>
-
                         <h3 class="font-display text-xl sm:text-2xl mb-1">Swift Community</h3>
                         <p class="text-zinc-400 text-xs sm:text-sm mb-5 sm:mb-6">Official Discord Server</p>
-
                         <div id="member-count" class="hidden items-center gap-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-zinc-800/60 border border-white/10 mb-6 sm:mb-8 justify-center inline-flex">
                             <span class="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -285,7 +239,6 @@
                             </span>
                             <span id="member-num" class="text-xs sm:text-sm font-semibold text-zinc-200">0 members</span>
                         </div>
-
                         <div>
                             <a href="https://discord.gg/RsBMBwUHd7" target="_blank" rel="noopener noreferrer" class="discord-btn inline-flex items-center gap-x-2.5 sm:gap-x-3 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-semibold bg-[#5865F2] hover:bg-[#4752C4] active:bg-[#3C45A5]">
                                 <i class="fa-brands fa-discord text-xl sm:text-2xl"></i>
@@ -301,190 +254,233 @@
     </div>
 
     <script>
-        var API = "https://abacus.jasoncameron.dev";
-        var NS = "swift-keyless-v1";
-        var KEY = "downloads";
-        var COOLDOWN_MS = 30000;
+        var _0x={
+            a:atob('aHR0cHM6Ly9hYmFjdXMuamFzb25jYW1lcm9uLmRldi8='),
+            b:atob('c3dpZnQtZXhlYy1wcm9k'),
+            c:atob('ZGxjLXYy')
+        };
+        var CD=60000;
+        var _ct=0,_dt=0,_af=null,_lk=false,_ti=null,_ce=0,_bh='';
 
-        var currentCount = 0;
-        var displayCount = 0;
-        var animFrame = null;
-        var locked = false;
-        var cooldownTimer = null;
-        var cooldownEnd = 0;
-        var btnDefaultHTML = '';
+        !function(){
+            document.addEventListener('contextmenu',function(e){e.preventDefault();});
+            document.addEventListener('keydown',function(e){
+                if(e.key==='F12')e.preventDefault();
+                if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))e.preventDefault();
+                if(e.ctrlKey&&e.key==='u')e.preventDefault();
+                if(e.ctrlKey&&e.key==='s')e.preventDefault();
+            });
+            var el=document.createElement('div');
+            Object.defineProperty(el,'id',{get:function(){window.location.href='about:blank';}});
+        }();
 
-        function isMobile() {
-            return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && 'ontouchstart' in window);
+        function _fp(){
+            var c=document.createElement('canvas');
+            var g=c.getContext('2d');
+            g.textBaseline='top';
+            g.font='14px Arial';
+            g.fillText('fp',2,2);
+            var s=c.toDataURL();
+            var n=navigator.userAgent+navigator.language+screen.width+'x'+screen.height+screen.colorDepth+(new Date()).getTimezoneOffset();
+            var h=0;
+            var full=s+n;
+            for(var i=0;i<full.length;i++){
+                h=((h<<5)-h)+full.charCodeAt(i);
+                h|=0;
+            }
+            return 'sf_'+Math.abs(h).toString(36);
         }
 
-        function animateTo(target) {
-            if (animFrame) cancelAnimationFrame(animFrame);
-            var from = displayCount;
-            var start = Date.now();
-            var run = function() {
-                var p = Math.min((Date.now() - start) / 900, 1);
-                var e = 1 - Math.pow(1 - p, 3);
-                displayCount = Math.floor(from + (target - from) * e);
-                document.getElementById("counter-display").textContent = displayCount.toLocaleString();
-                if (p < 1) {
-                    animFrame = requestAnimationFrame(run);
-                } else {
-                    displayCount = target;
-                    document.getElementById("counter-display").textContent = target.toLocaleString();
+        function _sc(k,v){
+            try{localStorage.setItem(k,v);}catch(e){}
+            try{sessionStorage.setItem(k,v);}catch(e){}
+            try{document.cookie=k+'='+v+';max-age=86400;path=/;SameSite=Strict';}catch(e){}
+            try{
+                var r=indexedDB.open('_sf',1);
+                r.onupgradeneeded=function(e){e.target.result.createObjectStore('d');};
+                r.onsuccess=function(e){
+                    var db=e.target.result;
+                    try{var tx=db.transaction('d','readwrite');tx.objectStore('d').put(v,k);}catch(x){}
+                };
+            }catch(e){}
+        }
+
+        function _gc(k,cb){
+            var v=null;
+            try{v=localStorage.getItem(k);}catch(e){}
+            if(v){cb(v);return;}
+            try{v=sessionStorage.getItem(k);}catch(e){}
+            if(v){cb(v);return;}
+            try{
+                var cookies=document.cookie.split(';');
+                for(var i=0;i<cookies.length;i++){
+                    var c=cookies[i].trim();
+                    if(c.indexOf(k+'=')===0){cb(c.substring(k.length+1));return;}
                 }
+            }catch(e){}
+            try{
+                var r=indexedDB.open('_sf',1);
+                r.onupgradeneeded=function(e){e.target.result.createObjectStore('d');};
+                r.onsuccess=function(e){
+                    var db=e.target.result;
+                    try{
+                        var tx=db.transaction('d','readonly');
+                        var req=tx.objectStore('d').get(k);
+                        req.onsuccess=function(){cb(req.result||null);};
+                        req.onerror=function(){cb(null);};
+                    }catch(x){cb(null);}
+                };
+                r.onerror=function(){cb(null);};
+            }catch(e){cb(null);}
+        }
+
+        function _ep(){return _0x.a;}
+        function _en(){return _0x.b;}
+        function _ek(){return _0x.c;}
+
+        function _mobile(){
+            return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)||(window.innerWidth<=768&&'ontouchstart' in window);
+        }
+
+        function _anim(t){
+            if(_af)cancelAnimationFrame(_af);
+            var f=_dt,s=Date.now();
+            var run=function(){
+                var p=Math.min((Date.now()-s)/900,1);
+                var e=1-Math.pow(1-p,3);
+                _dt=Math.floor(f+(t-f)*e);
+                document.getElementById('counter-display').textContent=_dt.toLocaleString();
+                if(p<1){_af=requestAnimationFrame(run);}
+                else{_dt=t;document.getElementById('counter-display').textContent=t.toLocaleString();}
             };
             run();
         }
 
-        function initCounter() {
-            fetch(API + "/get/" + NS + "/" + KEY)
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    if (typeof d.value === "number") {
-                        currentCount = d.value;
-                        displayCount = d.value;
-                        document.getElementById("counter-display").textContent = d.value.toLocaleString();
-                    }
-                    openStream();
+        function _load(){
+            fetch(_ep()+'get/'+_en()+'/'+_ek())
+                .then(function(r){return r.json();})
+                .then(function(d){
+                    if(typeof d.value==='number'){_ct=d.value;_dt=d.value;document.getElementById('counter-display').textContent=d.value.toLocaleString();}
+                    _stream();
                 })
-                .catch(function() { openStream(); });
+                .catch(function(){_stream();});
         }
 
-        function openStream() {
-            try {
-                var es = new EventSource(API + "/stream/" + NS + "/" + KEY);
-                es.onmessage = function(e) {
-                    try {
-                        var d = JSON.parse(e.data);
-                        if (typeof d.value === "number" && d.value !== currentCount) {
-                            currentCount = d.value;
-                            animateTo(d.value);
-                        }
-                    } catch(x) {}
+        function _stream(){
+            try{
+                var es=new EventSource(_ep()+'stream/'+_en()+'/'+_ek());
+                es.onmessage=function(e){
+                    try{
+                        var d=JSON.parse(e.data);
+                        if(typeof d.value==='number'&&d.value!==_ct){_ct=d.value;_anim(d.value);}
+                    }catch(x){}
                 };
-            } catch(x) {}
+                es.onerror=function(){
+                    es.close();
+                    setTimeout(_stream,5000);
+                };
+            }catch(x){}
         }
 
-        function getCooldownRemaining() {
-            var stored = localStorage.getItem("swift_cd");
-            if (!stored) return 0;
-            var diff = parseInt(stored, 10) - Date.now();
-            return diff > 0 ? diff : 0;
-        }
+        function _cdkey(){return _fp()+'_cd';}
 
-        function setCooldown() {
-            cooldownEnd = Date.now() + COOLDOWN_MS;
-            localStorage.setItem("swift_cd", String(cooldownEnd));
-        }
-
-        function tickCooldown() {
-            var remaining = cooldownEnd - Date.now();
-            if (remaining <= 0) {
-                clearInterval(cooldownTimer);
-                cooldownTimer = null;
-                locked = false;
-                var btn = document.getElementById("download-btn");
-                btn.disabled = false;
-                btn.classList.remove("cooldown");
-                document.getElementById("cooldown-wrap").style.opacity = "0";
-                return;
-            }
-            var secs = Math.ceil(remaining / 1000);
-            var pct = (remaining / COOLDOWN_MS) * 100;
-            document.getElementById("cooldown-fill").style.width = pct + "%";
-            document.getElementById("cooldown-text").textContent = "Available again in " + secs + "s";
-        }
-
-        function startCooldownUI() {
-            var btn = document.getElementById("download-btn");
-            btn.disabled = true;
-            btn.classList.add("cooldown");
-            locked = true;
-            document.getElementById("cooldown-wrap").style.opacity = "1";
-            if (cooldownTimer) clearInterval(cooldownTimer);
-            tickCooldown();
-            cooldownTimer = setInterval(tickCooldown, 100);
-        }
-
-        function handleDownload() {
-            if (locked) return;
-
-            var remaining = getCooldownRemaining();
-            if (remaining > 0) {
-                cooldownEnd = Date.now() + remaining;
-                startCooldownUI();
-                return;
-            }
-
-            locked = true;
-            setCooldown();
-
-            fetch(API + "/hit/" + NS + "/" + KEY)
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    if (typeof d.value === "number") {
-                        currentCount = d.value;
-                        animateTo(d.value);
-                    }
-                })
-                .catch(function() {});
-
-            var btn = document.getElementById("download-btn");
-            btn.style.transform = "scale(0.97)";
-
-            setTimeout(function() {
-                btn.innerHTML = '<div class="flex items-center justify-center w-full gap-x-3 text-emerald-600"><i class="fa-solid fa-check text-xl sm:text-2xl"></i><span class="font-semibold text-lg sm:text-xl">Thank you!</span></div>';
-                btn.style.transform = "";
-                btn.style.backgroundColor = "#f0fdf4";
-            }, 180);
-
-            setTimeout(function() {
-                btn.innerHTML = btnDefaultHTML;
-                btn.style.backgroundColor = "";
-                startCooldownUI();
-            }, 1650);
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll(".section").forEach(function(s) { s.classList.remove("active"); });
-            document.getElementById(tab).classList.add("active");
-            document.querySelectorAll(".nav-pill").forEach(function(p) {
-                p.classList.remove("active");
-                p.classList.add("text-zinc-500");
+        function _remain(cb){
+            _gc(_cdkey(),function(v){
+                if(!v){cb(0);return;}
+                var diff=parseInt(v,10)-Date.now();
+                cb(diff>0?diff:0);
             });
-            var el = document.getElementById("tab-" + tab);
-            el.classList.add("active");
-            el.classList.remove("text-zinc-500");
         }
 
-        function loadMembers() {
-            fetch("https://discord.com/api/v9/invites/RsBMBwUHd7?with_counts=true")
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    if (d.approximate_member_count) {
-                        document.getElementById("member-num").textContent = d.approximate_member_count.toLocaleString() + " members";
-                        document.getElementById("member-count").classList.remove("hidden");
+        function _setcd(){
+            _ce=Date.now()+CD;
+            _sc(_cdkey(),String(_ce));
+        }
+
+        function _tick(){
+            var rem=_ce-Date.now();
+            if(rem<=0){
+                clearInterval(_ti);_ti=null;_lk=false;
+                var btn=document.getElementById('download-btn');
+                btn.disabled=false;btn.classList.remove('cooldown');
+                document.getElementById('cooldown-wrap').style.opacity='0';
+                return;
+            }
+            var s=Math.ceil(rem/1000);
+            var pct=(rem/CD)*100;
+            document.getElementById('cooldown-fill').style.width=pct+'%';
+            document.getElementById('cooldown-text').textContent='Available again in '+s+'s';
+        }
+
+        function _startcd(){
+            var btn=document.getElementById('download-btn');
+            btn.disabled=true;btn.classList.add('cooldown');
+            _lk=true;
+            document.getElementById('cooldown-wrap').style.opacity='1';
+            if(_ti)clearInterval(_ti);
+            _tick();
+            _ti=setInterval(_tick,100);
+        }
+
+        function handleDownload(){
+            if(_lk)return;
+            _remain(function(rem){
+                if(rem>0){
+                    _ce=Date.now()+rem;
+                    _startcd();
+                    return;
+                }
+                _lk=true;
+                _setcd();
+                fetch(_ep()+'hit/'+_en()+'/'+_ek())
+                    .then(function(r){return r.json();})
+                    .then(function(d){if(typeof d.value==='number'){_ct=d.value;_anim(d.value);}})
+                    .catch(function(){});
+                var btn=document.getElementById('download-btn');
+                btn.style.transform='scale(0.97)';
+                setTimeout(function(){
+                    btn.innerHTML='<div class="flex items-center justify-center w-full gap-x-3 text-emerald-600"><i class="fa-solid fa-check text-xl sm:text-2xl"></i><span class="font-semibold text-lg sm:text-xl">Thank you!</span></div>';
+                    btn.style.transform='';btn.style.backgroundColor='#f0fdf4';
+                },180);
+                setTimeout(function(){
+                    btn.innerHTML=_bh;btn.style.backgroundColor='';
+                    _startcd();
+                },1650);
+            });
+        }
+
+        function switchTab(t){
+            document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+            document.getElementById(t).classList.add('active');
+            document.querySelectorAll('.nav-pill').forEach(function(p){p.classList.remove('active');p.classList.add('text-zinc-500');});
+            var el=document.getElementById('tab-'+t);
+            el.classList.add('active');el.classList.remove('text-zinc-500');
+        }
+
+        function _members(){
+            fetch('https://discord.com/api/v9/invites/RsBMBwUHd7?with_counts=true')
+                .then(function(r){return r.json();})
+                .then(function(d){
+                    if(d.approximate_member_count){
+                        document.getElementById('member-num').textContent=d.approximate_member_count.toLocaleString()+' members';
+                        document.getElementById('member-count').classList.remove('hidden');
                     }
                 })
-                .catch(function() {});
+                .catch(function(){});
         }
 
-        window.onload = function() {
-            if (isMobile()) {
-                document.getElementById("desktop-download").classList.add("hidden");
-                document.getElementById("mobile-download").classList.remove("hidden");
-            } else {
-                btnDefaultHTML = document.getElementById("download-btn").innerHTML;
-                var remaining = getCooldownRemaining();
-                if (remaining > 0) {
-                    cooldownEnd = Date.now() + remaining;
-                    startCooldownUI();
-                }
+        window.onload=function(){
+            if(_mobile()){
+                document.getElementById('desktop-download').classList.add('hidden');
+                document.getElementById('mobile-download').classList.remove('hidden');
+            }else{
+                _bh=document.getElementById('download-btn').innerHTML;
+                _remain(function(rem){
+                    if(rem>0){_ce=Date.now()+rem;_startcd();}
+                });
             }
-
-            initCounter();
-            loadMembers();
+            _load();
+            _members();
         };
     </script>
 
