@@ -848,8 +848,9 @@ body{
         <div class="apl-staff-note" id="asStaffNote"></div>
       </div>
       <div class="apl-id-row" id="asIdRow">ID: —</div>
+      <div style="margin-top:12px" id="asDeleteWrap"><button class="btn btn-rd btn-sm" id="btnDeleteAppAlways">🗑 Delete Application</button></div>
       <div class="apl-cooldown" id="asCooldown"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Re-apply in: <span class="apl-countdown" id="asCountdown">—</span></span></div>
-      <div class="apl-reapply" id="asReapply"><button class="btn btn-f btn-sm" id="btnReapply">Apply Again</button></div>
+      <div class="apl-reapply" id="asReapply"><button class="btn btn-f btn-sm" id="btnReapply">Apply Again</button><button class="btn btn-rd btn-sm" id="btnDeleteApp">🗑 Delete Application</button></div>
       <div class="chat-section" id="chatSection">
         <div class="chat-header">Response Chat <span class="live-indicator">LIVE</span></div>
         <div class="chat-messages" id="chatMessages"></div>
@@ -934,37 +935,16 @@ body{
   function getChats(appId){try{return JSON.parse(localStorage.getItem('ec_chat_'+appId)||'[]')}catch(e){return[]}}
   function saveChats(appId,chats){try{localStorage.setItem('ec_chat_'+appId,JSON.stringify(chats))}catch(e){}}
 
-  // Real-time update checker — polls bot API for live status & chat
+  // Poll localStorage for status updates
   function startRealtimeUpdates(){
     stopRealtimeUpdates();
     realtimeInterval=setInterval(function(){
       if(!currentAppId)return;
-      fetch(null /* not used */+'/api/status/'+encodeURIComponent(currentAppId))
-        .then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()})
-        .then(function(remoteApp){
-          // Merge remote status into localStorage
-          var apps=getApps();
-          var found=false;
-          for(var i=0;i<apps.length;i++){
-            if(apps[i].id===currentAppId){
-              apps[i].status=remoteApp.status||apps[i].status;
-              apps[i].staffMessage=remoteApp.staffMessage||apps[i].staffMessage;
-              apps[i].deniedAt=remoteApp.deniedAt||apps[i].deniedAt;
-              apps[i].acceptedAt=remoteApp.acceptedAt||apps[i].acceptedAt;
-              found=true;
-              break;
-            }
-          }
-          if(!found){apps.push(remoteApp)}
-          saveApps(apps);
-          // Sync chats
-          if(remoteApp.chats&&remoteApp.chats.length>0){
-            saveChats(currentAppId,remoteApp.chats);
-          }
-          renderStatus(remoteApp);
-          renderChat(currentAppId);
-        }).catch(function(err){console.error('[Eclipse] Chat error:',err);try{fetch(null /* not used */+'/api/error-report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'Chat send failed',detail:{error:String(err),botApi:null /* not used */}})})}catch(ignored){}});
-    },3000); // Poll every 3 seconds
+      var apps=getApps();
+      for(var i=0;i<apps.length;i++){
+        if(apps[i].id===currentAppId){renderStatus(apps[i]);renderChat(currentAppId);break;}
+      }
+    },3000);
   }
   
   function stopRealtimeUpdates(){
@@ -1024,16 +1004,17 @@ body{
       if(chat)chat.style.display='block';
       renderChat(app.id);
       if(remaining>0){if(cdEl)cdEl.style.display='flex';if(reapply)reapply.style.display='none';tickCountdown(cdNum,remaining,app)}
-      else{if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()}}
+      else{if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()};if($('btnDeleteApp'))$('btnDeleteApp').onclick=function(){if(confirm('Delete this application?'))deleteCurrentApplication()}}
     }
     if(idRow)idRow.textContent='ID: '+app.id;
+    var db2=$('btnDeleteAppAlways');if(db2){db2.onclick=function(){if(confirm('Delete this application? This cannot be undone.'))deleteCurrentApplication()};db2.style.display='inline-flex';}
   }
 
   function tickCountdown(el,remaining,app){
     if(!el)return;
     var iv=setInterval(function(){
       var r=remaining-(Date.now()-(app.deniedAt||Date.now()));
-      if(r<=0){el.textContent='00:00';clearInterval(iv);var cd=$('asCooldown'),rp=$('asReapply');if(cd)cd.style.display='none';if(rp)rp.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()};return}
+      if(r<=0){el.textContent='00:00';clearInterval(iv);var cd=$('asCooldown'),rp=$('asReapply');if(cd)cd.style.display='none';if(rp)rp.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()};if($('btnDeleteApp'))$('btnDeleteApp').onclick=function(){if(confirm('Delete this application?'))deleteCurrentApplication()};return}
       var m=Math.floor(r/60000),s=Math.floor((r%60000)/1000);el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
     },1000);
     el._iv=iv;
@@ -1096,6 +1077,8 @@ body{
     currentAppId=last.id;
     renderStatus(last);setupChat(last.id);
     startRealtimeUpdates();
+    // Wire permanent delete button
+    var db=$('btnDeleteAppAlways');if(db)db.onclick=function(){if(confirm('Delete this application? This cannot be undone.'))deleteCurrentApplication()};
   }
 
   function setupApplyForm(){
@@ -1138,6 +1121,21 @@ body{
     });
   }
 
+  // Delete current application
+  window.deleteCurrentApplication=function(){
+    if(!currentAppId){toast('No application to delete.','warn');return}
+    var apps=getApps();
+    var filtered=apps.filter(function(a){return a.id!==currentAppId});
+    if(filtered.length===apps.length){toast('Application not found.','warn');return}
+    saveApps(filtered);
+    localStorage.removeItem('ec_chat_'+currentAppId);
+    fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'🗑 **Application deleted by applicant** `'+currentAppId+'`'})}).catch(function(){});
+    toast('Application deleted.','info');
+    currentAppId=null;
+    resetForm();
+    checkApply();
+  };
+
   // Clear application data function (exposed globally)
   window.clearApplicationData=function(){
     var apps=getApps();
@@ -1165,5 +1163,5 @@ body{
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19bb01fdd5a0c36',t:'MTc4MzgxMzU5MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19bbc75ad14196c',t:'MTc4MzgxNDA5Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
