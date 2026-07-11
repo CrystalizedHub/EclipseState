@@ -1,488 +1,664 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swift • Keyless Executor</title>
-    <link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2e976c&is=6a2d45ec&hm=0a1dd39235a1da0a9ab5fe5646a1b77b89d8bd84dbcc33d9bb53cbb5bc48b56a&=&format=webp&quality=lossless&width=968&height=968">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', system-ui, sans-serif; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
-        .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .counter-num { font-variant-numeric: tabular-nums; font-feature-settings: "ss02"; }
-        .nav-pill { transition: all 0.2s ease; }
-        .nav-pill.active { color: white; }
-        .nav-pill.active::after { content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: #a5b4fc; border-radius: 9999px; }
-        .dl-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3); }
-        .dl-btn:hover:not(:disabled) { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3); }
-        .dl-btn:disabled { cursor: not-allowed; opacity: 0.7; }
-        .dl-btn.cooldown { opacity: 0.5; }
-        .feature-card { transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
-        .feature-card:hover { transform: translateY(-8px) scale(1.015); box-shadow: 0 16px 32px -8px rgb(0 0 0 / 0.4); border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.055); }
-        .discord-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3); }
-        .discord-btn:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3); }
-        .bar-fill { transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        .gold-orb { position: absolute; border-radius: 9999px; pointer-events: none; }
-        .gold-vein { position: absolute; left: 0; right: 0; pointer-events: none; }
-        .cooldown-bar { height: 3px; background: rgba(255,255,255,0.15); border-radius: 9999px; overflow: hidden; transition: opacity 0.3s ease; }
-        .cooldown-fill { height: 100%; background: linear-gradient(90deg, #a5b4fc, #818cf8); border-radius: 9999px; transition: width 0.1s linear; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eclipse State &mdash; FiveM Roleplay</title>
+<link rel="icon" type="image/png" href="uploads/logo.png">
+<meta name="description" content="Eclipse State — A premier FiveM roleplay community.">
+<style>
+/* ==========================================================
+   RESET
+   ========================================================== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,Oxygen,Ubuntu,sans-serif;
+  color:#f0ede8;min-height:100vh;overflow-x:hidden;
+  line-height:1.6;background:#0a0f16;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+
+/* ==========================================================
+   BEACH VIDEO BACKGROUND
+   ========================================================== */
+.video-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden}
+.video-bg video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;width:auto;height:auto;transform:translate(-50%,-50%);object-fit:cover}
+.video-bg::after{content:'';position:absolute;inset:0;background:rgba(6,10,18,.78);z-index:1}
+
+/* ==========================================================
+   CUSTOM PROPERTIES
+   ========================================================== */
+:root{
+  --surface:rgba(14,20,35,.65);--surface-hover:rgba(18,26,44,.75);
+  --border:rgba(255,255,255,.08);--border-strong:rgba(255,255,255,.13);
+  --accent:#f0803c;--accent-soft:#f5a06a;--accent-muted:rgba(240,128,60,.12);
+  --gold:#e2b04a;--danger:#e85050;--success:#3cb878;--info:#5b9bd5;
+  --text:#f0ede8;--text-dim:#97a5bc;--text-subtle:#6b7a93;
+  --radius:14px;--radius-sm:10px;--radius-pill:50px;
+  --shadow:0 2px 20px rgba(0,0,0,.42);
+  --transition:200ms cubic-bezier(.4,0,.2,1);
+}
+
+/* ==========================================================
+   SITE SHELL
+   ========================================================== */
+.app{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:0 22px}
+
+/* ==========================================================
+   HEADER / NAV
+   ========================================================== */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;margin-top:14px;
+  background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:var(--radius-pill);
+  gap:12px;flex-wrap:wrap;box-shadow:var(--shadow)
+}
+.header-brand{display:flex;align-items:center;flex-shrink:0}
+.header-brand img{height:40px;width:auto;border-radius:9px;box-shadow:0 0 20px rgba(240,128,60,.25)}
+.header-nav{display:flex;gap:2px;flex-wrap:wrap}
+.header-nav a{
+  color:var(--text-dim);text-decoration:none;padding:9px 16px;border-radius:var(--radius-pill);
+  font-size:.88rem;font-weight:500;transition:var(--transition);cursor:pointer
+}
+.header-nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.header-nav a.is-active{color:#fff;background:var(--accent-muted);font-weight:600;box-shadow:inset 0 0 0 1px rgba(240,128,60,.22)}
+.header-nav a.nav-owners{background:rgba(226,176,74,.14);color:var(--gold);font-weight:600;box-shadow:0 0 10px rgba(226,176,74,.08)}
+.header-nav a.nav-owners:hover{box-shadow:0 0 20px rgba(226,176,74,.22)}
+
+/* ==========================================================
+   BUTTONS
+   ========================================================== */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 24px;border-radius:var(--radius-pill);font-size:.92rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;text-decoration:none;transition:var(--transition);white-space:nowrap;line-height:1}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 20px rgba(240,128,60,.35)}
+.btn-primary:hover{background:#f5904f;transform:translateY(-1px);box-shadow:0 6px 28px rgba(240,128,60,.45)}
+.btn-outline{background:transparent;color:var(--accent-soft);border:1.5px solid rgba(240,128,60,.4)}
+.btn-outline:hover{background:var(--accent-muted);border-color:var(--accent);color:#fff}
+.btn-sm{padding:7px 16px;font-size:.82rem}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#c89628);color:#0f0f0f;font-weight:700;box-shadow:0 4px 18px rgba(226,176,74,.3)}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(226,176,74,.45)}
+
+/* ==========================================================
+   PAGE SYSTEM
+   ========================================================== */
+.page{display:none;animation:in .35s ease-out}
+.page.is-visible{display:block}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.section{padding:44px 0}
+
+/* ==========================================================
+   GLASS CARD
+   ========================================================== */
+.card{background:var(--surface);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);transition:var(--transition)}
+.card:hover{border-color:var(--border-strong)}
+
+/* ==========================================================
+   HOME PAGE
+   ========================================================== */
+.home-layout{display:flex;flex-direction:column;align-items:center;padding:60px 0 40px}
+.home-logo{width:140px;height:auto;border-radius:24px;margin-bottom:20px;box-shadow:0 0 80px rgba(240,128,60,.35);animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+.home-tagline{font-size:1.1rem;color:var(--text-dim);max-width:520px;text-align:center;margin-bottom:30px;line-height:1.55}
+
+/* Live player chip */
+.live-chip{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--surface);backdrop-filter:blur(16px);
+  border:1px solid var(--border);border-radius:var(--radius-pill);
+  padding:10px 22px;font-weight:600;font-size:.9rem;margin-bottom:30px
+}
+.live-chip .dot{width:10px;height:10px;border-radius:50%}
+.live-chip .dot.on{background:var(--success);box-shadow:0 0 10px var(--success);animation:blink 2s infinite}
+.live-chip .dot.off{background:var(--danger);box-shadow:0 0 10px var(--danger)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.live-chip .ip-copy{font-family:'SF Mono','Fira Code',monospace;color:var(--accent-soft);font-size:.85rem;cursor:pointer;transition:var(--transition)}
+.live-chip .ip-copy:hover{color:#fff}
+
+/* Token panel */
+.token-panel{max-width:500px;width:100%;text-align:center}
+.token-panel h3{font-size:1.15rem;margin-bottom:6px;font-weight:700}
+.token-panel .hint{font-size:.85rem;color:var(--text-dim);margin-bottom:20px}
+.token-row{display:flex;gap:10px}
+.token-row input{flex:1;background:rgba(10,16,26,.7);border:2px solid var(--border);border-radius:var(--radius-pill);padding:13px 18px;color:#fff;font-size:1.05rem;font-family:'SF Mono','Fira Code',monospace;letter-spacing:.1em;text-align:center;text-transform:uppercase;outline:none;transition:var(--transition)}
+.token-row input:focus{border-color:var(--accent);box-shadow:0 0 24px rgba(240,128,60,.18)}
+.token-err{color:var(--danger);font-size:.83rem;margin-top:10px;display:none}
+.token-err.is-visible{display:block}
+
+/* Support row */
+.support-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.support-chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--surface);backdrop-filter:blur(16px);
+  border:1px solid var(--border);border-radius:var(--radius-pill);
+  padding:8px 16px;font-size:.83rem;color:var(--text-dim);
+  text-decoration:none;cursor:pointer;transition:var(--transition)
+}
+.support-chip:hover{border-color:var(--accent);color:#fff}
+.support-chip .dc-online{color:var(--success);font-weight:600;font-size:.76rem}
+
+/* ==========================================================
+   DASHBOARD
+   ========================================================== */
+.dash-top{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.dash-avatar{width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid var(--accent);box-shadow:0 0 26px rgba(240,128,60,.25)}
+.dash-avatar-placeholder{width:68px;height:68px;border-radius:50%;background:rgba(14,20,35,.8);border:2.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--text-dim)}
+.dash-info h2{font-size:1.35rem;font-weight:700}
+.dash-tag{display:inline-block;margin-top:3px;padding:4px 14px;border-radius:var(--radius-pill);font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag-owner{background:linear-gradient(135deg,var(--gold),var(--accent));color:#0f0f0f}
+.tag-staff{background:rgba(139,92,246,.2);color:#c4b5fd}
+.tag-vip{background:var(--accent-muted);color:var(--accent-soft)}
+.tag-citizen{background:rgba(91,155,213,.15);color:var(--info)}
+.dash-r{display:flex;gap:9px;flex-wrap:wrap;margin-left:auto;align-items:center}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:20px 0 36px}
+.stat-card{text-align:center;padding:24px 16px}
+.stat-card .slabel{color:var(--text-dim);font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.stat-card .sval{font-size:2.1rem;font-weight:800;margin-top:6px;line-height:1}
+.stat-card .ssub{font-size:.74rem;color:var(--text-dim);margin-top:3px}
+.c-green{color:var(--success)}.c-red{color:var(--danger)}.c-gold{color:var(--gold)}.c-accent{color:var(--accent)}
+
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:36px}
+.quick-link{
+  display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;
+  text-decoration:none;color:var(--text);border-radius:var(--radius);transition:var(--transition);
+  background:var(--surface);backdrop-filter:blur(16px);border:1px solid var(--border)
+}
+.quick-link:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 0 30px rgba(240,128,60,.1)}
+.quick-link .qi{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.qi-purple{background:rgba(139,92,246,.18);color:#c4b5fd}
+.qi-orange{background:var(--accent-muted);color:var(--accent-soft)}
+.qi-blue{background:rgba(91,155,213,.15);color:var(--info)}
+.qi-green{background:rgba(60,184,120,.15);color:var(--success)}
+.qi-gold{background:rgba(226,176,74,.15);color:var(--gold)}
+.quick-link h4{font-size:.94rem;font-weight:600}.quick-link .qsub{font-size:.76rem;color:var(--text-dim);margin-top:2px}.quick-link .qbadge{font-size:.72rem;color:var(--success);font-weight:600;margin-top:3px}
+
+.act-sheet h3{margin-bottom:14px;font-size:1.05rem}
+.act-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.87rem}
+.act-row:last-child{border:0}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.act-dot.ok{background:var(--success);box-shadow:0 0 8px var(--success)}
+.act-dot.warn{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.act-dot.bad{background:var(--danger);box-shadow:0 0 8px var(--danger)}
+.act-time{color:var(--text-dim);font-size:.74rem;margin-left:auto}
+
+/* ==========================================================
+   SHOP
+   ========================================================== */
+.sec-title{font-size:2rem;font-weight:800;letter-spacing:-.025em;margin-bottom:8px}
+.sec-desc{color:var(--text-dim);margin-bottom:34px;font-size:1rem}
+
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.shop-card{background:var(--surface);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:var(--transition)}
+.shop-card:hover{border-color:rgba(240,128,60,.45);transform:translateY(-3px);box-shadow:0 14px 42px rgba(0,0,0,.45)}
+.shop-card.is-featured{border-color:rgba(226,176,74,.35);box-shadow:0 0 32px rgba(226,176,74,.08)}
+.shop-banner{height:140px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative}
+.sb-queue{background:linear-gradient(135deg,#152238,#0a1526)}
+.sb-unban{background:linear-gradient(135deg,#2e1522,#1a0e14)}
+.sb-vip{background:linear-gradient(135deg,#1f1730,#120e1e)}
+.sb-boost{background:linear-gradient(135deg,#152a22,#0c1a14)}
+.sb-wl{background:linear-gradient(135deg,#16222e,#0d1620)}
+.sb-custom{background:linear-gradient(135deg,#2a2018,#18100c)}
+.shop-pill{position:absolute;top:11px;right:11px;padding:3px 11px;border-radius:var(--radius-pill);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.shop-pill--hot{background:var(--accent);color:#fff}
+.shop-pill--value{background:var(--gold);color:#0f0f0f}
+.shop-body{padding:20px}.shop-body h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.shop-body .sd{font-size:.83rem;color:var(--text-dim);margin-bottom:16px;line-height:1.5}
+.shop-footer{display:flex;align-items:center;justify-content:space-between}
+.shop-price{font-size:1.4rem;font-weight:800;color:var(--accent)}
+.shop-price s{color:var(--text-dim);font-size:.8rem;font-weight:400;margin-right:5px}
+
+/* ==========================================================
+   RULEBOOK
+   ========================================================== */
+.rule-toc{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px;padding:18px;background:var(--surface);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius)}
+.rule-toc a{color:var(--text-dim);text-decoration:none;padding:7px 14px;border-radius:var(--radius-pill);font-size:.82rem;border:1px solid var(--border);transition:var(--transition)}
+.rule-toc a:hover{color:#fff;border-color:var(--accent);background:var(--accent-muted)}
+.rule-block{margin-bottom:20px;padding:26px;background:var(--surface);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition)}
+.rule-block:hover{border-color:var(--border-strong)}
+.rule-block h3{font-size:1.2rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rule-badge{display:inline-block;padding:3px 10px;border-radius:var(--radius-pill);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.rule-badge--critical{background:rgba(232,80,80,.14);color:var(--danger);border:1px solid rgba(232,80,80,.25)}
+.rule-badge--major{background:var(--accent-muted);color:var(--accent-soft);border:1px solid rgba(240,128,60,.25)}
+.rule-badge--minor{background:rgba(91,155,213,.12);color:var(--info);border:1px solid rgba(91,155,213,.22)}
+.rule-list{list-style:none}
+.rule-list li{padding:8px 0 8px 26px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);font-size:.9rem;line-height:1.55}
+.rule-list li:last-child{border:0}
+.rule-list li::before{content:'';position:absolute;left:4px;top:15px;width:8px;height:8px;border-radius:2px;background:var(--accent);opacity:.7}
+.rule-list li strong{color:#fff}
+.rule-penalty{margin-top:12px;padding:11px 16px;border-radius:var(--radius-sm);font-size:.82rem;font-weight:600;border-left:3px solid}
+.rp-critical{border-color:var(--danger);color:#f09090;background:rgba(232,80,80,.06)}
+.rp-major{border-color:var(--accent);color:var(--accent-soft);background:var(--accent-muted)}
+.rp-minor{border-color:var(--info);color:var(--info);background:rgba(91,155,213,.06)}
+
+/* ==========================================================
+   OWNERS PAGE
+   ========================================================== */
+.owner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px;margin-bottom:36px}
+.owner-card{text-align:center;padding:36px 24px}
+.owner-card:hover{border-color:rgba(226,176,74,.45);box-shadow:0 14px 44px rgba(0,0,0,.45),0 0 0 1px rgba(226,176,74,.15)}
+.owner-avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 0 34px rgba(226,176,74,.22);margin-bottom:14px}
+.owner-card h3{font-size:1.22rem;font-weight:700}
+.owner-card .owner-title{display:inline-block;margin-top:5px;padding:5px 15px;border-radius:var(--radius-pill);font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:linear-gradient(135deg,var(--gold),var(--accent));color:#0f0f0f}
+.owner-card .owner-id{font-family:'SF Mono',monospace;color:var(--text-dim);font-size:.83rem;margin-top:10px}
+.owner-card .owner-bio{color:var(--text-dim);font-size:.85rem;margin-top:14px;line-height:1.5;padding:0 8px}
+.owner-tags{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:14px}
+.ot{padding:3px 10px;border-radius:var(--radius-pill);font-size:.7rem;font-weight:600}
+.ot-dev{background:rgba(139,92,246,.14);color:#c4b5fd;border:1px solid rgba(139,92,246,.2)}
+.ot-lead{background:rgba(60,184,120,.12);color:var(--success);border:1px solid rgba(60,184,120,.18)}
+.ot-mgmt{background:var(--accent-muted);color:var(--accent-soft);border:1px solid rgba(240,128,60,.2)}
+
+/* ==========================================================
+   TOAST
+   ========================================================== */
+.toast-host{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{
+  background:rgba(14,20,35,.95);backdrop-filter:blur(20px);border:1px solid;
+  border-radius:var(--radius);padding:14px 18px;font-weight:600;font-size:.87rem;
+  box-shadow:0 10px 40px rgba(0,0,0,.55);display:flex;align-items:center;gap:10px;
+  animation:toastIn .35s cubic-bezier(.34,1.56,.64,1);max-width:400px
+}
+.toast--ok{border-color:var(--success);color:var(--success)}
+.toast--warn{border-color:var(--gold);color:var(--gold)}
+.toast--err{border-color:var(--danger);color:var(--danger)}
+.toast--info{border-color:var(--info);color:var(--info)}
+.t-icon{font-size:1.2rem;flex-shrink:0}
+.t-close{background:none;border:none;color:inherit;cursor:pointer;font-size:1.1rem;margin-left:auto;opacity:.6;padding:0 0 0 10px}
+.t-close:hover{opacity:1}
+@keyframes toastIn{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
+
+/* ==========================================================
+   MODAL
+   ========================================================== */
+.modal-mask{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+.modal-mask.is-open{display:flex}
+.modal-box{background:rgba(14,20,35,.98);border:1px solid var(--border-strong);border-radius:var(--radius);padding:32px;max-width:430px;width:92%;box-shadow:0 20px 70px rgba(0,0,0,.6)}
+.modal-box h3{font-size:1.2rem;margin-bottom:8px}
+.modal-box p{color:var(--text-dim);font-size:.87rem;margin-bottom:22px}
+.modal-actions{display:flex;gap:9px;justify-content:flex-end}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.footer{text-align:center;padding:38px 0;margin-top:56px;border-top:1px solid rgba(255,255,255,.06);color:var(--text-dim);font-size:.83rem}
+.footer a{color:var(--accent-soft);text-decoration:none;font-weight:500}
+.footer a:hover{text-decoration:underline}
+.footer-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media(max-width:860px){
+  .header{border-radius:22px;justify-content:center}.header-nav{justify-content:center}
+  .home-logo{width:110px}.token-row{flex-direction:column}
+  .dash-top{flex-direction:column;text-align:center}.dash-r{margin-left:0;justify-content:center}
+  .shop-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}
+  .quick-grid{grid-template-columns:1fr}.owner-grid{grid-template-columns:1fr}
+}
+@media(max-width:460px){
+  .stats-row{grid-template-columns:1fr}.stat-card .sval{font-size:1.7rem}
+  .app{padding:0 10px}.sec-title{font-size:1.45rem}.card{padding:20px}
+  .home-logo{width:90px}
+}
+</style>
 </head>
-<body class="bg-zinc-950 text-zinc-200 min-h-screen">
+<body>
 
-    <div class="fixed inset-0 pointer-events-none overflow-hidden" style="z-index:0">
-        <div class="gold-orb" style="width:700px;height:450px;top:-8%;left:5%;background:radial-gradient(ellipse,rgba(210,175,55,0.14) 0%,transparent 65%);filter:blur(60px)"></div>
-        <div class="gold-orb" style="width:600px;height:400px;top:5%;right:2%;background:radial-gradient(ellipse,rgba(195,160,50,0.12) 0%,transparent 65%);filter:blur(65px);transform:rotate(25deg)"></div>
-        <div class="gold-orb" style="width:800px;height:350px;top:30%;left:25%;background:radial-gradient(ellipse,rgba(200,165,55,0.1) 0%,transparent 60%);filter:blur(70px)"></div>
-        <div class="gold-orb" style="width:550px;height:500px;bottom:10%;left:0%;background:radial-gradient(ellipse,rgba(185,150,45,0.13) 0%,transparent 65%);filter:blur(60px);transform:rotate(-20deg)"></div>
-        <div class="gold-orb" style="width:650px;height:400px;bottom:0%;right:5%;background:radial-gradient(ellipse,rgba(205,170,55,0.11) 0%,transparent 65%);filter:blur(65px);transform:rotate(15deg)"></div>
-        <div class="gold-orb" style="width:400px;height:400px;top:55%;right:30%;background:radial-gradient(circle,rgba(220,185,65,0.09) 0%,transparent 60%);filter:blur(55px)"></div>
-        <div class="gold-orb" style="width:500px;height:300px;top:70%;left:15%;background:radial-gradient(ellipse,rgba(190,155,50,0.1) 0%,transparent 60%);filter:blur(60px);transform:rotate(35deg)"></div>
-        <div style="position:absolute;inset:0;opacity:0.7">
-            <div class="gold-vein" style="top:12%;height:2px;background:linear-gradient(90deg,transparent 2%,rgba(210,180,65,0.25) 15%,rgba(190,155,50,0.15) 35%,rgba(210,180,65,0.2) 55%,rgba(185,150,45,0.12) 75%,transparent 92%);transform:rotate(8deg)"></div>
-            <div class="gold-vein" style="top:28%;height:2px;background:linear-gradient(90deg,transparent 8%,rgba(200,170,60,0.2) 25%,transparent 45%,rgba(195,165,55,0.18) 65%,rgba(210,180,65,0.15) 82%,transparent 95%);transform:rotate(-5deg)"></div>
-            <div class="gold-vein" style="top:45%;height:2px;background:linear-gradient(90deg,transparent 0%,rgba(215,185,70,0.22) 18%,rgba(190,155,50,0.18) 40%,transparent 58%,rgba(200,170,60,0.16) 78%,transparent 95%);transform:rotate(14deg)"></div>
-            <div class="gold-vein" style="top:58%;height:1px;background:linear-gradient(90deg,transparent 12%,rgba(205,175,60,0.2) 30%,rgba(185,150,45,0.14) 50%,rgba(210,180,65,0.18) 72%,transparent 90%);transform:rotate(-9deg)"></div>
-            <div class="gold-vein" style="top:72%;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(195,165,55,0.2) 22%,rgba(210,180,65,0.25) 42%,transparent 62%,rgba(200,170,60,0.15) 85%,transparent 98%);transform:rotate(20deg)"></div>
-            <div class="gold-vein" style="top:85%;height:1px;background:linear-gradient(90deg,transparent 10%,rgba(190,155,50,0.18) 28%,rgba(205,175,60,0.22) 50%,rgba(195,165,55,0.14) 70%,transparent 88%);transform:rotate(-12deg)"></div>
-            <div class="gold-vein" style="top:36%;height:1px;background:linear-gradient(90deg,transparent 18%,rgba(220,190,70,0.2) 38%,rgba(200,170,60,0.16) 55%,transparent 75%);transform:rotate(28deg)"></div>
-            <div class="gold-vein" style="top:6%;height:1px;background:linear-gradient(90deg,transparent 25%,rgba(200,170,60,0.18) 45%,rgba(215,185,70,0.22) 65%,transparent 85%);transform:rotate(-3deg)"></div>
+<!-- ================================================================
+     BEACH VIDEO BACKGROUND
+     ================================================================ -->
+<div class="video-bg">
+  <video autoplay loop muted playsinline poster="uploads/logo.png">
+    <source src="uploads/beach.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- ================================================================
+     MAIN APP
+     ================================================================ -->
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <a class="header-brand" data-nav="home" style="cursor:pointer">
+      <img src="uploads/logo.png" alt="Eclipse State">
+    </a>
+    <nav class="header-nav">
+      <a class="is-active" data-nav="home">Home</a>
+      <a data-nav="dashboard">Dashboard</a>
+      <a data-nav="rulebook">Rulebook</a>
+      <a data-nav="shop">Shop</a>
+      <a data-nav="owners" class="nav-owners">Owners</a>
+    </nav>
+  </header>
+
+  <!-- ========== HOME ========== -->
+  <section class="page is-visible" id="pg-home">
+    <div class="home-layout">
+      <img src="uploads/logo.png" alt="Eclipse State" class="home-logo">
+      <p class="home-tagline">A serious FiveM roleplay community built by players, for players. Immersive RP, active staff, and a world that feels alive.</p>
+
+      <div class="live-chip" id="liveChip">
+        <span class="dot on" id="liveDot"></span>
+        <span id="liveTxt">Fetching server status&hellip;</span>
+        <span class="ip-copy" title="Click to copy">📋 connect eclipsestate.com</span>
+      </div>
+
+      <div class="card token-panel">
+        <h3>🔐 Link Your Account</h3>
+        <p class="hint">Copy the code from in-game and paste it in the textbox below.</p>
+        <div class="token-row">
+          <input type="text" id="tokenInput" placeholder="Paste your code here" maxlength="12" autocomplete="off" spellcheck="false">
+          <button class="btn btn-primary" id="tokenBtn">Link Account</button>
         </div>
+        <p class="token-err" id="tokenErr"></p>
+
+        <div class="support-row">
+          <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" class="support-chip">💬 Need help? Join Discord <span class="dc-online" id="dcSmall">—</span></a>
+          <span class="support-chip" id="copyIpChip" style="cursor:pointer">📋 Copy Server IP</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DASHBOARD ========== -->
+  <section class="page" id="pg-dashboard">
+    <div class="card" style="margin-top:28px">
+      <div class="dash-top">
+        <img src="" alt="" class="dash-avatar" id="dashAvatar" style="display:none">
+        <div class="dash-avatar-placeholder" id="dashAvatarFb">👤</div>
+        <div class="dash-info">
+          <h2 id="dashName">—</h2>
+          <span class="dash-tag" id="dashTag">—</span>
+          <div style="font-size:.8rem;color:var(--text-dim);margin-top:4px">Discord: <span id="dashDiscord" style="color:var(--accent-soft)">—</span></div>
+        </div>
+        <div class="dash-r">
+          <button class="btn btn-outline btn-sm" id="btnCopyIp">📋 Copy IP</button>
+          <button class="btn btn-primary btn-sm" id="btnJoin">🎮 Join Server</button>
+        </div>
+      </div>
     </div>
 
-    <div class="relative" style="z-index:1">
-
-        <nav class="border-b border-white/10 bg-zinc-950/80 backdrop-blur-2xl sticky top-0 z-50">
-            <div class="max-w-screen-xl mx-auto px-5 sm:px-6 md:px-8">
-                <div class="flex items-center justify-between md:justify-start h-16 sm:h-20 relative">
-                    <div class="flex items-center gap-x-2.5 sm:gap-x-3 z-10 shrink-0">
-                        <div class="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-2xl sm:rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-                            <img src="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2e976c&is=6a2d45ec&hm=0a1dd39235a1da0a9ab5fe5646a1b77b89d8bd84dbcc33d9bb53cbb5bc48b56a&=&format=webp&quality=lossless&width=968&height=968" alt="Swift" class="w-full h-full object-cover">
-                        </div>
-                        <span class="hidden sm:block font-display text-2xl sm:text-3xl md:text-4xl tracking-tighter">Swift</span>
-                    </div>
-                    <div class="md:absolute md:left-1/2 md:-translate-x-1/2">
-                        <div class="flex items-center gap-x-0.5 sm:gap-x-1 bg-zinc-900/70 border border-white/10 rounded-full p-0.5 sm:p-1">
-                            <button onclick="switchTab('download')" id="tab-download" class="nav-pill active relative px-3 sm:px-5 md:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-full flex items-center gap-x-1.5 sm:gap-x-2">
-                                <i class="fa-solid fa-download"></i>
-                                <span class="hidden sm:inline">Download</span>
-                            </button>
-                            <button onclick="switchTab('features')" id="tab-features" class="nav-pill relative px-3 sm:px-5 md:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-full flex items-center gap-x-1.5 sm:gap-x-2 text-zinc-500 hover:text-zinc-200">
-                                <i class="fa-solid fa-list-check"></i>
-                                <span class="hidden sm:inline">Features</span>
-                            </button>
-                            <button onclick="switchTab('support')" id="tab-support" class="nav-pill relative px-3 sm:px-5 md:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-full flex items-center gap-x-1.5 sm:gap-x-2 text-zinc-500 hover:text-zinc-200">
-                                <i class="fa-solid fa-headset"></i>
-                                <span class="hidden sm:inline">Support</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <main class="max-w-screen-xl mx-auto px-5 sm:px-6 md:px-8 pt-8 sm:pt-10 md:pt-14 pb-14 sm:pb-16 md:pb-20">
-
-            <div id="download" class="section active">
-                <div class="max-w-2xl mx-auto text-center">
-                    <div class="mb-6 sm:mb-8 md:mb-10">
-                        <div class="inline-flex items-center gap-x-2 px-3 sm:px-4 py-1 rounded-full bg-zinc-900 border border-white/10 mb-4 sm:mb-5">
-                            <span class="text-[10px] sm:text-xs font-semibold tracking-widest text-emerald-400">V1 • KEYLESS</span>
-                        </div>
-                        <h1 class="font-display text-4xl sm:text-6xl md:text-7xl tracking-[-2px] sm:tracking-[-3.5px] leading-none mb-3 sm:mb-4">
-                            The cleanest<br>executor ever made.
-                        </h1>
-                        <p class="text-base sm:text-lg md:text-xl text-zinc-400">Fast. Undetected. Reliable.</p>
-                    </div>
-
-                    <div class="rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 mb-6 sm:mb-8 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.07]">
-                        <div class="mb-5 sm:mb-7">
-                            <div class="flex items-center justify-center gap-x-2 mb-2">
-                                <i class="fa-solid fa-globe text-emerald-400 text-xs sm:text-sm"></i>
-                                <span class="uppercase text-[10px] sm:text-xs font-bold tracking-[2px] sm:tracking-[3px] text-emerald-400">GLOBAL DOWNLOADS</span>
-                            </div>
-                            <div id="counter-display" class="counter-num font-display text-[56px] sm:text-[80px] md:text-[110px] tracking-[-4px] sm:tracking-[-6px] text-white leading-none">0</div>
-                            <div class="text-xs sm:text-sm text-zinc-500 mt-1 font-medium">total downloads worldwide</div>
-                        </div>
-                        <div class="pt-5 sm:pt-7 border-t border-white/10">
-                            <div class="flex flex-col md:flex-row items-start md:items-end justify-center gap-y-6 sm:gap-y-8 gap-x-8 max-w-[620px] mx-auto px-1 sm:px-2">
-                                <div class="w-full md:w-auto">
-                                    <div class="flex justify-between items-end mb-1.5">
-                                        <span class="text-2xl sm:text-4xl font-semibold text-amber-400 tracking-tighter">100%</span>
-                                        <span class="text-[10px] sm:text-xs text-amber-400/70 font-bold tracking-wider ml-3">UPTIME</span>
-                                    </div>
-                                    <div class="h-[4px] sm:h-[5px] bg-amber-900/40 rounded-full overflow-hidden w-full md:w-36">
-                                        <div class="bar-fill h-full bg-amber-400 w-full rounded-full"></div>
-                                    </div>
-                                </div>
-                                <div class="w-full md:w-auto pt-1 sm:pt-2 md:pt-0">
-                                    <span class="text-2xl sm:text-4xl font-semibold text-emerald-400 tracking-tighter">UNDETECTED</span>
-                                    <div class="text-[10px] sm:text-xs text-emerald-400/70 font-medium mt-0.5">Since launch</div>
-                                </div>
-                                <div class="w-full md:w-auto">
-                                    <div class="flex justify-between items-end mb-1.5">
-                                        <span class="text-2xl sm:text-4xl font-semibold text-rose-400 tracking-tighter">100%</span>
-                                        <span class="text-[10px] sm:text-xs text-rose-400/70 font-bold tracking-wider ml-3">SUNC RATE</span>
-                                    </div>
-                                    <div class="h-[4px] sm:h-[5px] bg-rose-900/40 rounded-full overflow-hidden w-full md:w-36">
-                                        <div class="bar-fill h-full bg-rose-400 w-full rounded-full"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-6 sm:mb-8 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl">
-                        <div class="relative">
-                            <img src="https://media.discordapp.net/attachments/1513518434997243924/1514288250607505508/image.png?ex=6a2ec6d5&is=6a2d7555&hm=5c0a44b0b931314bf6b32f6c27783db5ef49e4102cdb184a4a1582c04372e260&=&format=webp&quality=lossless" alt="Swift UI Preview" class="w-full h-auto block">
-                            <div class="absolute inset-2 sm:inset-4 border border-white/10 rounded-xl sm:rounded-2xl opacity-30 pointer-events-none"></div>
-                        </div>
-                    </div>
-
-                    <div class="max-w-lg mx-auto">
-                        <div id="desktop-download">
-                            <button id="download-btn" onclick="handleDownload()" class="dl-btn group w-full flex items-center px-5 sm:px-8 py-4 sm:py-5 md:py-[22px] rounded-2xl sm:rounded-3xl text-lg sm:text-xl font-semibold bg-white hover:bg-zinc-100 active:bg-zinc-200">
-                                <div class="w-9 h-9 sm:w-11 sm:h-11 shrink-0 rounded-xl sm:rounded-2xl overflow-hidden ring-1 ring-zinc-900/20 mr-3 sm:mr-4">
-                                    <img src="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2e976c&is=6a2d45ec&hm=0a1dd39235a1da0a9ab5fe5646a1b77b89d8bd84dbcc33d9bb53cbb5bc48b56a&=&format=webp&quality=lossless&width=968&height=968" class="w-full h-full object-cover" alt="Swift">
-                                </div>
-                                <div class="flex-1 text-left min-w-0">
-                                    <span class="font-semibold text-xl sm:text-2xl tracking-tight text-zinc-900 block truncate">Download Swift</span>
-                                    <div class="text-zinc-600 text-[10px] sm:text-xs font-medium -mt-0.5">V1 • 0 MB</div>
-                                </div>
-                                <i class="fa-solid fa-arrow-down text-xl sm:text-2xl text-zinc-900 group-active:translate-y-0.5 transition-transform ml-1"></i>
-                            </button>
-                            <div id="cooldown-wrap" class="mt-2 max-w-lg mx-auto" style="opacity:0">
-                                <div class="cooldown-bar">
-                                    <div id="cooldown-fill" class="cooldown-fill" style="width:100%"></div>
-                                </div>
-                                <div id="cooldown-text" class="text-[10px] sm:text-xs text-zinc-500 text-center mt-1 font-medium"></div>
-                            </div>
-                            <div class="mt-2 sm:mt-3 text-[10px] sm:text-xs text-zinc-500 flex items-center justify-center gap-x-2">
-                                <i class="fa-solid fa-shield-halved text-emerald-400"></i>
-                                <span>Verified • Signed • Safe</span>
-                            </div>
-                        </div>
-                        <div id="mobile-download" class="hidden">
-                            <div class="rounded-2xl sm:rounded-3xl border border-rose-500/20 bg-rose-500/5 px-6 py-6">
-                                <div class="flex flex-col items-center gap-y-3">
-                                    <i class="fa-solid fa-mobile-screen text-3xl text-rose-400"></i>
-                                    <p class="text-sm text-rose-200/90 text-center leading-relaxed font-medium">
-                                        Download is unavailable for mobile users. We only support desktop at this time. Mobile support will be coming soon with an .apk release.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-5 sm:mt-6 max-w-lg mx-auto flex flex-col gap-2.5 sm:gap-3">
-                        <div class="rounded-xl sm:rounded-2xl border border-amber-500/20 bg-amber-500/5 px-4 sm:px-5 py-3 sm:py-4">
-                            <div class="flex items-start gap-x-2.5 sm:gap-x-3">
-                                <i class="fa-solid fa-circle-info text-amber-400 mt-0.5 text-sm"></i>
-                                <p class="text-xs sm:text-sm text-amber-200/80 text-left leading-relaxed">
-                                    To get this executor, you need to complete a checkpoint system. This is how we earn revenue to keep the project running. Please do not attempt to share loaders, as they will not work for other users.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="rounded-xl sm:rounded-2xl border border-zinc-700/40 bg-zinc-800/30 px-4 sm:px-5 py-3 sm:py-3.5">
-                            <div class="flex items-center gap-x-2.5 sm:gap-x-3">
-                                <i class="fa-solid fa-desktop text-zinc-400 text-sm"></i>
-                                <p class="text-xs sm:text-sm text-zinc-400 text-left">This is currently for desktop only.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6 sm:mt-8 text-[9px] sm:text-[10px] text-zinc-500 font-medium tracking-wider">
-                        Swift is not affiliated with Roblox Corporation in any way.
-                    </div>
-                </div>
-            </div>
-
-            <div id="features" class="section">
-                <div class="max-w-xl mx-auto text-center mb-8 sm:mb-10">
-                    <h2 class="font-display text-4xl sm:text-5xl md:text-6xl tracking-[-2px] sm:tracking-[-2.5px]">Everything you need.</h2>
-                    <p class="text-zinc-400 mt-2 sm:mt-3 text-sm sm:text-base">What we offer.</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 max-w-6xl mx-auto">
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-search text-xl sm:text-2xl text-indigo-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Decompiler</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Full bytecode decompiler with clean output.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-layer-group text-xl sm:text-2xl text-sky-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">MultiInstance</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Run multiple instances simultaneously.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-user-secret text-xl sm:text-2xl text-emerald-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Undetected</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Advanced anti-detection system.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-sync text-xl sm:text-2xl text-violet-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Always Updated</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Weekly updates with new features.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-sliders-h text-xl sm:text-2xl text-amber-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">QOL Changes</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Quality of life improvements everywhere.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-cog text-xl sm:text-2xl text-rose-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Settings</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Deep customization options.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-plug text-xl sm:text-2xl text-teal-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Script Hub</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Built-in verified script library.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-shield-alt text-xl sm:text-2xl text-orange-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Memory Protection</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Advanced memory shielding.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-terminal text-xl sm:text-2xl text-lime-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Console</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Powerful built-in developer console.</p></div>
-                    <div class="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/10 bg-white/[0.03] backdrop-blur-2xl cursor-default"><i class="fa-solid fa-globe text-xl sm:text-2xl text-blue-400 mb-3 sm:mb-4 block"></i><h4 class="font-semibold text-lg sm:text-xl mb-1">Auto-Update</h4><p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">Seamless background updates.</p></div>
-                </div>
-            </div>
-
-            <div id="support" class="section">
-                <div class="max-w-xl mx-auto text-center">
-                    <h2 class="font-display text-4xl sm:text-5xl md:text-6xl tracking-[-2px] sm:tracking-[-2.5px] mb-2 sm:mb-3">Get support.</h2>
-                    <p class="text-zinc-400 mb-8 sm:mb-10 text-sm sm:text-base">Join the community for help, updates, and more.</p>
-                    <div class="rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.07]">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-5 sm:mb-6 rounded-2xl sm:rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-                            <img src="https://media.discordapp.net/attachments/1513518434997243924/1514237345619120218/swiftTURNTHISINTOICO.png?ex=6a2e976c&is=6a2d45ec&hm=0a1dd39235a1da0a9ab5fe5646a1b77b89d8bd84dbcc33d9bb53cbb5bc48b56a&=&format=webp&quality=lossless&width=968&height=968" alt="Swift" class="w-full h-full object-cover">
-                        </div>
-                        <h3 class="font-display text-xl sm:text-2xl mb-1">Swift Community</h3>
-                        <p class="text-zinc-400 text-xs sm:text-sm mb-5 sm:mb-6">Official Discord Server</p>
-                        <div id="member-count" class="hidden items-center gap-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-zinc-800/60 border border-white/10 mb-6 sm:mb-8 justify-center inline-flex">
-                            <span class="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-full w-full bg-emerald-400"></span>
-                            </span>
-                            <span id="member-num" class="text-xs sm:text-sm font-semibold text-zinc-200">0 members</span>
-                        </div>
-                        <div>
-                            <a href="https://discord.gg/RsBMBwUHd7" target="_blank" rel="noopener noreferrer" class="discord-btn inline-flex items-center gap-x-2.5 sm:gap-x-3 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-semibold bg-[#5865F2] hover:bg-[#4752C4] active:bg-[#3C45A5]">
-                                <i class="fa-brands fa-discord text-xl sm:text-2xl"></i>
-                                <span>Join Discord</span>
-                                <i class="fa-solid fa-arrow-up-right-from-square text-xs sm:text-sm opacity-60"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
+    <div class="stats-row">
+      <div class="card stat-card"><div class="slabel">⏱ Playtime</div><div class="sval c-accent" id="statPlaytime">0h</div></div>
+      <div class="card stat-card"><div class="slabel">🚫 Banned</div><div class="sval" id="statBanned">No</div><div class="ssub">Account standing</div></div>
+      <div class="card stat-card"><div class="slabel">⚠ Warnings</div><div class="sval" id="statWarns">0</div><div class="ssub" id="statWarnSub">Good standing</div></div>
     </div>
 
-    <script>
-        var _0x={
-            a:atob('aHR0cHM6Ly9hYmFjdXMuamFzb25jYW1lcm9uLmRldi8='),
-            b:atob('c3dpZnQtZXhlYy1wcm9k'),
-            c:atob('ZGxjLXYy')
-        };
-        var CD=60000;
-        var _ct=0,_dt=0,_af=null,_lk=false,_ti=null,_ce=0,_bh='';
+    <div class="quick-grid">
+      <a class="quick-link" data-nav="rulebook" style="cursor:pointer"><span class="qi qi-purple">📜</span><span><h4>Rulebook</h4><span class="qsub">Read before playing</span></span></a>
+      <a class="quick-link" data-nav="shop" style="cursor:pointer"><span class="qi qi-orange">🛒</span><span><h4>Shop</h4><span class="qsub">Perks, unban &amp; more</span></span></a>
+      <a class="quick-link" href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener"><span class="qi qi-blue">💬</span><span><h4>Discord</h4><span class="qsub">Community hub</span><span class="qbadge" id="dcBadge">—</span></span></a>
+      <a class="quick-link" id="lnkTicket" style="cursor:pointer"><span class="qi qi-green">🎫</span><span><h4>Support</h4><span class="qsub">Open a ticket</span></span></a>
+      <a class="quick-link" data-nav="owners" style="cursor:pointer"><span class="qi qi-gold">👑</span><span><h4>Owners</h4><span class="qsub">Meet the founders</span></span></a>
+    </div>
 
-        !function(){
-            document.addEventListener('contextmenu',function(e){e.preventDefault();});
-            document.addEventListener('keydown',function(e){
-                if(e.key==='F12')e.preventDefault();
-                if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))e.preventDefault();
-                if(e.ctrlKey&&e.key==='u')e.preventDefault();
-                if(e.ctrlKey&&e.key==='s')e.preventDefault();
-            });
-            var el=document.createElement('div');
-            Object.defineProperty(el,'id',{get:function(){window.location.href='about:blank';}});
-        }();
+    <div class="card act-sheet">
+      <h3>📋 Recent Activity</h3>
+      <div id="actList">
+        <div class="act-row"><span class="act-dot ok"></span> Account linked <span class="act-time">Just now</span></div>
+        <div class="act-row"><span class="act-dot warn"></span> Welcome! Read the rulebook first. <span class="act-time">Just now</span></div>
+      </div>
+    </div>
+  </section>
 
-        function _fp(){
-            var c=document.createElement('canvas');
-            var g=c.getContext('2d');
-            g.textBaseline='top';
-            g.font='14px Arial';
-            g.fillText('fp',2,2);
-            var s=c.toDataURL();
-            var n=navigator.userAgent+navigator.language+screen.width+'x'+screen.height+screen.colorDepth+(new Date()).getTimezoneOffset();
-            var h=0;
-            var full=s+n;
-            for(var i=0;i<full.length;i++){
-                h=((h<<5)-h)+full.charCodeAt(i);
-                h|=0;
-            }
-            return 'sf_'+Math.abs(h).toString(36);
-        }
+  <!-- ========== RULEBOOK ========== -->
+  <section class="page" id="pg-rulebook">
+    <div class="section">
+      <h2 class="sec-title">📜 Server Rulebook</h2>
+      <p class="sec-desc">Every player must follow these rules. <strong>6 warnings = automatic permanent ban.</strong></p>
+      <nav class="rule-toc">
+        <a href="#r-general">🏛 General</a><a href="#r-rp">🎭 Roleplay</a><a href="#r-vdm">⚔ VDM/RDM</a><a href="#r-meta">🚫 Metagaming</a><a href="#r-combat">🔫 Combat</a><a href="#r-vehicles">🚗 Vehicles</a><a href="#r-econ">💰 Economy</a><a href="#r-staff">🛡 Staff</a><a href="#r-discord">💬 Discord</a>
+      </nav>
 
-        function _sc(k,v){
-            try{localStorage.setItem(k,v);}catch(e){}
-            try{sessionStorage.setItem(k,v);}catch(e){}
-            try{document.cookie=k+'='+v+';max-age=86400;path=/;SameSite=Strict';}catch(e){}
-            try{
-                var r=indexedDB.open('_sf',1);
-                r.onupgradeneeded=function(e){e.target.result.createObjectStore('d');};
-                r.onsuccess=function(e){
-                    var db=e.target.result;
-                    try{var tx=db.transaction('d','readwrite');tx.objectStore('d').put(v,k);}catch(x){}
-                };
-            }catch(e){}
-        }
+      <article class="rule-block" id="r-general"><h3><span class="rule-badge rule-badge--critical">Critical</span> General Conduct</h3>
+        <ul class="rule-list"><li><strong>Respect everyone.</strong> Racism, homophobia, hate speech = zero tolerance, instant permanent ban.</li><li><strong>No cheating.</strong> Hacking, modding, or exploiting = permanent ban, no appeal.</li><li><strong>No impersonation</strong> of staff, admins, or players.</li><li><strong>English only</strong> for IC and OOC communication.</li><li><strong>Staff have final say.</strong> Dispute via ticket, not in-game.</li><li><strong>Record sessions.</strong> Evidence protects you. Fake evidence = ban.</li></ul>
+        <div class="rule-penalty rp-critical">⚠ Warning → 3-Day Ban → Permanent Ban</div>
+      </article>
 
-        function _gc(k,cb){
-            var v=null;
-            try{v=localStorage.getItem(k);}catch(e){}
-            if(v){cb(v);return;}
-            try{v=sessionStorage.getItem(k);}catch(e){}
-            if(v){cb(v);return;}
-            try{
-                var cookies=document.cookie.split(';');
-                for(var i=0;i<cookies.length;i++){
-                    var c=cookies[i].trim();
-                    if(c.indexOf(k+'=')===0){cb(c.substring(k.length+1));return;}
-                }
-            }catch(e){}
-            try{
-                var r=indexedDB.open('_sf',1);
-                r.onupgradeneeded=function(e){e.target.result.createObjectStore('d');};
-                r.onsuccess=function(e){
-                    var db=e.target.result;
-                    try{
-                        var tx=db.transaction('d','readonly');
-                        var req=tx.objectStore('d').get(k);
-                        req.onsuccess=function(){cb(req.result||null);};
-                        req.onerror=function(){cb(null);};
-                    }catch(x){cb(null);}
-                };
-                r.onerror=function(){cb(null);};
-            }catch(e){cb(null);}
-        }
+      <article class="rule-block" id="r-rp"><h3><span class="rule-badge rule-badge--critical">Critical</span> Roleplay Standards</h3>
+        <ul class="rule-list"><li><strong>Stay in character.</strong> Fail RP = punishment.</li><li><strong>Value your life.</strong> Guns pointed at you = comply. No suicide/combat log.</li><li><strong>New Life Rule:</strong> Upon death, forget everything. Stay away <strong>15 minutes</strong>.</li><li><strong>Fear RP:</strong> Act afraid in danger.</li><li><strong>No powergaming.</strong> Let others react before forcing actions.</li><li><strong>Realistic characters.</strong> No super-soldiers without staff approval.</li><li><strong>Robberies need RP reasoning.</strong> No chain-robbing.</li></ul>
+        <div class="rule-penalty rp-critical">⚠ Warning → 7-Day Ban → Permanent Ban</div>
+      </article>
 
-        function _ep(){return _0x.a;}
-        function _en(){return _0x.b;}
-        function _ek(){return _0x.c;}
+      <article class="rule-block" id="r-vdm"><h3><span class="rule-badge rule-badge--major">Major</span> VDM &amp; RDM</h3>
+        <ul class="rule-list"><li><strong>RDM:</strong> Attacking/killing without valid RP = ban.</li><li><strong>VDM:</strong> Running people over/vehicle as weapon = ban.</li><li>Every hostile action needs <strong>clear quality RP</strong> beforehand.</li><li>Target must understand they're being engaged before shots fire.</li><li>Drive-bys require prior escalation.</li></ul>
+        <div class="rule-penalty rp-major">⚠ 3-Day → 14-Day → Permanent Ban</div>
+      </article>
 
-        function _mobile(){
-            return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)||(window.innerWidth<=768&&'ontouchstart' in window);
-        }
+      <article class="rule-block" id="r-meta"><h3><span class="rule-badge rule-badge--major">Major</span> Metagaming</h3>
+        <ul class="rule-list"><li><strong>No metagaming:</strong> Using OOC info (Discord, streams) IC = ban.</li><li><strong>Stream-sniping = permanent ban.</strong></li><li>No external comms for IC coordination.</li><li>Don't look up players OOC for IC advantage.</li><li>Keep /ooc out of active RP.</li></ul>
+        <div class="rule-penalty rp-major">⚠ 7-Day → Permanent Ban</div>
+      </article>
 
-        function _anim(t){
-            if(_af)cancelAnimationFrame(_af);
-            var f=_dt,s=Date.now();
-            var run=function(){
-                var p=Math.min((Date.now()-s)/900,1);
-                var e=1-Math.pow(1-p,3);
-                _dt=Math.floor(f+(t-f)*e);
-                document.getElementById('counter-display').textContent=_dt.toLocaleString();
-                if(p<1){_af=requestAnimationFrame(run);}
-                else{_dt=t;document.getElementById('counter-display').textContent=t.toLocaleString();}
-            };
-            run();
-        }
+      <article class="rule-block" id="r-combat"><h3><span class="rule-badge rule-badge--major">Major</span> Combat</h3>
+        <ul class="rule-list"><li>Combat must stem from <strong>genuine escalated RP</strong>.</li><li>Max <strong>6 per side</strong> in hostiles.</li><li>Capped <strong>3 robberies/hour</strong> per player.</li><li>No animation/emote exploits.</li><li>No camping hospitals, PD, spawns.</li><li><strong>30-min cooldown</strong> before re-engaging.</li></ul>
+        <div class="rule-penalty rp-major">⚠ 3-Day → 14-Day → Permanent Ban</div>
+      </article>
 
-        function _load(){
-            fetch(_ep()+'get/'+_en()+'/'+_ek())
-                .then(function(r){return r.json();})
-                .then(function(d){
-                    if(typeof d.value==='number'){_ct=d.value;_dt=d.value;document.getElementById('counter-display').textContent=d.value.toLocaleString();}
-                    _stream();
-                })
-                .catch(function(){_stream();});
-        }
+      <article class="rule-block" id="r-vehicles"><h3><span class="rule-badge rule-badge--minor">Minor</span> Vehicles</h3>
+        <ul class="rule-list"><li>Drive realistically — no 120mph through city.</li><li>Off-roading supercars = Fail RP.</li><li>No scaling buildings with vehicles.</li><li>Aircraft require IC pilot license.</li><li>Stolen vehicles go through proper IC channels.</li></ul>
+        <div class="rule-penalty rp-minor">⚠ Warning → 3-Day → 7-Day Ban</div>
+      </article>
 
-        function _stream(){
-            try{
-                var es=new EventSource(_ep()+'stream/'+_en()+'/'+_ek());
-                es.onmessage=function(e){
-                    try{
-                        var d=JSON.parse(e.data);
-                        if(typeof d.value==='number'&&d.value!==_ct){_ct=d.value;_anim(d.value);}
-                    }catch(x){}
-                };
-                es.onerror=function(){
-                    es.close();
-                    setTimeout(_stream,5000);
-                };
-            }catch(x){}
-        }
+      <article class="rule-block" id="r-econ"><h3><span class="rule-badge rule-badge--minor">Minor</span> Economy</h3>
+        <ul class="rule-list"><li>No large transfers without staff approval.</li><li>Duping/exploiting = <strong>perm ban + asset wipe.</strong></li><li>Businesses must be actively RP'd.</li><li>One primary residence per character.</li></ul>
+        <div class="rule-penalty rp-minor">⚠ Warning → Asset Wipe → Permanent Ban</div>
+      </article>
 
-        function _cdkey(){return _fp()+'_cd';}
+      <article class="rule-block" id="r-staff"><h3><span class="rule-badge rule-badge--major">Major</span> Staff &amp; Appeals</h3>
+        <ul class="rule-list"><li>Staff decisions are <strong>final</strong> during situations.</li><li>Never ask for free items/money.</li><li>False reports = you get punished.</li><li>Harassing staff = severe ban.</li><li>Appeals via Discord ticket with evidence.</li></ul>
+        <div class="rule-penalty rp-major">⚠ 3-Day → Permanent Ban</div>
+      </article>
 
-        function _remain(cb){
-            _gc(_cdkey(),function(v){
-                if(!v){cb(0);return;}
-                var diff=parseInt(v,10)-Date.now();
-                cb(diff>0?diff:0);
-            });
-        }
+      <article class="rule-block" id="r-discord"><h3><span class="rule-badge rule-badge--minor">Minor</span> Discord</h3>
+        <ul class="rule-list"><li>Follow Discord ToS.</li><li>No spamming/ghost pinging/flooding.</li><li>Right channels: memes→#media, support→tickets.</li><li>No ear-rape/soundboards in VC.</li><li>Ban evading = <strong>permanent community ban.</strong></li></ul>
+        <div class="rule-penalty rp-minor">⚠ Mute → Kick → Ban</div>
+      </article>
+    </div>
+  </section>
 
-        function _setcd(){
-            _ce=Date.now()+CD;
-            _sc(_cdkey(),String(_ce));
-        }
+  <!-- ========== SHOP ========== -->
+  <section class="page" id="pg-shop">
+    <div class="section">
+      <h2 class="sec-title">🛒 Eclipse Store</h2>
+      <p class="sec-desc">Premium perks. All sales final — no refunds.</p>
+      <div class="shop-grid">
+        <div class="shop-card is-featured"><div class="shop-banner sb-queue"><span class="shop-pill shop-pill--hot">Popular</span>🚀</div><div class="shop-body"><h3>Bypass Queue</h3><p class="sd">Skip the wait &amp; join instantly. Priority slot for life.</p><div class="shop-footer"><span class="shop-price">$2.00</span><button class="btn btn-primary btn-sm" data-buy="Bypass Queue" data-price="2">Buy</button></div></div></div>
+        <div class="shop-card"><div class="shop-banner sb-unban">🔓</div><div class="shop-body"><h3>Unban</h3><p class="sd">Second chance. One-time. Not valid for cheating bans.</p><div class="shop-footer"><span class="shop-price">$5.00</span><button class="btn btn-primary btn-sm" data-buy="Unban" data-price="5">Buy</button></div></div></div>
+        <div class="shop-card is-featured"><div class="shop-banner sb-vip"><span class="shop-pill shop-pill--value">Best Value</span>👑</div><div class="shop-body"><h3>VIP Tier</h3><p class="sd">VIP tag, priority queue, 2x XP, exclusive areas, monthly bonus.</p><div class="shop-footer"><span class="shop-price"><s>$10</s> $7.50</span><button class="btn btn-primary btn-sm" data-buy="VIP Tier" data-price="7.5">Buy</button></div></div></div>
+        <div class="shop-card"><div class="shop-banner sb-boost">⚡</div><div class="shop-body"><h3>Server Booster</h3><p class="sd">50% earnings boost for 30 days. Stacks with VIP.</p><div class="shop-footer"><span class="shop-price">$3.00</span><button class="btn btn-primary btn-sm" data-buy="Server Booster" data-price="3">Buy</button></div></div></div>
+        <div class="shop-card"><div class="shop-banner sb-wl">📝</div><div class="shop-body"><h3>Whitelist App</h3><p class="sd">Fast-track for Police, EMS, DOJ &amp; more.</p><div class="shop-footer"><span class="shop-price">$4.00</span><button class="btn btn-primary btn-sm" data-buy="Whitelist App" data-price="4">Buy</button></div></div></div>
+        <div class="shop-card"><div class="shop-banner sb-custom">🎨</div><div class="shop-body"><h3>Custom Discord Role</h3><p class="sd">Custom name &amp; color. Stand out.</p><div class="shop-footer"><span class="shop-price">$2.50</span><button class="btn btn-primary btn-sm" data-buy="Custom Role" data-price="2.5">Buy</button></div></div></div>
+      </div>
+    </div>
+  </section>
 
-        function _tick(){
-            var rem=_ce-Date.now();
-            if(rem<=0){
-                clearInterval(_ti);_ti=null;_lk=false;
-                var btn=document.getElementById('download-btn');
-                btn.disabled=false;btn.classList.remove('cooldown');
-                document.getElementById('cooldown-wrap').style.opacity='0';
-                return;
-            }
-            var s=Math.ceil(rem/1000);
-            var pct=(rem/CD)*100;
-            document.getElementById('cooldown-fill').style.width=pct+'%';
-            document.getElementById('cooldown-text').textContent='Available again in '+s+'s';
-        }
+  <!-- ========== OWNERS ========== -->
+  <section class="page" id="pg-owners">
+    <div class="section">
+      <h2 class="sec-title" style="text-align:center">👑 Server Ownership</h2>
+      <p class="sec-desc" style="text-align:center">The founders who built Eclipse State.</p>
+      <div class="owner-grid">
+        <div class="card owner-card">
+          <img src="https://cdn.discordapp.com/avatars/1147409272087519263/ccd5bed55f2b6b52b21988499b22c4d6.png?size=256" alt="75e0" class="owner-avatar" loading="lazy" onerror="this.style.display='none'">
+          <h3>75e0 <small style="color:var(--text-dim);font-weight:400">(xcq.v)</small></h3>
+          <span class="owner-title">👑 Owner / Developer</span>
+          <div class="owner-id">Discord: xcq.v</div>
+          <p class="owner-bio">Founder of Eclipse State. Full-stack dev handling all infrastructure, custom scripts &amp; web. The vision behind it all.</p>
+          <div class="owner-tags"><span class="ot ot-dev">Developer</span><span class="ot ot-mgmt">Founder</span><span class="ot ot-lead">Community Lead</span></div>
+        </div>
+        <div class="card owner-card">
+          <div style="width:88px;height:88px;border-radius:50%;border:3px solid var(--gold);box-shadow:0 0 34px rgba(226,176,74,.22);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:rgba(14,20,35,.6)">🎮</div>
+          <h3>thatsmitzyguy</h3>
+          <span class="owner-title">👑 Owner / Developer</span>
+          <div class="owner-id">Discord: thatsmitzyguy</div>
+          <p class="owner-bio">Co-owner &amp; lead dev. Runs in-game systems, economy &amp; community management. The engine behind Eclipse State.</p>
+          <div class="owner-tags"><span class="ot ot-dev">Developer</span><span class="ot ot-mgmt">Systems Lead</span><span class="ot ot-lead">Community Manager</span></div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;padding:34px 24px">
+        <h3 style="font-size:1.2rem;margin-bottom:8px">🤝 Join the Team</h3>
+        <p style="color:var(--text-dim);margin-bottom:18px">We are always looking for dedicated roleplayers, developers &amp; staff.</p>
+        <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" class="btn btn-gold">💬 Join Discord &amp; Apply</a>
+      </div>
+    </div>
+  </section>
 
-        function _startcd(){
-            var btn=document.getElementById('download-btn');
-            btn.disabled=true;btn.classList.add('cooldown');
-            _lk=true;
-            document.getElementById('cooldown-wrap').style.opacity='1';
-            if(_ti)clearInterval(_ti);
-            _tick();
-            _ti=setInterval(_tick,100);
-        }
+  <footer class="footer">
+    <p>&copy; 2026 <strong>Eclipse State</strong>. Not affiliated with Rockstar, Take-Two, or Cfx.re.</p>
+    <div class="footer-links"><a data-nav="rulebook" style="cursor:pointer">Rulebook</a><a data-nav="shop" style="cursor:pointer">Shop</a><a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener">Discord</a><a data-nav="owners" style="cursor:pointer">Owners</a></div>
+    <p style="font-size:.72rem;margin-top:6px">Built by <strong>75e0</strong> &amp; <strong>thatsmitzyguy</strong></p>
+  </footer>
+</div>
 
-        function handleDownload(){
-            if(_lk)return;
-            _remain(function(rem){
-                if(rem>0){
-                    _ce=Date.now()+rem;
-                    _startcd();
-                    return;
-                }
-                _lk=true;
-                _setcd();
-                fetch(_ep()+'hit/'+_en()+'/'+_ek())
-                    .then(function(r){return r.json();})
-                    .then(function(d){if(typeof d.value==='number'){_ct=d.value;_anim(d.value);}})
-                    .catch(function(){});
-                var btn=document.getElementById('download-btn');
-                btn.style.transform='scale(0.97)';
-                setTimeout(function(){
-                    btn.innerHTML='<div class="flex items-center justify-center w-full gap-x-3 text-emerald-600"><i class="fa-solid fa-check text-xl sm:text-2xl"></i><span class="font-semibold text-lg sm:text-xl">Thank you!</span></div>';
-                    btn.style.transform='';btn.style.backgroundColor='#f0fdf4';
-                },180);
-                setTimeout(function(){
-                    btn.innerHTML=_bh;btn.style.backgroundColor='';
-                    _startcd();
-                },1650);
-            });
-        }
+<!-- MODAL -->
+<div class="modal-mask" id="modal">
+  <div class="modal-box">
+    <h3 id="modalTitle">Confirm</h3>
+    <p id="modalDesc"></p>
+    <div class="modal-actions"><button class="btn btn-outline btn-sm" id="modalCancel">Cancel</button><button class="btn btn-primary btn-sm" id="modalOk">Confirm</button></div>
+  </div>
+</div>
 
-        function switchTab(t){
-            document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
-            document.getElementById(t).classList.add('active');
-            document.querySelectorAll('.nav-pill').forEach(function(p){p.classList.remove('active');p.classList.add('text-zinc-500');});
-            var el=document.getElementById('tab-'+t);
-            el.classList.add('active');el.classList.remove('text-zinc-500');
-        }
+<!-- TOAST HOST -->
+<div class="toast-host" id="toastHost"></div>
 
-        function _members(){
-            fetch('https://discord.com/api/v9/invites/RsBMBwUHd7?with_counts=true')
-                .then(function(r){return r.json();})
-                .then(function(d){
-                    if(d.approximate_member_count){
-                        document.getElementById('member-num').textContent=d.approximate_member_count.toLocaleString()+' members';
-                        document.getElementById('member-count').classList.remove('hidden');
-                    }
-                })
-                .catch(function(){});
-        }
+<script>
+(function(){
+  'use strict';
 
-        window.onload=function(){
-            if(_mobile()){
-                document.getElementById('desktop-download').classList.add('hidden');
-                document.getElementById('mobile-download').classList.remove('hidden');
-            }else{
-                _bh=document.getElementById('download-btn').innerHTML;
-                _remain(function(rem){
-                    if(rem>0){_ce=Date.now()+rem;_startcd();}
-                });
-            }
-            _load();
-            _members();
-        };
-    </script>
+  /* ---- DB ---- */
+  var DB={
+    'HJF38':{name:'Alex "Shadow" Carter',discord:'shadow#1234',avatar:'',role:'VIP Member',cls:'tag-vip',playtime:'247h',banned:false,warns:1},
+    'KLM92':{name:'Jamie Reese',discord:'jreese#5678',avatar:'',role:'Staff',cls:'tag-staff',playtime:'892h',banned:false,warns:2},
+    'OWNER':{name:'75e0',discord:'xcq.v',avatar:'https://cdn.discordapp.com/avatars/1147409272087519263/ccd5bed55f2b6b52b21988499b22c4d6.png?size=128',role:'Owner / Developer',cls:'tag-owner',playtime:'1,500h+',banned:false,warns:0},
+    'SMITZ':{name:'thatsmitzyguy',discord:'thatsmitzyguy',avatar:'',role:'Owner / Developer',cls:'tag-owner',playtime:'1,200h+',banned:false,warns:0},
+    'BANNED':{name:'Cheater123',discord:'cheater#9999',avatar:'',role:'Citizen',cls:'tag-citizen',playtime:'3h',banned:true,warns:6}
+  };
+  var user=null,pending=null;
 
+  /* ---- DOM CACHE ---- */
+  function $(id){return document.getElementById(id)}
+  var pages={home:$('pg-home'),dashboard:$('pg-dashboard'),rulebook:$('pg-rulebook'),shop:$('pg-shop'),owners:$('pg-owners')};
+  var navs=document.querySelectorAll('.header-nav a[data-nav]');
+
+  /* ---- NAV ---- */
+  function go(page){
+    if(page==='dashboard'&&!user){toast('Link your account first!','warn');page='home'}
+    Object.keys(pages).forEach(function(k){pages[k].classList.remove('is-visible')});
+    if(pages[page])pages[page].classList.add('is-visible');
+    navs.forEach(function(a){a.classList.remove('is-active');if(a.getAttribute('data-nav')===page)a.classList.add('is-active')});
+    if(page==='dashboard'&&user)renderDash();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // Bind all navs
+  document.querySelectorAll('[data-nav]').forEach(function(el){
+    el.addEventListener('click',function(e){e.preventDefault();go(el.getAttribute('data-nav'))});
+  });
+
+  /* ---- TOKEN ---- */
+  $('tokenBtn').addEventListener('click',function(){
+    var raw=$('tokenInput').value.trim().toUpperCase(),err=$('tokenErr');
+    err.classList.remove('is-visible');$('tokenInput').style.borderColor='';
+    if(!raw){err.textContent='Please paste your in-game code.';err.classList.add('is-visible');return}
+    var key=raw.split('-')[0];
+    if(DB[key]){user=DB[key];renderDash();go('dashboard');toast('Welcome, '+user.name.split(' ')[0]+'! Account linked.','ok')}
+    else{err.textContent='Code not recognized. Copy it from in-game and try again.';err.classList.add('is-visible');$('tokenInput').style.borderColor='#e85050';setTimeout(function(){$('tokenInput').style.borderColor=''},2000)}
+  });
+  $('tokenInput').addEventListener('keydown',function(e){if(e.key==='Enter')$('tokenBtn').click()});
+
+  /* ---- DASHBOARD ---- */
+  function renderDash(){
+    if(!user)return;
+    $('dashName').textContent=user.name;$('dashDiscord').textContent=user.discord;
+    if(user.avatar){$('dashAvatar').src=user.avatar;$('dashAvatar').style.display='';$('dashAvatarFb').style.display='none'}
+    else{$('dashAvatar').style.display='none';$('dashAvatarFb').style.display='flex'}
+    $('dashTag').textContent=user.role;$('dashTag').className='dash-tag '+(user.cls||'tag-citizen');
+    $('statPlaytime').textContent=user.playtime;
+    if(user.banned){$('statBanned').textContent='YES';$('statBanned').className='sval c-red'}
+    else{$('statBanned').textContent='No';$('statBanned').className='sval c-green'}
+    var w=user.warns||0;$('statWarns').textContent=w+' / 6';
+    if(w>=6){$('statWarns').className='sval c-red';$('statWarnSub').textContent='BAN THRESHOLD';$('statWarnSub').style.color='#e85050'}
+    else if(w>=4){$('statWarns').className='sval c-gold';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#e2b04a'}
+    else if(w>=2){$('statWarns').className='sval';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#f5a06a'}
+    else{$('statWarns').className='sval c-green';$('statWarnSub').textContent='Good standing';$('statWarnSub').style.color=''}
+    var bannedRow=user.banned?'<div class="act-row"><span class="act-dot bad"></span> BANNED. Purchase unban in shop. <span class="act-time">—</span></div>':'';
+    var warnRow=w>0?'<div class="act-row"><span class="act-dot warn"></span> '+w+' warning(s). '+(6-w)+' remaining. <span class="act-time">—</span></div>':'';
+    $('actList').innerHTML='<div class="act-row"><span class="act-dot ok"></span> Account linked — '+user.discord+' <span class="act-time">Just now</span></div>'+bannedRow+warnRow;
+  }
+
+  /* ---- SHOP ---- */
+  document.querySelectorAll('[data-buy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      if(!user){toast('Link your account first!','warn');go('home');return}
+      pending={name:b.getAttribute('data-buy'),price:parseFloat(b.getAttribute('data-price'))};
+      $('modalTitle').textContent='Confirm Purchase';
+      $('modalDesc').textContent='Buy "'+pending.name+'" for $'+pending.price.toFixed(2)+'? Linked to: '+user.discord;
+      $('modalOk').textContent='Confirm — $'+pending.price.toFixed(2);$('modal').classList.add('is-open');
+    });
+  });
+  $('modalOk').addEventListener('click',function(){if(!pending)return;toast('Purchased "'+pending.name+'" for $'+pending.price.toFixed(2)+'! Check Discord.','ok');pending=null;$('modal').classList.remove('is-open')});
+  $('modalCancel').addEventListener('click',function(){pending=null;$('modal').classList.remove('is-open')});
+  $('modal').addEventListener('click',function(e){if(e.target===$('modal')){pending=null;$('modal').classList.remove('is-open')}});
+
+  /* ---- UTILS ---- */
+  function copyIp(){
+    var ip='connect eclipsestate.com';
+    if(navigator.clipboard){navigator.clipboard.writeText(ip).then(function(){toast('Copied! F8 in FiveM → paste.','info')}).catch(function(){toast('IP: '+ip,'info')})}
+    else{toast('IP: '+ip,'info')}
+  }
+  $('btnCopyIp').addEventListener('click',copyIp);
+  $('copyIpChip').addEventListener('click',copyIp);
+  $('liveIp') && $('liveIp').addEventListener('click',copyIp);
+  $('liveChip').querySelector('.ip-copy').addEventListener('click',copyIp);
+  $('btnJoin').addEventListener('click',function(){toast('Opening FiveM...','info');window.open('fivem://connect/eclipsestate.com','_blank')});
+  $('lnkTicket').addEventListener('click',function(){toast('Join Discord → open ticket in #support','info')});
+
+  /* ---- TOAST ---- */
+  function toast(msg,type){
+    type=type||'info';var icons={ok:'✅',warn:'⚠️',err:'❌',info:'ℹ️'};
+    var el=document.createElement('div');el.className='toast toast--'+type;
+    el.innerHTML='<span class="t-icon">'+(icons[type]||'ℹ️')+'</span><span>'+msg+'</span><button class="t-close">&times;</button>';
+    el.querySelector('.t-close').addEventListener('click',function(){el.remove()});
+    $('toastHost').appendChild(el);setTimeout(function(){if(el.parentNode)el.remove()},5000);
+  }
+
+  /* ---- LIVE FIVEM ---- */
+  function fetchPlayers(){
+    var ip='eclipsestate.com',port='30120';
+    fetch('http://'+ip+':'+port+'/dynamic.json',{signal:AbortSignal.timeout(4000)})
+      .then(function(r){if(!r.ok)throw Error('bad');return r.json()})
+      .then(function(d){var c=d.clients||0,m=d.sv_maxclients||64;$('liveTxt').textContent=c+' / '+m+' online';$('liveDot').className='dot '+(c>0?'on':'off')})
+      .catch(function(){
+        fetch('http://'+ip+':'+port+'/players.json',{signal:AbortSignal.timeout(4000)})
+          .then(function(r){if(!r.ok)throw Error('bad');return r.json()})
+          .then(function(p){var c=Array.isArray(p)?p.length:0;$('liveTxt').textContent=c+' player'+(c!==1?'s':'')+' online';$('liveDot').className='dot '+(c>0?'on':'off')})
+          .catch(function(){$('liveTxt').textContent='Server offline — check back';$('liveDot').className='dot off'});
+      });
+  }
+
+  /* ---- LIVE DISCORD ---- */
+  function fetchDiscord(){
+    var gid='1525359528659652669';
+    fetch('https://discord.com/api/guilds/'+gid+'/widget.json',{signal:AbortSignal.timeout(5000)})
+      .then(function(r){if(!r.ok)throw Error('bad');return r.json()})
+      .then(function(d){var on=d.presence_count||0,tot=d.members?d.members.length:on,txt='🟢 '+on+' online · '+tot+' members';var s=$('dcSmall'),b=$('dcBadge');if(s)s.textContent=txt;if(b)b.textContent=txt})
+      .catch(function(){
+        fetch('https://discord.com/api/v9/invites/cU3CH7z494?with_counts=true',{signal:AbortSignal.timeout(5000)})
+          .then(function(r){if(!r.ok)throw Error('bad');return r.json()})
+          .then(function(d){var on=d.approximate_presence_count||0,tot=d.approximate_member_count||0,txt='🟢 '+on+' online · '+tot+' members';var s=$('dcSmall'),b=$('dcBadge');if(s)s.textContent=txt;if(b)b.textContent=txt})
+          .catch(function(){var s=$('dcSmall'),b=$('dcBadge');if(s)s.textContent='Join us!';if(b)b.textContent='Join our Discord!'});
+      });
+  }
+
+  /* ---- INIT ---- */
+  fetchPlayers();fetchDiscord();setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
+
+  // URL hash auto-login
+  if(window.location.hash){var h=window.location.hash.replace('#','').toUpperCase(),k=h.split('-')[0];if(DB[k]){$('tokenInput').value=h;user=DB[k];renderDash()}}
+})();
+</script>
 </body>
 </html>
