@@ -905,7 +905,11 @@ body{
   var U=null,P=null,COOLDOWN_MS=3600000;
   var currentAppId=null;
   var realtimeInterval=null;
-  var BOT_API=(function(){try{if(window.location.origin&&window.location.origin!=='null'&&window.location.origin!=='file://')return window.location.origin}catch(e){}return'http://localhost:5599'})(); // auto-detected from page URL — open http://YOUR-SERVER-IP:5599
+  // ╔══════════════════════════════════════════╗
+  // ║  BOT API URL — CHANGE THIS ONE LINE     ║
+  // ║  Paste your bot server URL below         ║
+  // ╚══════════════════════════════════════════╝
+  var BOT_API='http://95.217.148.96:5599'; // ← PUT YOUR BOT URL HERE (e.g. http://12.34.56.78:5599)
   function $(id){return document.getElementById(id)}
 
   var pages={};
@@ -962,7 +966,7 @@ body{
           }
           renderStatus(remoteApp);
           renderChat(currentAppId);
-        }).catch(function(){});
+        }).catch(function(err){console.error('[Eclipse] Chat error:',err);try{fetch(BOT_API+'/api/error-report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'Chat send failed',detail:{error:String(err),botApi:BOT_API}})})}catch(ignored){}});
     },3000); // Poll every 3 seconds
   }
   
@@ -1126,11 +1130,17 @@ body{
         if(btn){btn.textContent=ot;btn.disabled=false}
       }).catch(function(err){
         var msg='Failed to send. ';
-        if(err.message&&err.message.indexOf('Failed to fetch')!==-1)msg+='Cannot reach bot API at '+BOT_API+'. Make sure the bot is running and you opened this page via http://SERVER-IP:5599';
-        else if(err.message)msg+=err.message;
-        else msg+='Unknown error.';
+        if(err.message&&err.message.indexOf('Failed to fetch')!==-1){
+          msg+='Cannot reach bot API at '+BOT_API+'. Make sure you opened this page via http://SERVER-IP:5599 (not a local file)';
+        }else if(err.message){
+          msg+=err.message;
+          // Also try to get response body for 404/400 errors
+          if(err.message.indexOf('HTTP ')!==-1)msg+=' — Check bot console for details.';
+        }else{msg+='Unknown error.';}
         toast(msg,'err');
-        console.error('[Eclipse] Apply error:',err,'BOT_API=',BOT_API);
+        // Report error to bot's error-log channel
+        try{fetch(BOT_API+'/api/error-report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,detail:{error:String(err),botApi:BOT_API,userAgent:navigator.userAgent}})})}catch(ignored){}
+        console.error('[Eclipse] Apply error:',err,'BOT_API='+BOT_API);
         if(btn){btn.textContent=ot;btn.disabled=false}
       });
     });
@@ -1155,6 +1165,8 @@ body{
 
   function init(){
     initPages();bindNav();setupToken();setupShop();setupModal();setupUtils();setupApplyForm();checkApply();fetchPlayers();fetchDiscord();setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
+    console.log('[Eclipse] Using BOT_API =',BOT_API);
+    if(BOT_API.indexOf('localhost')!==-1)console.warn('[Eclipse] BOT_API is localhost — change it to your bot server IP!');
     if (!isMobile()) {
       showPage('home');
     }
@@ -1162,5 +1174,5 @@ body{
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19b83122f529833',t:'MTc4MzgxMTc0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19ba313ba7dbedc',t:'MTc4MzgxMzA1Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
