@@ -4,735 +4,1137 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eclipse State — FiveM Roleplay</title>
-<link rel="icon" type="image/png" href="uploads/logo.png">
+<link rel="icon" type="image/png" href="uploads/eclipse-logo-new.png">
 <meta name="description" content="Eclipse State — A premier FiveM roleplay community.">
 <style>
-/* ==========================================================
-   RESET & BASE
-   ========================================================== */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
 body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  color:#e8e4df;min-height:100vh;overflow-x:hidden;
-  line-height:1.6;background:#04121c;
-  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale
+  color:#e8e4df;min-height:100vh;overflow-x:hidden;line-height:1.6;
+  background:#01060e;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
 }
 
-/* ==========================================================
-   VIDEO BACKGROUND
-   ========================================================== */
-.video-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.video-layer video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;width:auto;height:auto;transform:translate(-50%,-50%);object-fit:cover}
-.video-layer::after{content:'';position:absolute;inset:0;background:rgba(2,8,16,.72);z-index:1}
+/* Custom Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:rgba(6,14,28,.5);border-radius:5px}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#f2813d,#e06030);border-radius:5px;border:2px solid rgba(6,14,28,.5)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#f5904d,#e07040)}
+::-webkit-scrollbar-corner{background:rgba(6,14,28,.5)}
 
-/* ==========================================================
-   TOKENS
-   ========================================================== */
-:root{
-  --surface:rgba(8,18,32,.68);--surface2:rgba(10,22,40,.78);
-  --border:rgba(255,255,255,.07);--border-light:rgba(255,255,255,.11);
-  --accent:#f2813d;--accent-light:#f69a62;--accent-glow:rgba(242,129,61,.2);
-  --gold:#e2b04a;--gold-glow:rgba(226,176,74,.18);
-  --red:#e85050;--green:#3cb878;--blue:#5b9bd5;
-  --text:#e8e4df;--muted:#8c99ad;--faint:#5c6b80;
-  --radius:16px;--radius-sm:10px;--radius-pill:999px;
-  --shadow:0 2px 24px rgba(0,0,0,.5);
-  --ease:220ms cubic-bezier(.4,0,.2,1)
+/* Firefox scrollbar */
+*{scrollbar-width:thin;scrollbar-color:#f2813d rgba(6,14,28,.5)}
+
+/* Mobile Block Overlay */
+.mobile-block {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: linear-gradient(180deg, #040d1f 0%, #061630 20%, #0a1f42 40%, #0d2d54 55%, #0a5890 70%, #0b4e7e 85%, #0a2e4a 100%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 30px;
+  text-align: center;
 }
 
-/* ==========================================================
-   APP SHELL
-   ========================================================== */
-.app{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 24px}
+.mobile-block .mb-logo {
+  width: 120px;
+  height: auto;
+  border-radius: 24px;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 40px rgba(242,129,61,.45));
+  animation: mbPulse 3s ease-in-out infinite;
+}
 
-/* ==========================================================
-   NAV
-   ========================================================== */
-.nav-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 20px;margin-top:16px;
-  background:var(--surface);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
-  border:1px solid var(--border);border-radius:var(--radius-pill);
-  gap:12px;flex-wrap:wrap;box-shadow:var(--shadow)
+@keyframes mbPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 40px rgba(242,129,61,.45)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 60px rgba(242,129,61,.6)); }
 }
-.nav-logo{display:flex;align-items:center;flex-shrink:0}
-.nav-logo img{height:44px;width:auto;border-radius:10px}
-.nav-links{display:flex;gap:2px;flex-wrap:wrap}
-.nav-links a{
-  display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;
-  padding:9px 16px;border-radius:var(--radius-pill);font-size:.86rem;font-weight:500;
-  transition:var(--ease);cursor:pointer
+
+.mobile-block .mb-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: mbBounce 2s ease-in-out infinite;
 }
-.nav-links a svg{width:16px;height:16px;opacity:.7;transition:var(--ease)}
+
+@keyframes mbBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.mobile-block h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.mobile-block p {
+  color: #8c99ad;
+  font-size: 1rem;
+  max-width: 340px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.mobile-block .mb-discord-box {
+  background: rgba(6, 14, 28, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px 30px;
+  margin-bottom: 20px;
+}
+
+.mobile-block .mb-discord-box h2 {
+  color: #f2813d;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.mobile-block .mb-discord-box p {
+  color: #8c99ad;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.mobile-block .mb-discord-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #5865F2;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+  margin-bottom: 16px;
+}
+
+.mobile-block .mb-discord-btn:hover {
+  background: #4752C4;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(88, 101, 242, 0.5);
+}
+
+.mobile-block .mb-discord-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.mobile-block .mb-info {
+  font-size: 0.78rem;
+  color: #5c6b80;
+  max-width: 300px;
+}
+
+.mobile-block .mb-positions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 24px;
+  max-width: 320px;
+}
+
+.mobile-block .mb-positions span {
+  background: rgba(60, 184, 120, 0.15);
+  color: #3cb878;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid rgba(60, 184, 120, 0.25);
+}
+
+@media (max-width: 768px) {
+  .mobile-block {
+    display: flex;
+  }
+  .scene, .app, .nav-bar, .footer {
+    display: none !important;
+  }
+}
+
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.sky-layer{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 55% 22% at 50% 30%, #fffbe6 0%, #ffe8b040 15%, transparent 40%),
+    radial-gradient(ellipse 70% 32% at 50% 42%, #ffc078 0%, #ff9a5040 20%, transparent 50%),
+    radial-gradient(ellipse 90% 40% at 50% 55%, #ff8c55 0%, transparent 55%),
+    radial-gradient(ellipse 100% 60% at 50% 100%, #0b5a8a 0%, transparent 50%),
+    linear-gradient(175deg,
+      #040d1f 0%,#061630 4%,#0a1f42 9%,#0d2d54 14%,#103a64 19%,
+      #134a74 25%,#155880 30%,#1a6890 35%,#1e78a0 40%,
+      #f4a460 46%,#f8b060 50%,#f8a050 54%,#f09050 58%,
+      #e07048 62%,#c0503a 66%,#0b4a6c 70%,#0a3e5e 75%,
+      #08304c 81%,#06243a 87%,#041830 93%,#020c18 100%
+    );
+  animation:skymove 40s ease-in-out infinite alternate;
+}
+@keyframes skymove{0%{filter:hue-rotate(0deg) saturate(1)}100%{filter:hue-rotate(2deg) saturate(1.04)}}
+.sun-disc{
+  position:absolute;top:18%;left:50%;transform:translateX(-50%);
+  width:120px;height:120px;
+  background:
+    radial-gradient(circle at 40% 40%,#fffef8 0%,#fffbe0 8%,#ffe8a0 22%,#ffcc4d 45%,#ffa530 65%,#ff8a1a80 85%,transparent 100%);
+  border-radius:50%;
+  box-shadow:0 0 60px #ffe8a035,0 0 140px #ffcc4d25,0 0 240px #ffa53018,0 0 400px #ff7a1010;
+  animation:sunbeat 6s ease-in-out infinite alternate;
+}
+@keyframes sunbeat{0%{box-shadow:0 0 60px #ffe8a035,0 0 140px #ffcc4d25,0 0 240px #ffa53018}100%{box-shadow:0 0 80px #ffe8a050,0 0 170px #ffcc4d38,0 0 280px #ffa53025}}
+.sun-path{
+  position:absolute;top:64%;left:50%;transform:translateX(-50%);
+  width:150px;height:130px;
+  background:linear-gradient(180deg,rgba(255,196,77,.35) 0%,rgba(255,196,77,.18) 22%,rgba(255,196,77,.06) 50%,rgba(255,196,77,.01) 75%,transparent 100%);
+  border-radius:50%;animation:pathglow 5s ease-in-out infinite alternate;
+}
+@keyframes pathglow{0%{opacity:.5;width:150px}100%{opacity:.8;width:200px}}
+.cloud{position:absolute;background:#fff;border-radius:50%;filter:blur(26px);opacity:0}
+.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:50%}
+.c1{top:7%;left:6%;width:260px;height:60px;opacity:.14;animation:driftA 42s linear infinite}
+.c1::before{width:130px;height:65px;top:-30px;left:45px}.c1::after{width:150px;height:50px;top:-14px;left:90px}
+.c2{top:14%;left:52%;width:220px;height:48px;opacity:.1;animation:driftB 48s linear infinite}
+.c2::before{width:110px;height:55px;top:-24px;left:38px}.c2::after{width:120px;height:42px;top:-10px;left:75px}
+.c3{top:4%;left:70%;width:180px;height:40px;opacity:.08;animation:driftA 34s linear infinite}
+.c3::before{width:90px;height:45px;top:-20px;left:32px}
+@keyframes driftA{0%{transform:translateX(0)}100%{transform:translateX(80px)}}
+@keyframes driftB{0%{transform:translateX(0)}100%{transform:translateX(-60px)}}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite;animation-delay:var(--dl);opacity:0}
+@keyframes twinkle{0%,100%{opacity:0}50%{opacity:.5}}
+.ocean{
+  position:absolute;bottom:0;left:0;width:100%;height:44%;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 30px,rgba(255,255,255,.012) 30px,rgba(255,255,255,.012) 31px),
+    repeating-linear-gradient(90deg,transparent,transparent 140px,rgba(255,255,255,.005) 140px,rgba(255,255,255,.005) 141px),
+    linear-gradient(180deg,
+      #0a5890 0%,#0b4e7e 7%,#0c4268 16%,#0b3758 27%,
+      #0a2e4a 40%,#09263e 54%,#071e32 68%,#051628 82%,#030e1c 94%,#010812 100%
+    );
+  animation:oceanshimmer 8s ease-in-out infinite alternate;
+}
+
+.ocean::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background:
+    repeating-linear-gradient(92deg,transparent 0px,transparent 60px,rgba(30,130,180,.08) 60px,rgba(30,130,180,.08) 62px),
+    repeating-linear-gradient(88deg,transparent 0px,transparent 80px,rgba(20,100,150,.06) 80px,rgba(20,100,150,.06) 82px),
+    repeating-linear-gradient(45deg,transparent 0px,transparent 40px,rgba(40,160,200,.04) 40px,rgba(40,160,200,.04) 41px),
+    repeating-linear-gradient(100deg,transparent 0px,transparent 200px,rgba(100,180,220,.03) 200px,rgba(100,180,220,.03) 204px),
+    radial-gradient(ellipse 300px 40px at 20% 30%,rgba(80,160,200,.06) 0%,transparent 70%),
+    radial-gradient(ellipse 250px 35px at 60% 50%,rgba(60,140,180,.05) 0%,transparent 70%),
+    radial-gradient(ellipse 400px 50px at 80% 20%,rgba(90,170,210,.04) 0%,transparent 70%),
+    radial-gradient(ellipse 350px 45px at 40% 70%,rgba(50,120,160,.05) 0%,transparent 70%);
+  animation: waterDetailFlow 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.ocean::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse 8px 3px at 15% 8%,rgba(255,255,255,.15) 0%,transparent 100%),
+    radial-gradient(ellipse 12px 4px at 35% 12%,rgba(255,255,255,.12) 0%,transparent 100%),
+    radial-gradient(ellipse 6px 2px at 55% 5%,rgba(255,255,255,.18) 0%,transparent 100%),
+    radial-gradient(ellipse 10px 3px at 75% 10%,rgba(255,255,255,.14) 0%,transparent 100%),
+    radial-gradient(ellipse 7px 2px at 90% 7%,rgba(255,255,255,.16) 0%,transparent 100%),
+    radial-gradient(ellipse 14px 4px at 25% 15%,rgba(255,255,255,.1) 0%,transparent 100%),
+    radial-gradient(ellipse 9px 3px at 65% 18%,rgba(255,255,255,.13) 0%,transparent 100%),
+    radial-gradient(ellipse 11px 3px at 45% 20%,rgba(255,255,255,.11) 0%,transparent 100%),
+    radial-gradient(circle at 30% 25%,rgba(120,200,240,.08) 0%,transparent 40%),
+    radial-gradient(circle at 70% 35%,rgba(100,180,220,.06) 0%,transparent 35%),
+    radial-gradient(circle at 50% 40%,rgba(140,210,250,.07) 0%,transparent 45%),
+    radial-gradient(ellipse 20px 8px at 10% 30%,rgba(80,180,220,.1) 0%,transparent 100%),
+    radial-gradient(ellipse 25px 10px at 85% 45%,rgba(90,170,210,.08) 0%,transparent 100%),
+    radial-gradient(ellipse 18px 7px at 60% 55%,rgba(70,160,200,.09) 0%,transparent 100%);
+  animation: waterSurfaceShimmer 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.wave-overlay {
+  position: absolute;
+  bottom: 0;
+  left: -5%;
+  width: 110%;
+  height: 20%;
+  background: linear-gradient(180deg,transparent 0%,rgba(15,80,120,.15) 30%,rgba(10,60,100,.25) 60%,rgba(5,40,80,.35) 100%);
+  animation: waveMove 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.wave-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,transparent 0%,rgba(100,180,220,.3) 20%,rgba(150,220,255,.5) 40%,rgba(100,180,220,.3) 60%,transparent 100%);
+  animation: waveLine 4s ease-in-out infinite;
+}
+
+.wave-overlay-2 {
+  position: absolute;
+  bottom: 5%;
+  left: -5%;
+  width: 110%;
+  height: 15%;
+  background: linear-gradient(180deg,transparent 0%,rgba(20,90,130,.1) 40%,rgba(15,70,110,.2) 70%,rgba(10,50,90,.3) 100%);
+  animation: waveMove 10s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+
+@keyframes waveMove{0%,100%{transform:translateX(-2%) skewX(-1deg)}50%{transform:translateX(2%) skewX(1deg)}}
+@keyframes waveLine{0%,100%{opacity:.3;transform:scaleX(.95)}50%{opacity:.6;transform:scaleX(1.05)}}
+@keyframes waterDetailFlow{0%,100%{opacity:.8;transform:translateX(0)}50%{opacity:1;transform:translateX(10px)}}
+@keyframes waterSurfaceShimmer{0%,100%{opacity:.7}100%{opacity:1}}
+@keyframes oceanshimmer{0%{filter:brightness(1)}100%{filter:brightness(1.06)}}
+.horizon-glow{position:absolute;top:55%;left:0;width:100%;height:8%;background:linear-gradient(180deg,rgba(242,140,70,.22) 0%,rgba(242,140,70,.08) 30%,rgba(242,140,70,.02) 60%,transparent 100%)}
+.shore{position:absolute;bottom:0;left:0;width:100%;height:5%;background:linear-gradient(180deg,rgba(15,30,50,.2) 0%,rgba(10,22,40,.35) 40%,rgba(5,15,28,.55) 100%)}
+.sparkle-dot{position:absolute;bottom:0;background:#fff;border-radius:50%;animation:spark var(--d) ease-in-out infinite;animation-delay:var(--dl);opacity:0}
+@keyframes spark{0%,100%{opacity:0;transform:translateY(0)}50%{opacity:.6;transform:translateY(-12px)}}
+.tint{position:absolute;inset:0;background:rgba(1,4,8,.3);z-index:2}
+
+:root{--s:rgba(6,14,28,.68);--b:rgba(255,255,255,.07);--bl:rgba(255,255,255,.12);--a:#f2813d;--al:#f69a62;--ag:rgba(242,129,61,.22);--gld:#e2b04a;--gg:rgba(226,176,74,.2);--rd:#e85050;--gn:#3cb878;--blu:#5b9bd5;--t:#e8e4df;--m:#8c99ad;--f:#5c6b80;--r:16px;--rs:10px;--rp:999px;--sh:0 2px 24px rgba(0,0,0,.5);--e:220ms cubic-bezier(.4,0,.2,1)}
+.app{position:relative;z-index:10;max-width:1200px;margin:0 auto;padding:0 24px}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 18px;margin-top:14px;background:var(--s);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--b);border-radius:var(--rp);gap:6px;flex-wrap:wrap;box-shadow:var(--sh)}
+.nav-logo{cursor:pointer;display:flex;align-items:center;flex-shrink:0}
+.nav-logo img{height:42px;width:auto;border-radius:9px;box-shadow:0 0 18px rgba(242,129,61,.3)}
+.nav-links{display:flex;gap:1px;flex-wrap:wrap}
+.nav-links a{display:inline-flex;align-items:center;gap:4px;color:var(--m);text-decoration:none;padding:8px 12px;border-radius:var(--rp);font-size:.82rem;font-weight:500;transition:var(--e);cursor:pointer;white-space:nowrap}
+.nav-links a svg{width:14px;height:14px;opacity:.7;transition:var(--e)}
 .nav-links a:hover{color:#fff;background:rgba(255,255,255,.05)}
 .nav-links a:hover svg{opacity:1}
-.nav-links a.active{color:#fff;background:var(--accent-glow);font-weight:600;box-shadow:inset 0 0 0 1px rgba(242,129,61,.18)}
+.nav-links a.active{color:#fff;background:var(--ag);font-weight:600;box-shadow:inset 0 0 0 1px rgba(242,129,61,.18)}
 .nav-links a.active svg{opacity:1}
-.nav-links a.nav-owner{background:var(--gold-glow);color:var(--gold);font-weight:600}
-.nav-links a.nav-owner:hover{box-shadow:0 0 16px var(--gold-glow)}
+.nav-links a.na{background:rgba(60,184,120,.14);color:var(--gn);font-weight:600}
+.nav-links a.no{background:var(--gg);color:var(--gld);font-weight:600}
+.nav-links a.nw{background:rgba(91,155,213,.12);color:var(--blu);font-weight:600}
 
-/* ==========================================================
-   BUTTONS
-   ========================================================== */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  padding:12px 28px;border-radius:var(--radius-pill);font-size:.9rem;font-weight:600;
-  cursor:pointer;border:none;font-family:inherit;text-decoration:none;
-  transition:var(--ease);white-space:nowrap;line-height:1;letter-spacing:-.01em
-}
-.btn--fill{background:var(--accent);color:#fff;box-shadow:0 4px 18px var(--accent-glow)}
-.btn--fill:hover{background:#f5904d;transform:translateY(-1px);box-shadow:0 8px 28px rgba(242,129,61,.35)}
-.btn--stroke{background:transparent;color:var(--accent-light);border:1.5px solid rgba(242,129,61,.35)}
-.btn--stroke:hover{background:var(--accent-glow);border-color:var(--accent);color:#fff}
-.btn--sm{padding:8px 18px;font-size:.82rem}
-.btn--gold{background:linear-gradient(135deg,var(--gold),#c89628);color:#0d0d0d;font-weight:700;box-shadow:0 4px 16px var(--gold-glow)}
-.btn--gold:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(226,176,74,.4)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 26px;border-radius:var(--rp);font-size:.88rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;text-decoration:none;transition:var(--e);white-space:nowrap;line-height:1;letter-spacing:-.01em}
+.btn-f{background:var(--a);color:#fff;box-shadow:0 4px 18px var(--ag)}
+.btn-f:hover{background:#f5904d;transform:translateY(-1px);box-shadow:0 8px 28px rgba(242,129,61,.35)}
+.btn-s{background:transparent;color:var(--al);border:1.5px solid rgba(242,129,61,.35)}
+.btn-s:hover{background:var(--ag);border-color:var(--a);color:#fff}
+.btn-sm{padding:7px 16px;font-size:.8rem}
+.btn-gn{background:var(--gn);color:#fff;box-shadow:0 4px 16px rgba(60,184,120,.25)}
+.btn-gn:hover{background:#4cc985;transform:translateY(-1px);box-shadow:0 8px 24px rgba(60,184,120,.4)}
+.btn-rd{background:var(--rd);color:#fff;box-shadow:0 4px 16px rgba(232,80,80,.25)}
+.btn-rd:hover{background:#f06060;transform:translateY(-1px);box-shadow:0 8px 24px rgba(232,80,80,.4)}
 
-/* ==========================================================
-   PAGE SWITCHING
-   ========================================================== */
-.page{display:none;animation:pageIn .3s ease-out}
-.page--visible{display:block}
-@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.section{padding:40px 0}
+.page{display:none}.page.on{display:block}.section{padding:40px 0}
+.card{background:var(--s);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--b);border-radius:var(--r);padding:30px;box-shadow:var(--sh);transition:var(--e)}
 
-/* ==========================================================
-   CARDS
-   ========================================================== */
-.card{
-  background:var(--surface);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid var(--border);border-radius:var(--radius);
-  padding:30px;box-shadow:var(--shadow);transition:var(--ease)
-}
-.card:hover{border-color:var(--border-light)}
+.hc{display:flex;flex-direction:column;align-items:center;text-align:center;padding:56px 0 50px}
+.hc .logo{width:220px;height:auto;border-radius:28px;margin-bottom:24px;filter:drop-shadow(0 0 100px rgba(242,129,61,.55));animation:lf 4s ease-in-out infinite}
+@keyframes lf{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-14px) scale(1.02)}}
+.hc .tag{font-size:1.15rem;color:var(--m);max-width:500px;margin-bottom:32px;line-height:1.6}
+.sb{display:inline-flex;align-items:center;gap:10px;background:var(--s);backdrop-filter:blur(24px);border:1px solid var(--b);border-radius:var(--rp);padding:10px 22px;font-weight:600;font-size:.88rem;margin-bottom:30px}
+.sb .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sb .dot.on{background:var(--gn);box-shadow:0 0 10px var(--gn);animation:bl 2s infinite}
+.sb .dot.off{background:var(--rd);box-shadow:0 0 8px var(--rd)}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.3}}
+.sb .ip{font-family:'SF Mono','Fira Code',monospace;color:var(--al);font-size:.82rem;cursor:pointer}
+.sb .ip:hover{color:#fff}
+.tb{max-width:480px;width:100%}
+.tb h3{font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.tb .hint{font-size:.83rem;color:var(--m);margin-bottom:22px;line-height:1.5}
+.tr{display:flex;gap:10px}
+.tr input{flex:1;background:rgba(2,8,16,.6);border:2px solid var(--b);border-radius:var(--rp);padding:13px 18px;color:#fff;font-size:1.02rem;font-family:'SF Mono','Fira Code',monospace;letter-spacing:.08em;text-align:center;text-transform:uppercase;outline:none;transition:var(--e)}
+.tr input:focus{border-color:var(--a);box-shadow:0 0 22px var(--ag)}
+.te{color:var(--rd);font-size:.81rem;margin-top:10px;display:none}.te.s{display:block}
+.hr{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.hc2{display:inline-flex;align-items:center;gap:7px;background:var(--s);backdrop-filter:blur(24px);border:1px solid var(--b);border-radius:var(--rp);padding:8px 16px;font-size:.82rem;color:var(--m);text-decoration:none;cursor:pointer;transition:var(--e)}
+.hc2 svg{width:15px;height:15px;opacity:.6;transition:var(--e)}
+.hc2:hover{border-color:var(--a);color:#fff}.hc2:hover svg{opacity:1}
+.hc2 .dcn{color:var(--gn);font-weight:600;font-size:.74rem}
 
-/* ==========================================================
-   HOME
-   ========================================================== */
-.home-center{
-  display:flex;flex-direction:column;align-items:center;text-align:center;
-  padding:70px 0 50px
-}
-.home-logo{width:150px;height:auto;border-radius:28px;margin-bottom:28px;filter:drop-shadow(0 0 60px rgba(242,129,61,.4));animation:logoFloat 5s ease-in-out infinite}
-@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.home-tag{font-size:1.15rem;color:var(--muted);max-width:500px;margin-bottom:32px;line-height:1.6}
+.dh{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:0}
+.dpfp{width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0;border:3px solid var(--a);box-shadow:0 0 28px var(--ag)}
+.dpfpp{width:72px;height:72px;border-radius:50%;flex-shrink:0;background:rgba(6,14,28,.8);border:3px solid var(--b);display:flex;align-items:center;justify-content:center}
+.dpfpp svg{width:32px;height:32px;opacity:.4}
+.dm h2{font-size:1.3rem;font-weight:700}
+.dt{display:inline-block;margin-top:4px;padding:4px 13px;border-radius:var(--rp);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.dt-o{background:linear-gradient(135deg,var(--gld),var(--a));color:#0d0d0d}
+.dt-s{background:rgba(139,92,246,.2);color:#c4b5fd}
+.dt-v{background:var(--ag);color:var(--al)}
+.dt-c{background:rgba(91,155,213,.14);color:var(--blu)}
+.dba{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 
-.server-badge{
-  display:inline-flex;align-items:center;gap:10px;
-  background:var(--surface);backdrop-filter:blur(24px);
-  border:1px solid var(--border);border-radius:var(--radius-pill);
-  padding:10px 22px;font-weight:600;font-size:.88rem;margin-bottom:32px
-}
-.server-badge .live-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.server-badge .live-dot.on{background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 2s infinite}
-.server-badge .live-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.server-badge .ip-copy{font-family:'SF Mono','Fira Code',monospace;color:var(--accent-light);font-size:.82rem;cursor:pointer;transition:var(--ease)}
-.server-badge .ip-copy:hover{color:#fff}
+.sr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0 36px}
+.sc2{text-align:center;padding:26px 16px}
+.sc2 .sl{color:var(--m);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.sc2 .sv{font-size:2.2rem;font-weight:800;margin-top:8px;line-height:1}
+.sc2 .ss{font-size:.72rem;color:var(--m);margin-top:4px}
+.cg{color:var(--gn)}.cr{color:var(--rd)}.cgl{color:var(--gld)}.ca{color:var(--a)}
 
-.token-box{max-width:480px;width:100%}
-.token-box h3{font-size:1.1rem;font-weight:700;margin-bottom:6px}
-.token-box .hint{font-size:.83rem;color:var(--muted);margin-bottom:22px;line-height:1.5}
-.token-row{display:flex;gap:10px}
-.token-row input{
-  flex:1;background:rgba(4,11,20,.6);border:2px solid var(--border);
-  border-radius:var(--radius-pill);padding:13px 18px;color:#fff;
-  font-size:1.02rem;font-family:'SF Mono','Fira Code',monospace;
-  letter-spacing:.08em;text-align:center;text-transform:uppercase;
-  outline:none;transition:var(--ease)
-}
-.token-row input:focus{border-color:var(--accent);box-shadow:0 0 22px var(--accent-glow)}
-.token-err{color:var(--red);font-size:.81rem;margin-top:10px;display:none}
-.token-err.show{display:block}
+.qg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:36px}
+.ql{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;text-decoration:none;color:var(--t);border-radius:var(--r);transition:var(--e);background:var(--s);backdrop-filter:blur(24px);border:1px solid var(--b)}
+.ql:hover{border-color:rgba(242,129,61,.4);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.ql .qii{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ql .qii svg{width:21px;height:21px}
+.qp{background:rgba(139,92,246,.16)}.qp svg{color:#c4b5fd}
+.qo{background:var(--ag)}.qo svg{color:var(--al)}
+.qb{background:rgba(91,155,213,.14)}.qb svg{color:var(--blu)}
+.qg2{background:rgba(60,184,120,.13)}.qg2 svg{color:var(--gn)}
+.qgl{background:var(--gg)}.qgl svg{color:var(--gld)}
+.ql h4{font-size:.92rem;font-weight:600}.ql .qs2{font-size:.74rem;color:var(--m);margin-top:2px}.ql .qb2{font-size:.7rem;color:var(--gn);font-weight:600;margin-top:3px}
 
-.help-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
-.help-chip{
-  display:inline-flex;align-items:center;gap:7px;
-  background:var(--surface);backdrop-filter:blur(24px);
-  border:1px solid var(--border);border-radius:var(--radius-pill);
-  padding:8px 16px;font-size:.82rem;color:var(--muted);
-  text-decoration:none;cursor:pointer;transition:var(--ease)
-}
-.help-chip svg{width:15px;height:15px;opacity:.6;transition:var(--ease)}
-.help-chip:hover{border-color:var(--accent);color:#fff}
-.help-chip:hover svg{opacity:1}
-.help-chip .dc-num{color:var(--green);font-weight:600;font-size:.74rem}
+.ash h3{font-size:1.05rem;margin-bottom:14px}
+.ar{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem}
+.ar:last-child{border:0}
+.ad{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ad.ok{background:var(--gn);box-shadow:0 0 8px var(--gn)}
+.ad.w{background:var(--gld);box-shadow:0 0 8px var(--gld)}
+.ad.b{background:var(--rd);box-shadow:0 0 8px var(--rd)}
+.atm{color:var(--m);font-size:.72rem;margin-left:auto}
 
-/* ==========================================================
-   DASHBOARD
-   ========================================================== */
-.dash-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:0}
-.dash-pfp{
-  width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0;
-  border:3px solid var(--accent);box-shadow:0 0 28px var(--accent-glow)
-}
-.dash-pfp-placeholder{
-  width:72px;height:72px;border-radius:50%;flex-shrink:0;
-  background:rgba(8,18,32,.8);border:3px solid var(--border);
-  display:flex;align-items:center;justify-content:center
-}
-.dash-pfp-placeholder svg{width:32px;height:32px;opacity:.4}
-.dash-meta h2{font-size:1.3rem;font-weight:700}
-.dash-tag{
-  display:inline-block;margin-top:4px;padding:4px 13px;border-radius:var(--radius-pill);
-  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em
-}
-.tag-owner{background:linear-gradient(135deg,var(--gold),var(--accent));color:#0d0d0d}
-.tag-staff{background:rgba(139,92,246,.2);color:#c4b5fd}
-.tag-vip{background:var(--accent-glow);color:var(--accent-light)}
-.tag-citizen{background:rgba(91,155,213,.14);color:var(--blue)}
-.dash-btns{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sh2{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.sd2{color:var(--m);margin-bottom:36px;font-size:.95rem}
 
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0 36px}
-.stat-card{text-align:center;padding:26px 16px}
-.stat-card .s-lbl{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
-.stat-card .s-val{font-size:2.2rem;font-weight:800;margin-top:8px;line-height:1}
-.stat-card .s-sub{font-size:.72rem;color:var(--muted);margin-top:4px}
-.c-green{color:var(--green)}.c-red{color:var(--red)}.c-gold{color:var(--gold)}.c-orange{color:var(--accent)}
+.wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.ws{text-align:center;padding:36px 22px}
+.ws .wn{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;margin:0 auto 16px;background:var(--ag);color:var(--a);border:2px solid var(--a)}
+.ws h3{font-size:1.05rem;font-weight:700;margin-bottom:8px}
+.ws p{font-size:.84rem;color:var(--m);line-height:1.5}
+.ws code{display:inline-block;margin-top:10px;background:rgba(242,129,61,.12);color:var(--al);padding:6px 14px;border-radius:var(--rp);font-family:'SF Mono','Fira Code',monospace;font-size:.85rem;letter-spacing:.04em}
+.we{margin-top:32px}
 
-.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:36px}
-.quick-link{
-  display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;
-  text-decoration:none;color:var(--text);border-radius:var(--radius);transition:var(--ease);
-  background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--border)
-}
-.quick-link:hover{border-color:rgba(242,129,61,.4);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
-.quick-link .ql-icon{
-  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0
-}
-.quick-link .ql-icon svg{width:22px;height:22px}
-.ql-purple{background:rgba(139,92,246,.16)}.ql-purple svg{color:#c4b5fd}
-.ql-orange{background:var(--accent-glow)}.ql-orange svg{color:var(--accent-light)}
-.ql-blue{background:rgba(91,155,213,.14)}.ql-blue svg{color:var(--blue)}
-.ql-green{background:rgba(60,184,120,.13)}.ql-green svg{color:var(--green)}
-.ql-gold{background:var(--gold-glow)}.ql-gold svg{color:var(--gold)}
-.quick-link h4{font-size:.92rem;font-weight:600}
-.quick-link .ql-sub{font-size:.74rem;color:var(--muted);margin-top:2px}
-.quick-link .ql-badge{font-size:.7rem;color:var(--green);font-weight:600;margin-top:3px}
+.rtoc{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:30px;padding:18px;background:var(--s);backdrop-filter:blur(24px);border:1px solid var(--b);border-radius:var(--r)}
+.rtoc a{color:var(--m);text-decoration:none;padding:7px 14px;border-radius:var(--rp);font-size:.81rem;border:1px solid var(--b);transition:var(--e);cursor:pointer}
+.rtoc a:hover{color:#fff;border-color:var(--a);background:var(--ag)}
+.rb{margin-bottom:20px;padding:28px 30px;background:var(--s);backdrop-filter:blur(24px);border:1px solid var(--b);border-radius:var(--r);transition:var(--e)}
+.rb:hover{border-color:var(--bl)}
+.rb h3{font-size:1.18rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rlvl{display:inline-block;padding:3px 10px;border-radius:var(--rp);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.lc{background:rgba(232,80,80,.13);color:var(--rd);border:1px solid rgba(232,80,80,.2)}
+.lm{background:var(--ag);color:var(--al);border:1px solid rgba(242,129,61,.2)}
+.ln{background:rgba(91,155,213,.11);color:var(--blu);border:1px solid rgba(91,155,213,.2)}
+.rlst{list-style:none}
+.rlst li{padding:9px 0 9px 24px;position:relative;border-bottom:1px solid rgba(255,255,255,.03);font-size:.9rem;line-height:1.6}
+.rlst li:last-child{border:0}
+.rlst li::before{content:'';position:absolute;left:2px;top:16px;width:6px;height:6px;border-radius:2px;background:var(--a);opacity:.6}
+.rlst li strong{color:#fff}
+.rlst li .rr{display:block;font-size:.82rem;color:var(--m);margin-top:3px;line-height:1.45}
+.rpb{margin-top:14px;padding:11px 16px;border-radius:var(--rs);font-size:.8rem;font-weight:600;border-left:3px solid}
+.rpc{border-color:var(--rd);color:#f09090;background:rgba(232,80,80,.05)}
+.rpm{border-color:var(--a);color:var(--al);background:var(--ag)}
+.rpn{border-color:var(--blu);color:var(--blu);background:rgba(91,155,213,.05)}
 
-.act-sheet h3{font-size:1.05rem;margin-bottom:14px}
-.act-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem}
-.act-row:last-child{border:0}
-.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.act-dot.ok{background:var(--green);box-shadow:0 0 8px var(--green)}
-.act-dot.warn{background:var(--gold);box-shadow:0 0 8px var(--gold)}
-.act-dot.bad{background:var(--red);box-shadow:0 0 8px var(--red)}
-.act-time{color:var(--muted);font-size:.72rem;margin-left:auto}
+.sg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.shopc{background:var(--s);backdrop-filter:blur(24px);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;transition:var(--e)}
+.shopc:hover{border-color:rgba(242,129,61,.4);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.5)}
+.shopc.ft{border-color:rgba(226,176,74,.3)}
+.si{height:140px;display:flex;align-items:center;justify-content:center;position:relative}
+.si svg{width:56px;height:56px}
+.si-q{background:linear-gradient(135deg,#132238,#081426)}.si-u{background:linear-gradient(135deg,#2c1320,#180c15)}
+.si-v{background:linear-gradient(135deg,#1e1630,#100c1e)}.si-b{background:linear-gradient(135deg,#142820,#0a1912)}
+.si-w{background:linear-gradient(135deg,#14202e,#0a1520)}.si-c{background:linear-gradient(135deg,#281e16,#16100a)}
+.sbz{position:absolute;top:10px;right:10px;padding:3px 11px;border-radius:var(--rp);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.sbz.hot{background:var(--a);color:#fff}.sbz.best{background:var(--gld);color:#0d0d0d}
+.sby{padding:20px}.sby h3{font-size:1.08rem;font-weight:700;margin-bottom:5px}
+.sby .sd3{font-size:.8rem;color:var(--m);margin-bottom:16px;line-height:1.5}
+.sf{display:flex;align-items:center;justify-content:space-between}
+.sp{font-size:1.4rem;font-weight:800;color:var(--a)}.sp s{color:var(--m);font-size:.78rem;font-weight:400;margin-right:4px}
 
-/* ==========================================================
-   SHOP
-   ========================================================== */
-.sec-head{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
-.sec-desc{color:var(--muted);margin-bottom:36px;font-size:.95rem}
+.og{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px;margin-bottom:32px}
+.oc{text-align:center;padding:36px 24px}
+.oc:hover{border-color:rgba(226,176,74,.4);box-shadow:0 14px 44px rgba(0,0,0,.5),0 0 0 1px rgba(226,176,74,.12)}
+.opfp{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--gld);box-shadow:0 0 36px var(--gg);margin-bottom:14px}
+.oc h3{font-size:1.18rem;font-weight:700}
+.oc .ot{display:inline-block;margin-top:6px;padding:5px 15px;border-radius:var(--rp);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:linear-gradient(135deg,var(--gld),var(--a));color:#0d0d0d}
+.oc .od{font-family:'SF Mono',monospace;color:var(--m);font-size:.81rem;margin-top:10px}
+.oc .ob{color:var(--m);font-size:.83rem;margin-top:14px;line-height:1.5;padding:0 8px}
+.otags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
+.otg{padding:5px 11px;border-radius:var(--rp);font-size:.7rem;font-weight:600}
+.ot-d{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.18)}
+.ot-l{background:rgba(60,184,120,.1);color:var(--gn);border:1px solid rgba(60,184,120,.16)}
+.ot-m{background:var(--ag);color:var(--al);border:1px solid rgba(242,129,61,.18)}
+.ot-b{background:rgba(91,155,213,.1);color:var(--blu);border:1px solid rgba(91,155,213,.18)}
+.ot-s{background:rgba(226,176,74,.1);color:var(--gld);border:1px solid rgba(226,176,74,.18)}
+.ot-r{background:rgba(232,80,80,.1);color:var(--rd);border:1px solid rgba(232,80,80,.16)}
 
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-.shop-card{
-  background:var(--surface);backdrop-filter:blur(24px);
-  border:1px solid var(--border);border-radius:var(--radius);
-  overflow:hidden;transition:var(--ease)
-}
-.shop-card:hover{border-color:rgba(242,129,61,.4);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.5)}
-.shop-card.featured{border-color:rgba(226,176,74,.3);box-shadow:0 0 36px rgba(226,176,74,.06)}
-.shop-img{height:140px;display:flex;align-items:center;justify-content:center;position:relative}
-.shop-img svg{width:56px;height:56px}
-.si-queue{background:linear-gradient(135deg,#132238,#081426)}
-.si-unban{background:linear-gradient(135deg,#2c1320,#180c15)}
-.si-vip{background:linear-gradient(135deg,#1e1630,#100c1e)}
-.si-boost{background:linear-gradient(135deg,#142820,#0a1912)}
-.si-wl{background:linear-gradient(135deg,#14202e,#0a1520)}
-.si-custom{background:linear-gradient(135deg,#281e16,#16100a)}
-.shop-badge{
-  position:absolute;top:10px;right:10px;padding:3px 11px;border-radius:var(--radius-pill);
-  font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em
-}
-.shop-badge.hot{background:var(--accent);color:#fff}
-.shop-badge.best{background:var(--gold);color:#0d0d0d}
-.shop-body{padding:20px}
-.shop-body h3{font-size:1.08rem;font-weight:700;margin-bottom:5px}
-.shop-body .sd{font-size:.8rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
-.shop-foot{display:flex;align-items:center;justify-content:space-between}
-.shop-price{font-size:1.4rem;font-weight:800;color:var(--accent)}
-.shop-price s{color:var(--muted);font-size:.78rem;font-weight:400;margin-right:4px}
+.al2{max-width:680px;margin:0 auto}
+.fs{margin-bottom:22px}
+.fs label{display:block;font-weight:600;font-size:.88rem;margin-bottom:6px;color:var(--t)}
+.fs .lh{font-size:.74rem;color:var(--f);font-weight:400;margin-left:6px}
+.fs input,.fs select,.fs textarea{width:100%;background:rgba(2,8,16,.6);border:2px solid var(--b);border-radius:var(--rs);padding:13px 16px;color:#fff;font-size:.9rem;font-family:inherit;outline:none;transition:var(--e);resize:vertical}
+.fs input:focus,.fs select:focus,.fs textarea:focus{border-color:var(--a);box-shadow:0 0 20px var(--ag)}
+.fs textarea{min-height:95px}
+.fs select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238c99ad' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:42px;cursor:pointer}
+.fs select option{background:#0a1525;color:#fff}
+.fn2{display:flex;align-items:flex-start;gap:10px;font-size:.78rem;color:var(--f);margin:8px 0 22px;padding:12px 16px;background:rgba(255,255,255,.03);border-radius:var(--rs);border:1px solid var(--b);line-height:1.5}
+.fn2 .fi{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.fn2 .fi svg{width:18px;height:18px;opacity:.7}
+.fsr{display:flex;justify-content:flex-end;gap:10px}
 
-/* ==========================================================
-   RULEBOOK
-   ========================================================== */
-.rule-toc{
-  display:flex;flex-wrap:wrap;gap:7px;margin-bottom:30px;padding:18px;
-  background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:var(--radius)
-}
-.rule-toc a{color:var(--muted);text-decoration:none;padding:7px 14px;border-radius:var(--radius-pill);font-size:.81rem;border:1px solid var(--border);transition:var(--ease)}
-.rule-toc a:hover{color:#fff;border-color:var(--accent);background:var(--accent-glow)}
+.apl-status{display:none;padding:40px 30px;text-align:center;max-width:560px;margin:0 auto}
+.apl-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:24px}
+.apl-step{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.88rem;font-weight:700;background:rgba(255,255,255,.04);border:2px solid var(--b);color:var(--f);transition:var(--e)}
+.apl-step.done{background:rgba(60,184,120,.12);border-color:var(--gn);color:var(--gn)}
+.apl-step.active{background:rgba(91,155,213,.14);border-color:var(--blu);color:var(--blu);box-shadow:0 0 16px rgba(91,155,213,.25)}
+.apl-step.denied{background:rgba(232,80,80,.12);border-color:var(--rd);color:var(--rd)}
+.apl-line{width:44px;height:2px;background:var(--b);transition:var(--e)}
+.apl-line.done{background:var(--gn)}
 
-.rule-block{
-  margin-bottom:20px;padding:26px 28px;
-  background:var(--surface);backdrop-filter:blur(24px);
-  border:1px solid var(--border);border-radius:var(--radius);transition:var(--ease)
-}
-.rule-block:hover{border-color:var(--border-light)}
-.rule-block h3{font-size:1.15rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.rule-lvl{display:inline-block;padding:3px 10px;border-radius:var(--radius-pill);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.lvl-crit{background:rgba(232,80,80,.13);color:var(--red);border:1px solid rgba(232,80,80,.2)}
-.lvl-maj{background:var(--accent-glow);color:var(--accent-light);border:1px solid rgba(242,129,61,.2)}
-.lvl-min{background:rgba(91,155,213,.11);color:var(--blue);border:1px solid rgba(91,155,213,.2)}
-.rule-list{list-style:none}
-.rule-list li{padding:7px 0 7px 22px;position:relative;border-bottom:1px solid rgba(255,255,255,.03);font-size:.88rem;line-height:1.55}
-.rule-list li:last-child{border:0}
-.rule-list li::before{content:'';position:absolute;left:2px;top:14px;width:6px;height:6px;border-radius:2px;background:var(--accent);opacity:.6}
-.rule-list li strong{color:#fff}
-.rp-box{margin-top:12px;padding:11px 16px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;border-left:3px solid}
-.rp-crit{border-color:var(--red);color:#f09090;background:rgba(232,80,80,.05)}
-.rp-maj{border-color:var(--accent);color:var(--accent-light);background:var(--accent-glow)}
-.rp-min{border-color:var(--blue);color:var(--blue);background:rgba(91,155,213,.05)}
+.apl-icon-circle{width:80px;height:80px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative}
+.apl-icon-circle::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid transparent;animation:stRing 2s ease-in-out infinite}
+@keyframes stRing{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.8;transform:scale(1.08)}}
+.apl-icon-sent{background:rgba(91,155,213,.15)}.apl-icon-sent::after{border-color:rgba(91,155,213,.3)}
+.apl-icon-review{background:rgba(226,176,74,.15)}.apl-icon-review::after{border-color:rgba(226,176,74,.3)}
+.apl-icon-accept{background:rgba(60,184,120,.15)}.apl-icon-accept::after{border-color:rgba(60,184,120,.35)}
+.apl-icon-deny{background:rgba(232,80,80,.15)}.apl-icon-deny::after{border-color:rgba(232,80,80,.3)}
 
-/* ==========================================================
-   OWNERS
-   ========================================================== */
-.owner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px;margin-bottom:36px}
-.owner-card{text-align:center;padding:36px 24px}
-.owner-card:hover{border-color:rgba(226,176,74,.4);box-shadow:0 14px 44px rgba(0,0,0,.5),0 0 0 1px rgba(226,176,74,.12)}
-.owner-pfp{
-  width:90px;height:90px;border-radius:50%;object-fit:cover;
-  border:3px solid var(--gold);box-shadow:0 0 36px var(--gold-glow);margin-bottom:14px
-}
-.owner-card h3{font-size:1.18rem;font-weight:700}
-.owner-card .o-title{
-  display:inline-block;margin-top:6px;padding:5px 15px;border-radius:var(--radius-pill);
-  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-  background:linear-gradient(135deg,var(--gold),var(--accent));color:#0d0d0d
-}
-.owner-card .o-discord{font-family:'SF Mono',monospace;color:var(--muted);font-size:.81rem;margin-top:10px}
-.owner-card .o-bio{color:var(--muted);font-size:.83rem;margin-top:14px;line-height:1.5;padding:0 8px}
-.o-tags{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:14px}
-.o-tag{padding:4px 10px;border-radius:var(--radius-pill);font-size:.68rem;font-weight:600}
-.o-dev{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.18)}
-.o-lead{background:rgba(60,184,120,.1);color:var(--green);border:1px solid rgba(60,184,120,.16)}
-.o-mgmt{background:var(--accent-glow);color:var(--accent-light);border:1px solid rgba(242,129,61,.18)}
+.apl-title{font-size:1.5rem;font-weight:800;margin-bottom:4px;letter-spacing:-.02em}
+.apl-subtitle{font-size:.9rem;color:var(--m);margin-bottom:18px}
+.apl-badge{display:inline-block;padding:8px 22px;border-radius:var(--rp);font-size:.82rem;font-weight:700;letter-spacing:.04em;margin-bottom:18px}
+.apl-badge.sent{background:rgba(91,155,213,.15);color:var(--blu);border:1px solid rgba(91,155,213,.28)}
+.apl-badge.review{background:rgba(226,176,74,.15);color:var(--gld);border:1px solid rgba(226,176,74,.28)}
+.apl-badge.accept{background:rgba(60,184,120,.15);color:var(--gn);border:1px solid rgba(60,184,120,.3)}
+.apl-badge.deny{background:rgba(232,80,80,.15);color:var(--rd);border:1px solid rgba(232,80,80,.28)}
 
-/* ==========================================================
-   TOAST
-   ========================================================== */
-.toast-rack{position:fixed;bottom:28px;right:28px;z-index:9999;display:flex;flex-direction:column;gap:10px}
-.toast{
-  background:rgba(10,20,36,.95);backdrop-filter:blur(24px);border:1px solid;
-  border-radius:var(--radius);padding:15px 20px;font-weight:600;font-size:.86rem;
-  box-shadow:0 12px 48px rgba(0,0,0,.6);display:flex;align-items:center;gap:10px;
-  animation:toastPop .35s cubic-bezier(.34,1.56,.64,1);max-width:380px
-}
-.toast-ok{border-color:var(--green);color:var(--green)}
-.toast-warn{border-color:var(--gold);color:var(--gold)}
-.toast-err{border-color:var(--red);color:var(--red)}
-.toast-info{border-color:var(--blue);color:var(--blue)}
+.apl-msg-box{background:rgba(255,255,255,.03);border:1px solid var(--b);border-radius:var(--rs);padding:18px 22px;margin-bottom:16px;text-align:left;line-height:1.6}
+.apl-msg-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--f);margin-bottom:6px}
+.apl-msg-text{font-size:.9rem;color:var(--m)}
+.apl-staff-note{margin-top:12px;padding-top:12px;border-top:1px solid var(--b);font-size:.85rem;color:#fff;font-style:italic;display:none}
+
+.apl-id-row{display:inline-block;margin-bottom:4px;font-family:'SF Mono','Fira Code',monospace;font-size:.8rem;color:var(--f);background:rgba(255,255,255,.03);padding:6px 14px;border-radius:var(--rp);letter-spacing:.03em}
+.apl-cooldown{margin-top:18px;font-size:.82rem;color:var(--f);display:none;align-items:center;justify-content:center;gap:8px}
+.apl-cooldown svg{width:16px;height:16px;opacity:.6}
+.apl-countdown{font-weight:700;color:var(--gld);font-family:'SF Mono','Fira Code',monospace}
+.apl-reapply{margin-top:20px;display:none;justify-content:center;gap:12px}
+
+.chat-section{margin-top:20px;text-align:left;background:rgba(255,255,255,.02);border:1px solid var(--b);border-radius:var(--rs);padding:0;overflow:hidden}
+.chat-header{padding:10px 16px;background:rgba(255,255,255,.03);font-size:.78rem;font-weight:700;color:var(--f);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--b)}
+.chat-messages{padding:14px 16px;max-height:240px;overflow-y:auto}
+.chat-msg{display:flex;gap:10px;margin-bottom:14px}
+.chat-msg:last-child{margin-bottom:0}
+.chat-msg-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700}
+.chat-msg-avatar.staff{background:rgba(242,129,61,.18);color:var(--a)}
+.chat-msg-avatar.user{background:rgba(91,155,213,.15);color:var(--blu)}
+.chat-msg-bubble{flex:1;background:rgba(255,255,255,.04);padding:10px 14px;border-radius:var(--rs);font-size:.83rem;line-height:1.5}
+.chat-msg-bubble .chat-author{font-size:.7rem;font-weight:700;color:var(--f);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.chat-msg-bubble .chat-time{font-size:.66rem;color:var(--f);margin-top:4px}
+.chat-input-row{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--b);background:rgba(255,255,255,.015)}
+.chat-input-row input{flex:1;background:rgba(2,8,16,.4);border:1px solid var(--b);border-radius:var(--rp);padding:9px 14px;color:#fff;font-size:.82rem;font-family:inherit;outline:none;transition:var(--e)}
+.chat-input-row input:focus{border-color:var(--a)}
+.chat-input-row button{padding:9px 16px;font-size:.8rem}
+
+/* Live indicator */
+.live-indicator{font-size:.7rem;color:var(--gn);display:inline-flex;align-items:center;gap:4px}
+.live-indicator::before{content:'';width:6px;height:6px;background:var(--gn);border-radius:50%;animation:bl 2s infinite}
+
+.tr2{position:fixed;bottom:28px;right:28px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+.toast{background:rgba(10,20,36,.95);backdrop-filter:blur(24px);border:1px solid;border-radius:var(--r);padding:15px 20px;font-weight:600;font-size:.86rem;box-shadow:0 12px 48px rgba(0,0,0,.6);display:flex;align-items:center;gap:10px;animation:tp .35s cubic-bezier(.34,1.56,.64,1);max-width:380px}
+.toast-ok{border-color:var(--gn);color:var(--gn)}.toast-warn{border-color:var(--gld);color:var(--gld)}.toast-err{border-color:var(--rd);color:var(--rd)}.toast-info{border-color:var(--blu);color:var(--blu)}
 .toast svg{width:20px;height:20px;flex-shrink:0}
-.toast-close{background:none;border:none;color:inherit;cursor:pointer;font-size:1.1rem;margin-left:auto;opacity:.5;padding:0 0 0 10px}
-.toast-close:hover{opacity:1}
-@keyframes toastPop{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
+.tc{background:none;border:none;color:inherit;cursor:pointer;font-size:1.1rem;margin-left:auto;opacity:.5;padding:0 0 0 10px}.tc:hover{opacity:1}
+@keyframes tp{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
 
-/* ==========================================================
-   MODAL
-   ========================================================== */
-.modal-mask{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center}
-.modal-mask.open{display:flex}
-.modal-box{background:rgba(10,20,36,.98);border:1px solid var(--border-light);border-radius:var(--radius);padding:32px;max-width:420px;width:92%;box-shadow:0 24px 80px rgba(0,0,0,.6)}
-.modal-box h3{font-size:1.15rem;margin-bottom:8px}
-.modal-box p{color:var(--muted);font-size:.84rem;margin-bottom:22px}
-.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.mm{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center}
+.mm.open{display:flex}
+.mb{background:rgba(10,20,36,.98);border:1px solid var(--bl);border-radius:var(--r);padding:32px;max-width:420px;width:92%;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.mb h3{font-size:1.15rem;margin-bottom:8px}.mb p{color:var(--m);font-size:.84rem;margin-bottom:22px}
+.mba{display:flex;gap:10px;justify-content:flex-end}
 
-/* ==========================================================
-   FOOTER
-   ========================================================== */
-.footer{text-align:center;padding:40px 0;margin-top:60px;border-top:1px solid rgba(255,255,255,.05);color:var(--muted);font-size:.81rem}
-.footer a{color:var(--accent-light);text-decoration:none;font-weight:500}
-.footer a:hover{text-decoration:underline}
-.footer-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.footer{text-align:center;padding:40px 0;margin-top:60px;border-top:1px solid rgba(255,255,255,.05);color:var(--m);font-size:.81rem}
+.footer a{color:var(--al);text-decoration:none;font-weight:500;cursor:pointer}.footer a:hover{text-decoration:underline}
+.fr{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:8px 0}
 
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
 @media(max-width:860px){
   .nav-bar{border-radius:22px;justify-content:center}.nav-links{justify-content:center}
-  .home-logo{width:110px}.token-row{flex-direction:column}
-  .dash-head{flex-direction:column;text-align:center}.dash-btns{margin-left:0;justify-content:center}
-  .shop-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}
-  .quick-grid{grid-template-columns:1fr}.owner-grid{grid-template-columns:1fr}
+  .hc .logo{width:150px}.tr{flex-direction:column}
+  .dh{flex-direction:column;text-align:center}.dba{margin-left:0;justify-content:center}
+  .sg2{grid-template-columns:1fr}.sr{grid-template-columns:1fr 1fr}
+  .qg{grid-template-columns:1fr}.og{grid-template-columns:1fr}.wg{grid-template-columns:1fr}
+  .apl-status{padding:36px 20px}
 }
 @media(max-width:460px){
-  .stats-row{grid-template-columns:1fr}.stat-card .s-val{font-size:1.7rem}
-  .app{padding:0 10px}.sec-head{font-size:1.4rem}.card{padding:20px}
-  .home-logo{width:90px}
+  .sr{grid-template-columns:1fr}.sc2 .sv{font-size:1.7rem}
+  .app{padding:0 10px}.sh2{font-size:1.4rem}.card{padding:20px}.hc .logo{width:120px}
 }
 </style>
 </head>
 <body>
 
-<!-- VIDEO BKG -->
-<div class="video-layer"><video autoplay loop muted playsinline poster="uploads/logo.png"><source src="uploads/ocean.mp4" type="video/mp4"></video></div>
+<!-- Mobile Block Overlay -->
+<div class="mobile-block" id="mobileBlock">
+  <img src="uploads/eclipse-logo-new.png" alt="Eclipse State" class="mb-logo">
+  <div class="mb-icon">📱</div>
+  <h1>Desktop Required</h1>
+  <p>The Eclipse State website is optimized for desktop browsers. You'll need to be on a computer to access the full application and management features.</p>
+  <div class="mb-discord-box">
+    <h2>💬 Join Our Discord</h2>
+    <p>Connect with our community, get support, apply for staff positions, and stay updated on server news — all through Discord!</p>
+  </div>
+  <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" class="mb-discord-btn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+    Join Eclipse State Discord
+  </a>
+  <p class="mb-info">We're hiring! Apply for Discord Support, Moderator, Community Manager, and more roles directly on our Discord server.</p>
+  <div class="mb-positions">
+    <span>🎫 Discord Support</span>
+    <span>🛡️ Moderator</span>
+    <span>🌐 Community Manager</span>
+    <span>💻 Developer</span>
+    <span>🎉 Party Team</span>
+  </div>
+</div>
 
-<!-- APP -->
+<div class="scene" aria-hidden="true">
+  <div class="sky-layer"></div>
+  <div class="sun-disc"></div>
+  <div class="sun-path"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+  <div class="horizon-glow"></div>
+  <div class="ocean">
+    <div class="wave-overlay"></div>
+    <div class="wave-overlay-2"></div>
+  </div>
+  <div class="shore"></div>
+  <div class="tint"></div>
+  <div id="sparkleBox"></div>
+  <div id="starBox"></div>
+</div>
+
 <div class="app">
 
-<!-- ============================ NAV ============================ -->
 <header class="nav-bar">
-  <a class="nav-logo" data-nav="home" style="cursor:pointer">
-    <img src="uploads/logo.png" alt="Eclipse State">
-  </a>
+  <div class="nav-logo" data-nav="home"><img src="uploads/eclipse-logo-new.png" alt="Eclipse State"></div>
   <nav class="nav-links">
-    <a class="active" data-nav="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1z"/></svg>
-      Home
-    </a>
-    <a data-nav="dashboard">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
-    </a>
-    <a data-nav="rulebook">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-      Rulebook
-    </a>
-    <a data-nav="shop">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-      Shop
-    </a>
-    <a data-nav="owners" class="nav-owner">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      Owners
-    </a>
+    <a class="active" data-nav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1z"/></svg>Home</a>
+    <a data-nav="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+    <a data-nav="wiki" class="nw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Wiki</a>
+    <a data-nav="rulebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/></svg>Rules</a>
+    <a data-nav="shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>Shop</a>
+    <a data-nav="apply" class="na"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Apply</a>
+    <a data-nav="owners" class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Owners</a>
   </nav>
 </header>
 
-<!-- ============================ HOME ============================ -->
-<section class="page page--visible" id="pg-home">
-  <div class="home-center">
-    <img src="uploads/logo.png" alt="Eclipse State" class="home-logo">
-    <p class="home-tag">A serious FiveM roleplay community built by players, for players. Immersive RP, active staff, and a world that feels alive.</p>
-
-    <div class="server-badge" id="liveBadge">
-      <span class="live-dot on" id="liveDot"></span>
-      <span id="liveTxt">Loading server status…</span>
-      <span class="ip-copy" id="liveIp">📋 connect eclipsestate.com</span>
-    </div>
-
-    <div class="card token-box">
-      <h3>Link Your Account</h3>
-      <p class="hint">Copy the code from in-game and paste it below.</p>
-      <div class="token-row">
-        <input type="text" id="tokenInput" placeholder="Paste your code" maxlength="12" autocomplete="off" spellcheck="false">
-        <button class="btn btn--fill" id="tokenBtn">Link Account</button>
-      </div>
-      <p class="token-err" id="tokenErr"></p>
-
-      <div class="help-row">
-        <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" class="help-chip">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-          Need help? Join Discord
-          <span class="dc-num" id="dcSmall">—</span>
-        </a>
-        <span class="help-chip" id="copyIpChip" style="cursor:pointer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          Copy Server IP
-        </span>
+<div class="page on" id="pg-home">
+  <div class="hc">
+    <img src="uploads/eclipse-logo-new.png" alt="Eclipse State" class="logo">
+    <p class="tag">A serious FiveM roleplay community built by players, for players.</p>
+    <div class="sb"><span class="dot on" id="liveDot"></span><span id="liveTxt">Loading…</span><span class="ip" id="liveIp">📋 connect eclipsestate.com</span></div>
+    <div class="card tb"><h3>Link Your Account</h3><p class="hint">Copy the code from in-game and paste it below.</p><div class="tr"><input type="text" id="tokenInput" placeholder="Paste your code" maxlength="12" autocomplete="off" spellcheck="false"><button class="btn btn-f" id="tokenBtn">Link Account</button></div><p class="te" id="tokenErr"></p>
+      <div class="hr">
+        <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" class="hc2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>Discord <span class="dcn" id="dcSmall">—</span></a>
+        <span class="hc2" id="copyIpChip" style="cursor:pointer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy IP</span>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ============================ DASHBOARD ============================ -->
-<section class="page" id="pg-dashboard">
-  <div class="card" style="margin-top:28px">
-    <div class="dash-head">
-      <img src="" alt="" class="dash-pfp" id="dashAvatar" style="display:none">
-      <div class="dash-pfp-placeholder" id="dashAvatarPh">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </div>
-      <div class="dash-meta">
-        <h2 id="dashName">—</h2>
-        <span class="dash-tag" id="dashTag">—</span>
-        <div style="font-size:.78rem;color:var(--muted);margin-top:4px">Discord: <span id="dashDiscord" style="color:var(--accent-light)">—</span></div>
-      </div>
-      <div class="dash-btns">
-        <button class="btn btn--stroke btn--sm" id="btnCopyIp">Copy IP</button>
-        <button class="btn btn--fill btn--sm" id="btnJoin">Join Server</button>
-      </div>
-    </div>
+<div class="page" id="pg-dashboard">
+  <div class="card" style="margin-top:28px"><div class="dh">
+    <img src="" alt="" class="dpfp" id="dashAvatar" style="display:none"><div class="dpfpp" id="dashAvatarPh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="dm"><h2 id="dashName">—</h2><span class="dt" id="dashTag">—</span><div style="font-size:.78rem;color:var(--m);margin-top:4px">Discord: <span id="dashDiscord" style="color:var(--al)">—</span></div></div>
+    <div class="dba"><button class="btn btn-s btn-sm" id="btnCopyIp">Copy IP</button><button class="btn btn-f btn-sm" id="btnJoin">Join Server</button></div>
+  </div></div>
+  <div class="sr">
+    <div class="card sc2"><div class="sl">Playtime</div><div class="sv ca" id="statPlaytime">0h</div></div>
+    <div class="card sc2"><div class="sl">Banned</div><div class="sv" id="statBanned">No</div><div class="ss">Account standing</div></div>
+    <div class="card sc2"><div class="sl">Warnings</div><div class="sv" id="statWarns">0</div><div class="ss" id="statWarnSub">Good standing</div></div>
   </div>
-
-  <div class="stats-row">
-    <div class="card stat-card"><div class="s-lbl">Playtime</div><div class="s-val c-orange" id="statPlaytime">0h</div></div>
-    <div class="card stat-card"><div class="s-lbl">Banned</div><div class="s-val" id="statBanned">No</div><div class="s-sub">Account standing</div></div>
-    <div class="card stat-card"><div class="s-lbl">Warnings</div><div class="s-val" id="statWarns">0</div><div class="s-sub" id="statWarnSub">Good standing</div></div>
+  <div class="qg">
+    <div class="ql" data-nav="wiki"><span class="qii qb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span><h4>Wiki</h4><span class="qs2">How to join & get started</span></span></div>
+    <div class="ql" data-nav="rulebook"><span class="qii qp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span><span><h4>Rulebook</h4><span class="qs2">Read before playing</span></span></div>
+    <div class="ql" data-nav="shop"><span class="qii qo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></span><span><h4>Shop</h4><span class="qs2">Perks & store</span></span></div>
+    <a class="ql" href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener"><span class="qii qb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></span><span><h4>Discord</h4><span class="qs2">Community hub</span><span class="qb2" id="dcBadge">—</span></span></a>
+    <div class="ql" data-nav="apply"><span class="qii qg2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></span><span><h4>Apply</h4><span class="qs2">Join the team</span></span></div>
+    <div class="ql" data-nav="owners"><span class="qii qgl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><span><h4>Owners</h4><span class="qs2">Meet the founders</span></span></div>
   </div>
+  <div class="card ash"><h3>Recent Activity</h3><div id="actList"></div></div>
+</div>
 
-  <div class="quick-grid">
-    <a class="quick-link" data-nav="rulebook" style="cursor:pointer">
-      <span class="ql-icon ql-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span>
-      <span><h4>Rulebook</h4><span class="ql-sub">Read before playing</span></span>
-    </a>
-    <a class="quick-link" data-nav="shop" style="cursor:pointer">
-      <span class="ql-icon ql-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></span>
-      <span><h4>Shop</h4><span class="ql-sub">Perks, unban &amp; more</span></span>
-    </a>
-    <a class="quick-link" href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener">
-      <span class="ql-icon ql-blue"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></span>
-      <span><h4>Discord</h4><span class="ql-sub">Community hub</span><span class="ql-badge" id="dcBadge">—</span></span>
-    </a>
-    <a class="quick-link" id="lnkSupport" style="cursor:pointer">
-      <span class="ql-icon ql-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-      <span><h4>Support</h4><span class="ql-sub">Open a ticket</span></span>
-    </a>
-    <a class="quick-link" data-nav="owners" style="cursor:pointer">
-      <span class="ql-icon ql-gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-      <span><h4>Owners</h4><span class="ql-sub">Meet the founders</span></span>
-    </a>
-  </div>
-
-  <div class="card act-sheet">
-    <h3>Recent Activity</h3>
-    <div id="actList">
-      <div class="act-row"><span class="act-dot ok"></span> Account linked <span class="act-time">Just now</span></div>
-      <div class="act-row"><span class="act-dot warn"></span> Welcome! Read the rulebook first. <span class="act-time">Just now</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ RULEBOOK ============================ -->
-<section class="page" id="pg-rulebook">
+<div class="page" id="pg-wiki">
   <div class="section">
-    <h2 class="sec-head">Server Rulebook</h2>
-    <p class="sec-desc">Every player must follow these rules. <strong>6 warnings = automatic permanent ban.</strong></p>
-    <nav class="rule-toc">
-      <a href="#r-gen">General</a><a href="#r-rp">Roleplay</a><a href="#r-vdm">VDM/RDM</a><a href="#r-meta">Metagaming</a><a href="#r-combat">Combat</a><a href="#r-veh">Vehicles</a><a href="#r-econ">Economy</a><a href="#r-staff">Staff</a><a href="#r-dc">Discord</a>
-    </nav>
-
-    <article class="rule-block" id="r-gen"><h3><span class="rule-lvl lvl-crit">Critical</span> General Conduct</h3>
-      <ul class="rule-list"><li><strong>Respect everyone.</strong> Racism, homophobia, hate speech = zero tolerance, instant permanent ban.</li><li><strong>No cheating.</strong> Hacking, modding, exploiting = permanent ban, no appeal.</li><li><strong>No impersonation</strong> of staff, admins, or other players.</li><li><strong>English only</strong> for IC and OOC communication.</li><li><strong>Staff have final say.</strong> Dispute via ticket, not in-game argument.</li><li><strong>Record sessions.</strong> Evidence protects you. Fake evidence = ban.</li></ul>
-      <div class="rp-box rp-crit">Warning → 3-Day Ban → Permanent Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-rp"><h3><span class="rule-lvl lvl-crit">Critical</span> Roleplay Standards</h3>
-      <ul class="rule-list"><li><strong>Stay in character.</strong> Fail RP = punishment.</li><li><strong>Value your life.</strong> Guns on you = comply. No suicide/combat log to escape.</li><li><strong>New Life Rule:</strong> Upon death, forget everything. Stay away <strong>15 minutes</strong>.</li><li><strong>Fear RP:</strong> Act afraid in dangerous situations.</li><li><strong>No powergaming.</strong> Let others react before forcing actions on them.</li><li><strong>Realistic characters.</strong> No super-soldiers without staff approval.</li><li><strong>Robberies need RP reasoning.</strong> No chain-robbing or camping spots.</li></ul>
-      <div class="rp-box rp-crit">Warning → 7-Day Ban → Permanent Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-vdm"><h3><span class="rule-lvl lvl-maj">Major</span> VDM &amp; RDM</h3>
-      <ul class="rule-list"><li><strong>RDM:</strong> Attacking/killing without valid RP reasoning = ban.</li><li><strong>VDM:</strong> Running people over or using vehicles as weapons = ban.</li><li>Every hostile action requires <strong>clear, quality RP</strong> beforehand.</li><li>The target must understand they're being engaged before shots are fired.</li><li>Drive-bys require prior escalation — no random sprays.</li></ul>
-      <div class="rp-box rp-maj">3-Day Ban → 14-Day Ban → Permanent Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-meta"><h3><span class="rule-lvl lvl-maj">Major</span> Metagaming</h3>
-      <ul class="rule-list"><li><strong>No metagaming.</strong> Using OOC info (Discord, streams, player lists) IC = ban.</li><li><strong>Stream-sniping = permanent ban.</strong> No warning, no appeal.</li><li>No external communication to coordinate IC actions.</li><li>Don't look up players OOC to gain IC advantage.</li><li>Keep /ooc chat out of active RP scenes.</li></ul>
-      <div class="rp-box rp-maj">7-Day Ban → Permanent Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-combat"><h3><span class="rule-lvl lvl-maj">Major</span> Combat</h3>
-      <ul class="rule-list"><li>Combat must stem from <strong>genuine escalated RP</strong> — never boredom.</li><li>Max <strong>6 per side</strong> in any hostile situation.</li><li>Capped at <strong>3 robberies/hour</strong> per player.</li><li>No animation or emote exploits for combat advantage.</li><li>No camping hospitals, PD, spawns, or garage exits.</li><li><strong>30-minute cooldown</strong> before re-engaging the same group.</li></ul>
-      <div class="rp-box rp-maj">3-Day Ban → 14-Day Ban → Permanent Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-veh"><h3><span class="rule-lvl lvl-min">Minor</span> Vehicles</h3>
-      <ul class="rule-list"><li>Drive realistically — no 120mph through city centers.</li><li>Off-roading supercars or low sports cars = Fail RP.</li><li>No using vehicles to scale buildings or reach glitched areas.</li><li>Aircraft require an IC pilot license.</li><li>Stolen vehicles must be roleplayed through proper IC channels.</li></ul>
-      <div class="rp-box rp-min">Warning → 3-Day Ban → 7-Day Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-econ"><h3><span class="rule-lvl lvl-min">Minor</span> Economy</h3>
-      <ul class="rule-list"><li>No large money transfers without staff approval.</li><li>Duping or exploiting economy = <strong>permanent ban + asset wipe.</strong></li><li>Businesses must be actively roleplayed — inactive = revoked.</li><li>One primary residence per character. No hoarding.</li></ul>
-      <div class="rp-box rp-min">Warning → Asset Wipe → Permanent Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-staff"><h3><span class="rule-lvl lvl-maj">Major</span> Staff &amp; Appeals</h3>
-      <ul class="rule-list"><li>Staff decisions are <strong>final</strong> during active situations.</li><li>Never ask staff for free items, money, or special treatment.</li><li>False reports = you get punished instead.</li><li>Harassing or targeting staff in or out of character = severe ban.</li><li>Appeals go through Discord tickets with evidence.</li></ul>
-      <div class="rp-box rp-maj">3-Day Ban → Permanent Ban</div>
-    </article>
-
-    <article class="rule-block" id="r-dc"><h3><span class="rule-lvl lvl-min">Minor</span> Discord</h3>
-      <ul class="rule-list"><li>Follow Discord's Terms of Service at all times.</li><li>No spamming, ghost pinging, or flooding any channel.</li><li>Use the right channels: memes → #media, support → tickets.</li><li>No ear-rape, soundboards, or disruptive audio in voice channels.</li><li>Ban evading on Discord = <strong>permanent community-wide ban.</strong></li></ul>
-      <div class="rp-box rp-min">Mute → Kick → Ban</div>
-    </article>
-  </div>
-</section>
-
-<!-- ============================ SHOP ============================ -->
-<section class="page" id="pg-shop">
-  <div class="section">
-    <h2 class="sec-head">Eclipse Store</h2>
-    <p class="sec-desc">Premium perks. All sales final — no refunds.</p>
-    <div class="shop-grid">
-      <div class="shop-card featured"><div class="shop-img si-queue"><span class="shop-badge hot">Popular</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="shop-body"><h3>Bypass Queue</h3><p class="sd">Skip the wait and join instantly. Priority slot for life.</p><div class="shop-foot"><span class="shop-price">$2.00</span><button class="btn btn--fill btn--sm" data-buy="Bypass Queue" data-price="2">Buy</button></div></div></div>
-      <div class="shop-card"><div class="shop-img si-unban"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div class="shop-body"><h3>Unban</h3><p class="sd">Get a second chance. One-time use. Not valid for cheating bans.</p><div class="shop-foot"><span class="shop-price">$5.00</span><button class="btn btn--fill btn--sm" data-buy="Unban" data-price="5">Buy</button></div></div></div>
-      <div class="shop-card featured"><div class="shop-img si-vip"><span class="shop-badge best">Best Value</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="shop-body"><h3>VIP Tier</h3><p class="sd">VIP tag, priority queue, 2x XP, exclusive areas, monthly bonus.</p><div class="shop-foot"><span class="shop-price"><s>$10</s> $7.50</span><button class="btn btn--fill btn--sm" data-buy="VIP Tier" data-price="7.5">Buy</button></div></div></div>
-      <div class="shop-card"><div class="shop-img si-boost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="shop-body"><h3>Server Booster</h3><p class="sd">50% earnings boost for 30 days. Stacks with VIP.</p><div class="shop-foot"><span class="shop-price">$3.00</span><button class="btn btn--fill btn--sm" data-buy="Server Booster" data-price="3">Buy</button></div></div></div>
-      <div class="shop-card"><div class="shop-img si-wl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="shop-body"><h3>Whitelist App</h3><p class="sd">Fast-track for Police, EMS, DOJ and more.</p><div class="shop-foot"><span class="shop-price">$4.00</span><button class="btn btn--fill btn--sm" data-buy="Whitelist App" data-price="4">Buy</button></div></div></div>
-      <div class="shop-card"><div class="shop-img si-custom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="shop-body"><h3>Custom Discord Role</h3><p class="sd">Custom name and color. Stand out in the community.</p><div class="shop-foot"><span class="shop-price">$2.50</span><button class="btn btn--fill btn--sm" data-buy="Custom Role" data-price="2.5">Buy</button></div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ OWNERS ============================ -->
-<section class="page" id="pg-owners">
-  <div class="section">
-    <h2 class="sec-head" style="text-align:center">Server Ownership</h2>
-    <p class="sec-desc" style="text-align:center">The founders who built Eclipse State from the ground up.</p>
-    <div class="owner-grid">
-      <div class="card owner-card">
-        <img src="https://cdn.discordapp.com/avatars/1147409272087519263/ccd5bed55f2b6b52b21988499b22c4d6.png?size=256" alt="75e0" class="owner-pfp" loading="lazy" onerror="this.style.display='none'">
-        <h3>75e0 <small style="color:var(--muted);font-weight:400">(xcq.v)</small></h3>
-        <span class="o-title">Owner / Developer</span>
-        <div class="o-discord">Discord: xcq.v</div>
-        <p class="o-bio">Founder of Eclipse State. Full-stack developer managing all infrastructure, custom scripts, and the web platform. The vision behind everything.</p>
-        <div class="o-tags"><span class="o-tag o-dev">Developer</span><span class="o-tag o-mgmt">Founder</span><span class="o-tag o-lead">Community Lead</span></div>
+    <h2 class="sh2">Getting Started</h2>
+    <p class="sd2">Everything you need to join Eclipse State and start playing.</p>
+    
+    <div class="card" style="margin-bottom:30px">
+      <h3 style="font-size:1.3rem;margin-bottom:20px;color:var(--a)">📥 How to Install FiveM</h3>
+      <div class="rlst">
+        <li><strong>Download FiveM</strong><span class="rr">Get the latest version from <a href="https://fivem.net" target="_blank" rel="noopener" style="color:var(--al)">fivem.net</a>. Make sure you have a legal copy of GTA V installed on your PC.</span></li>
+        <li><strong>Install FiveM</strong><span class="rr">Run the installer and follow the prompts. FiveM will install as a separate application alongside your GTA V.</span></li>
+        <li><strong>Launch FiveM</strong><span class="rr">Open FiveM from your Start Menu or Desktop. The first launch may take a few minutes to set up.</span></li>
+        <li><strong>Create or Sign In</strong><span class="rr">Sign in with your Cfx.re account (required). If you don't have one, create one during the sign-in process.</span></li>
       </div>
-      <div class="card owner-card">
-        <div style="width:90px;height:90px;border-radius:50%;border:3px solid var(--gold);box-shadow:0 0 36px var(--gold-glow);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:rgba(10,22,40,.6)">
-          <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    </div>
+
+    <div class="card" style="margin-bottom:30px">
+      <h3 style="font-size:1.3rem;margin-bottom:20px;color:var(--gn)">🔗 How to Join Eclipse State</h3>
+      <div class="rlst">
+        <li><strong>Join Our Discord</strong><span class="rr">First, join our Discord server at <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" style="color:var(--blu)">discord.gg/cU3CH7z494</a>. This is where you'll get support and updates.</span></li>
+        <li><strong>Open FiveM Console</strong><span class="rr">Open FiveM and press <strong>F8</strong> to open the game console.</span></li>
+        <li><strong>Connect to Server</strong><span class="rr">In the console, type: <code style="background:rgba(242,129,61,.15);padding:4px 10px;border-radius:6px;font-family:'SF Mono','Fira Code',monospace;color:var(--al)">connect eclipsestate.com</code></span></li>
+        <li><strong>Get Your Token</strong><span class="rr">Once connected in-game, press <strong>F8</strong> again and type <code style="background:rgba(242,129,61,.15);padding:4px 10px;border-radius:6px;font-family:'SF Mono','Fira Code',monospace;color:var(--al)">token</code> to receive your unique linking code.</span></li>
+        <li><strong>Link Your Account</strong><span class="rr">Copy the code from in-game, paste it on the Home page of this website, and click "Link Account" to access your dashboard.</span></li>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:1.3rem;margin-bottom:20px;color:var(--gld)">📋 Quick Reference</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+        <div style="background:rgba(255,255,255,.03);padding:16px;border-radius:10px;border:1px solid var(--b)">
+          <div style="font-weight:700;color:var(--a);margin-bottom:6px">Server IP</div>
+          <code style="font-family:'SF Mono','Fira Code',monospace;color:var(--al)">eclipsestate.com</code>
         </div>
-        <h3>thatsmitzyguy</h3>
-        <span class="o-title">Owner / Developer</span>
-        <div class="o-discord">Discord: thatsmitzyguy</div>
-        <p class="o-bio">Co-owner and lead developer. Runs in-game systems, economy balancing, and community management. The engine that powers Eclipse State.</p>
-        <div class="o-tags"><span class="o-tag o-dev">Developer</span><span class="o-tag o-mgmt">Systems Lead</span><span class="o-tag o-lead">Community Manager</span></div>
+        <div style="background:rgba(255,255,255,.03);padding:16px;border-radius:10px;border:1px solid var(--b)">
+          <div style="font-weight:700;color:var(--a);margin-bottom:6px">Discord</div>
+          <code style="font-family:'SF Mono','Fira Code',monospace;color:var(--blu)">discord.gg/cU3CH7z494</code>
+        </div>
+        <div style="background:rgba(255,255,255,.03);padding:16px;border-radius:10px;border:1px solid var(--b)">
+          <div style="font-weight:700;color:var(--a);margin-bottom:6px">Connect Command</div>
+          <code style="font-family:'SF Mono','Fira Code',monospace;color:var(--gn)">connect eclipsestate.com</code>
+        </div>
       </div>
     </div>
-    <div class="card" style="text-align:center;padding:34px 24px">
-      <h3 style="font-size:1.1rem;margin-bottom:8px">Join the Team</h3>
-      <p style="color:var(--muted);margin-bottom:18px">We're looking for dedicated roleplayers, developers, and staff.</p>
-      <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" class="btn btn--gold">Join Discord &amp; Apply</a>
+  </div>
+</div>
+
+<div class="page" id="pg-rulebook">
+  <div class="section"><h2 class="sh2">Server Rulebook</h2><p class="sd2">Every player must follow these rules. Breaking rules leads to warnings. <strong>6 warnings = automatic permanent ban.</strong> If you have never played FiveM before, please read each rule carefully — the explanations will help you understand what is expected.</p>
+    <nav class="rtoc"><a href="#r-gen">General</a><a href="#r-rp">Roleplay</a><a href="#r-vdm">VDM/RDM</a><a href="#r-meta">Metagaming</a><a href="#r-combat">Combat</a><a href="#r-veh">Vehicles</a><a href="#r-econ">Economy</a><a href="#r-staff">Staff</a><a href="#r-dc">Discord</a></nav>
+    <article class="rb" id="r-gen"><h3><span class="rlvl lc">Critical</span> General Conduct</h3><ul class="rlst">
+      <li><strong>Respect everyone at all times.</strong><span class="rr">Racism, homophobia, hate speech, sexism, or any form of discrimination or harassment is <strong>zero tolerance</strong>. You will be permanently banned instantly with no warning and no appeal. This includes voice chat, text chat, and any form of communication.</span></li>
+      <li><strong>No cheating, hacking, or exploiting.</strong><span class="rr">Using mod menus, aimbots, wallhacks, speed hacks, or any third-party tool that gives you an unfair advantage = <strong>immediate permanent ban</strong>. Exploiting bugs in the game or server scripts (like duplication glitches or teleport exploits) is also a permanent ban. If you find a bug, report it — don't abuse it.</span></li>
+      <li><strong>Do not impersonate staff or other players.</strong><span class="rr">Pretending to be an admin, moderator, owner, or another player to trick or deceive others will get you banned. Staff members will always identify themselves properly.</span></li>
+      <li><strong>English is the only permitted language.</strong><span class="rr">All in-character (IC) and out-of-character (OOC) communication must be in English. This ensures everyone can understand each other and staff can moderate effectively.</span></li>
+      <li><strong>Staff decisions are final during active situations.</strong><span class="rr">If a staff member tells you to do something or makes a ruling in-game, follow it immediately. If you disagree, open a ticket on Discord afterward with evidence. Arguing with staff in-game will result in additional punishment.</span></li>
+      <li><strong>Record your gameplay.</strong><span class="rr">Having video evidence protects you. If someone reports you and you have a recording showing you followed the rules, it can save you from punishment. However, <strong>faking or editing evidence</strong> to falsely accuse someone = permanent ban.</span></li>
+      <li><strong>Use common sense.</strong><span class="rr">If an action feels wrong or unfair, it probably is. Don't do it. If you're unsure whether something is allowed, ask a staff member before doing it.</span></li>
+    </ul><div class="rpb rpc">Warning → 3-Day Ban → Permanent Ban</div></article>
+
+    <article class="rb" id="r-rp"><h3><span class="rlvl lc">Critical</span> Roleplay Standards</h3><ul class="rlst">
+      <li><strong>Stay in character (IC) at all times.</strong><span class="rr">When you're in the server, you are playing a character. Everything you say and do is part of your character's story. "Fail RP" means breaking character or doing things that make no sense for your character — like dancing during a hostage situation or talking about real-life topics while being robbed. This ruins the experience for everyone.</span></li>
+      <li><strong>Value your life (Fear RP).</strong><span class="rr">If someone points a gun at you, you must roleplay being afraid. Comply with their demands. You cannot suicide to escape a situation, disconnect (combat log), or act like a superhero who isn't scared of death. Your character values their life just like a real person would.</span></li>
+      <li><strong>New Life Rule (NLR).</strong><span class="rr">When your character dies, they forget <strong>everything</strong> about the events that led to their death. You must stay away from the area where you died for at least <strong>15 minutes</strong>. You cannot return to the same situation, cannot seek revenge, and cannot tell others what happened.</span></li>
+      <li><strong>No powergaming.</strong><span class="rr">Powergaming means forcing an action on another player without giving them a fair chance to respond. For example, saying "/me knocks you out" without letting them react is powergaming. Always give other players time to type or speak their response. Roleplay is cooperative — not competitive.</span></li>
+      <li><strong>Create a realistic character.</strong><span class="rr">Your character should be believable. No "secret agent," "military super-soldier," or "billionaire crime lord" backstories without explicit staff approval. Your character should have realistic skills, flaws, and motivations — just like a real person.</span></li>
+      <li><strong>Robberies must have real roleplay reasoning.</strong><span class="rr">You cannot rob someone just because you're bored. There must be an in-character reason for the robbery. Chain-robbing (robbing multiple people back-to-back) or camping popular robbery spots is not allowed. Max <strong>3 robberies per hour</strong> per player.</span></li>
+    </ul><div class="rpb rpc">Warning → 7-Day Ban → Permanent Ban</div></article>
+
+    <article class="rb" id="r-vdm"><h3><span class="rlvl lm">Major</span> VDM &amp; RDM — No Random Violence</h3><ul class="rlst">
+      <li><strong>RDM (Random Deathmatch) is forbidden.</strong><span class="rr">RDM means killing or attacking another player without any valid roleplay reason. You cannot just walk up to someone and shoot them because you feel like it. Every hostile act must be part of a roleplay story — there must be a reason that makes sense in-character.</span></li>
+      <li><strong>VDM (Vehicle Deathmatch) is forbidden.</strong><span class="rr">VDM means running people over with a vehicle or using a car as a weapon. You cannot drive into crowds or use your vehicle to kill people outside of a valid roleplay scenario.</span></li>
+      <li><strong>Initiation must be clear.</strong><span class="rr">Before any attack, the other person must clearly understand they are being threatened or engaged. You can't just open fire silently — there must be verbal or visible clues that a hostile situation is starting. Give them time to understand what's happening.</span></li>
+      <li><strong>Drive-by shootings require prior escalation.</strong><span class="rr">You cannot randomly spray bullets from a car. There must be an ongoing roleplay conflict that leads to the drive-by.</span></li>
+    </ul><div class="rpb rpm">3-Day Ban → 14-Day Ban → Permanent Ban</div></article>
+
+    <article class="rb" id="r-meta"><h3><span class="rlvl lm">Major</span> Metagaming &amp; Powergaming</h3><ul class="rlst">
+      <li><strong>Metagaming is strictly banned.</strong><span class="rr">Metagaming means using information from outside the game (Discord chats, streams, player lists, DMs) to make decisions inside the game. For example, if you see in Discord that someone is at a specific location, you cannot suddenly "find" them in-character. Your character only knows what they've learned in-character.</span></li>
+      <li><strong>Stream-sniping = permanent ban.</strong><span class="rr">If you watch someone's stream to track their location or gain an advantage in-game, you will be permanently banned. No warnings, no appeal. This is one of the most serious offenses on the server.</span></li>
+      <li><strong>No external communication for IC coordination.</strong><span class="rr">Do not use Discord voice calls, party chat, or any external app to coordinate in-character actions unless you are in a staff-approved channel. Your character should communicate through in-game methods.</span></li>
+      <li><strong>Keep OOC chat out of active RP.</strong><span class="rr">The /ooc (out-of-character) command should be used sparingly and never during active roleplay scenes. Breaking character to say something OOC in the middle of a heated RP moment ruins immersion for everyone.</span></li>
+    </ul><div class="rpb rpm">7-Day Ban → Permanent Ban</div></article>
+
+    <article class="rb" id="r-combat"><h3><span class="rlvl lm">Major</span> Combat Rules</h3><ul class="rlst">
+      <li><strong>Combat must come from genuine escalated roleplay.</strong><span class="rr">You cannot start a fight simply because you're bored or want action. There must be a developing story and conflict between characters that naturally leads to combat. Hostility should be the last resort, not the first option.</span></li>
+      <li><strong>Maximum 6 members per side.</strong><span class="rr">In any hostile situation, each group or gang is limited to <strong>6 active members</strong>. This keeps fights fair and prevents massive group stomping. If you have a larger event planned, get staff approval first.</span></li>
+      <li><strong>No camping.</strong><span class="rr">You cannot wait outside hospitals, police stations, spawn points, or garage exits to attack people. These are safe zones where players should be able to transition without being ambushed.</span></li>
+      <li><strong>30-minute cooldown after combat.</strong><span class="rr">After a hostile situation ends (someone dies or both sides disengage), you must wait <strong>30 minutes</strong> before re-initiating combat with the same group. This prevents endless revenge loops.</span></li>
+      <li><strong>No exploiting animations or emotes.</strong><span class="rr">You cannot use character animations, emotes, or glitches to gain a combat advantage — such as combat rolling through walls, animation-canceling to shoot faster, or using emotes to glitch through objects.</span></li>
+    </ul><div class="rpb rpm">3-Day Ban → 14-Day Ban → Permanent Ban</div></article>
+
+    <article class="rb" id="r-veh"><h3><span class="rlvl ln">Minor</span> Vehicle Rules</h3><ul class="rlst">
+      <li><strong>Drive realistically.</strong><span class="rr">No speeding through crowded city areas at 120mph. No stunt jumps off every ramp you see. Driving should look believable — your character wouldn't drive like a maniac unless there's a very good roleplay reason (like being chased).</span></li>
+      <li><strong>Off-roading supercars = Fail RP.</strong><span class="rr">Supercars and low-clearance sports cars cannot go off-roading up mountains. It makes no sense and breaks immersion. Use appropriate vehicles (SUVs, trucks, off-road vehicles) for rough terrain.</span></li>
+      <li><strong>No vehicle exploits.</strong><span class="rr">Do not use vehicles to climb buildings, access rooftops, or reach areas that are clearly not meant to be accessible. This includes using ramps, boosting, or any physics tricks to glitch into restricted areas.</span></li>
+      <li><strong>Aircraft require a pilot's license.</strong><span class="rr">If you want to fly planes or helicopters, you must obtain a pilot's license through in-character roleplay. This adds realism and prevents random players from crashing aircraft into the city.</span></li>
+      <li><strong>Stolen vehicles must be roleplayed properly.</strong><span class="rr">If you steal a car, you can't just keep it forever. It must go through IC channels — chop shops, re-plating services, selling to fences, etc. Simply hoarding stolen cars is not allowed.</span></li>
+    </ul><div class="rpb rpn">Warning → 3-Day Ban → 7-Day Ban</div></article>
+
+    <article class="rb" id="r-econ"><h3><span class="rlvl ln">Minor</span> Economy &amp; Assets</h3><ul class="rlst">
+      <li><strong>No large transfers without approval.</strong><span class="rr">Transferring large sums of in-game money between your own characters requires staff approval — this prevents economy manipulation. If you have a legitimate reason, open a ticket and we'll review it.</span></li>
+      <li><strong>Economy exploits = permanent ban + asset wipe.</strong><span class="rr">Duplicating items, abusing money glitches, or exploiting any economy loophole will result in your entire account being wiped (all money, cars, properties removed) and a permanent ban. Your inventory and bank records are logged.</span></li>
+      <li><strong>Businesses must be actively roleplayed.</strong><span class="rr">If you own a business but never open it or roleplay there, it will be revoked and given to someone who will actually use it. "Ghost" businesses hurt the server economy.</span></li>
+      <li><strong>One residence per character.</strong><span class="rr">Property hoarding is not allowed. Each character may own one primary residence. This ensures there are enough houses and apartments available for new players.</span></li>
+    </ul><div class="rpb rpn">Warning → Asset Wipe → Permanent Ban</div></article>
+
+    <article class="rb" id="r-staff"><h3><span class="rlvl lm">Major</span> Staff &amp; Appeals</h3><ul class="rlst">
+      <li><strong>Staff decisions are final during situations.</strong><span class="rr">When a staff member makes a ruling during an active scene, follow it immediately — even if you disagree. You can appeal later through the proper channels. Arguing or being disrespectful mid-situation will result in further punishment.</span></li>
+      <li><strong>Never ask staff for special treatment.</strong><span class="rr">Do not ask staff for free money, items, vehicles, or any in-game advantage. Staff are here to moderate and help — not to give handouts. Asking for favors undermines the integrity of the server.</span></li>
+      <li><strong>False reports = punishment for you.</strong><span class="rr">Filing fake reports against other players to get them in trouble will result in <strong>you</strong> being punished instead. Only submit genuine reports with real evidence.</span></li>
+      <li><strong>Staff are community members too.</strong><span class="rr">Harassing, stalking, or targeting staff members — in or out of character — is a serious offense and will result in a severe ban. Staff volunteer their time to make the server better. Treat them with respect.</span></li>
+      <li><strong>Appeals go through Discord tickets.</strong><span class="rr">If you believe you were unfairly punished, open a ticket on Discord with your evidence. Be calm, respectful, and factual. Raging or demanding will not help your case.</span></li>
+    </ul><div class="rpb rpm">3-Day Ban → Permanent Ban</div></article>
+
+    <article class="rb" id="r-dc"><h3><span class="rlvl ln">Minor</span> Discord Rules</h3><ul class="rlst">
+      <li><strong>Follow Discord's Terms of Service.</strong><span class="rr">Any violation of Discord's ToS (including underage use, sharing illegal content, or harassment) will result in a ban from our server and a report to Discord.</span></li>
+      <li><strong>No spamming or flooding.</strong><span class="rr">Do not send repeated messages, ghost ping (@mention then delete), or flood any channel with nonsense. This includes DM spamming other community members.</span></li>
+      <li><strong>Use channels for their intended purpose.</strong><span class="rr">Memes go in #media, gameplay clips in #clips, support requests go through the ticket system. Keeping channels organized helps everyone find what they need.</span></li>
+      <li><strong>Voice channels: be respectful.</strong><span class="rr">No ear-rape (extremely loud or distorted audio), disruptive soundboards, or screaming in voice channels. If someone asks you to stop, stop. If staff asks you to stop, comply immediately.</span></li>
+      <li><strong>Ban evading = permanent community ban.</strong><span class="rr">If you are banned and create a new account to rejoin, that is ban evasion. All your accounts will be banned permanently across the entire Eclipse State community — FiveM server and Discord.</span></li>
+    </ul><div class="rpb rpn">Mute → Kick → Ban</div></article>
+  </div>
+</div>
+
+<div class="page" id="pg-shop">
+  <div class="section"><h2 class="sh2">Eclipse Store</h2><p class="sd2">Premium perks. All sales final — no refunds.</p>
+    <div class="sg2">
+      <div class="shopc ft"><div class="si si-q"><span class="sbz hot">Popular</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="sby"><h3>Bypass Queue</h3><p class="sd3">Skip the wait and join instantly. Priority slot for life.</p><div class="sf"><span class="sp">$2.00</span><button class="btn btn-f btn-sm" data-buy="Bypass Queue" data-price="2">Buy</button></div></div></div>
+      <div class="shopc"><div class="si si-u"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div class="sby"><h3>Unban</h3><p class="sd3">Second chance. One-time use. Not valid for cheating bans.</p><div class="sf"><span class="sp">$5.00</span><button class="btn btn-f btn-sm" data-buy="Unban" data-price="5">Buy</button></div></div></div>
+      <div class="shopc ft"><div class="si si-v"><span class="sbz best">Best Value</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="sby"><h3>VIP Tier</h3><p class="sd3">VIP tag, priority queue, 2x XP, exclusive areas, monthly bonus.</p><div class="sf"><span class="sp"><s>$10</s> $7.50</span><button class="btn btn-f btn-sm" data-buy="VIP Tier" data-price="7.5">Buy</button></div></div></div>
+      <div class="shopc"><div class="si si-b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="sby"><h3>Server Booster</h3><p class="sd3">50% earnings boost for 30 days. Stacks with VIP.</p><div class="sf"><span class="sp">$3.00</span><button class="btn btn-f btn-sm" data-buy="Server Booster" data-price="3">Buy</button></div></div></div>
+      <div class="shopc"><div class="si si-w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="sby"><h3>Whitelist App</h3><p class="sd3">Fast-track for Police, EMS, DOJ and more.</p><div class="sf"><span class="sp">$4.00</span><button class="btn btn-f btn-sm" data-buy="Whitelist App" data-price="4">Buy</button></div></div></div>
+      <div class="shopc"><div class="si si-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="sby"><h3>Custom Discord Role</h3><p class="sd3">Custom name and color. Stand out in the community.</p><div class="sf"><span class="sp">$2.50</span><button class="btn btn-f btn-sm" data-buy="Custom Role" data-price="2.5">Buy</button></div></div></div>
     </div>
   </div>
-</section>
+</div>
+
+<div class="page" id="pg-apply">
+  <div class="section"><h2 class="sh2">Apply for Staff</h2><p class="sd2">Want to help run Eclipse State? Fill out the form and we'll review your application.</p>
+    <div class="card al2" id="applyFormWrap">
+      <form id="applyForm" autocomplete="off">
+        <div class="fs"><label>Position <span class="lh">(required)</span></label>
+          <select id="appPosition" required><option value="" disabled selected>Select a position…</option>
+            <option value="Ticket Support">🎫 Ticket Support (Discord)</option>
+            <option value="Discord Moderator">🛡️ Discord Moderator</option>
+            <option value="In-Game Admin">🎮 In-Game Admin</option>
+            <option value="Party Team">🎉 Party &amp; Events Team</option>
+            <option value="Developer">💻 Developer</option>
+            <option value="Media Team">📸 Media / Content Creator</option>
+            <option value="Community Manager">🌐 Community Manager</option>
+            <option value="Other">🔧 Other</option></select></div>
+        <div class="fs"><label>Discord Username <span class="lh">(NOT DISPLAY)</span></label>
+          <input type="text" id="appDiscordUser" placeholder="yourdiscorduser" required maxlength="32"></div>
+        <div class="fs"><label>Why do you want to be part of the team?</label>
+          <textarea id="appWhy" placeholder="Tell us about your motivation, experience, and what drives you… (minimum 30 characters)" required></textarea></div>
+        <div class="fs"><label>Will you help us gain members / joins? How?</label>
+          <textarea id="appMembers" placeholder="What strategies or connections do you have to grow the community? (minimum 20 characters)" required></textarea></div>
+        <div class="fs"><label>What will you bring that others won't?</label>
+          <textarea id="appUnique" placeholder="What makes you stand out? Skills, ideas, personality — be specific. (minimum 20 characters)" required></textarea></div>
+        <div class="fs"><label>Additional Notes <span class="lh">(optional)</span></label>
+          <textarea id="appNotes" placeholder="Anything else you want us to know…"></textarea></div>
+        <div class="fn2"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><strong>Write detailed answers.</strong> Spam or one-word applications will be ignored. Your application is sent to staff via Discord. If denied, you must wait <strong>1 hour</strong> before re-applying. Responses from staff appear in the chat below.</div></div>
+        <div class="fsr"><button type="submit" class="btn btn-gn">Submit Application</button></div>
+      </form>
+    </div>
+
+    <div class="card apl-status" id="applyStatus">
+      <div class="apl-steps" id="asSteps">
+        <div class="apl-step done" id="stepSent">✓</div>
+        <div class="apl-line done" id="lineSent"></div>
+        <div class="apl-step active" id="stepReview">🔄</div>
+        <div class="apl-line" id="lineReview"></div>
+        <div class="apl-step" id="stepDecision">⚡</div>
+      </div>
+      <div class="apl-icon-circle apl-icon-sent" id="asIcon">📨</div>
+      <div class="apl-title" id="asTitle">Application Sent</div>
+      <div class="apl-subtitle" id="asSubtitle"></div>
+      <div class="apl-badge sent" id="asBadge">Sent</div>
+      <div class="apl-msg-box" id="asMsgBox">
+        <div class="apl-msg-label" id="asMsgLabel">Status</div>
+        <div class="apl-msg-text" id="asMsgText"></div>
+        <div class="apl-staff-note" id="asStaffNote"></div>
+      </div>
+      <div class="apl-id-row" id="asIdRow">ID: —</div>
+      <div class="apl-cooldown" id="asCooldown"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Re-apply in: <span class="apl-countdown" id="asCountdown">—</span></span></div>
+      <div class="apl-reapply" id="asReapply"><button class="btn btn-f btn-sm" id="btnReapply">Apply Again</button></div>
+      <div class="chat-section" id="chatSection">
+        <div class="chat-header">Response Chat <span class="live-indicator">LIVE</span></div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Type your response to staff…" maxlength="500">
+          <button class="btn btn-f btn-sm" id="chatSend">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="pg-owners">
+  <div class="section"><h2 class="sh2" style="text-align:center">Server Ownership</h2><p class="sd2" style="text-align:center">The founders who built Eclipse State from the ground up.</p>
+    <div class="og">
+      <div class="card oc"><img src="https://cdn.discordapp.com/avatars/1147409272087519263/ccd5bed55f2b6b52b21988499b22c4d6.png?size=256" alt="75e0" class="opfp" loading="lazy" onerror="this.style.display='none'"><h3>75e0 <small style="color:var(--m);font-weight:400">(xcq.v)</small></h3><span class="ot">Owner / Developer</span><div class="od">Discord: xcq.v</div><p class="ob">Founder of Eclipse State. Full-stack developer responsible for all server infrastructure, custom scripts, and the web platform.</p>
+        <div class="otags"><span class="otg ot-m">Owner</span><span class="otg ot-d">Developer</span><span class="otg ot-b">Discord Bot Manager</span><span class="otg ot-l">Applications Holder</span><span class="otg ot-s">Discord Team</span><span class="otg ot-r">Discord Support</span></div></div>
+      <div class="card oc"><div style="width:90px;height:90px;border-radius:50%;border:3px solid var(--gld);box-shadow:0 0 36px var(--gg);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:rgba(6,14,28,.6)"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="var(--gld)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><h3>Travix <small style="color:var(--m);font-weight:400">(thatsmitzyguy)</small></h3><span class="ot">Owner / Developer</span><div class="od">Discord: thatsmitzyguy</div><p class="ob">Co-owner and lead developer. Runs in-game systems, economy balancing, and community management.</p>
+        <div class="otags"><span class="otg ot-m">Owner</span><span class="otg ot-d">Developer</span><span class="otg ot-b">Discord Bot Manager</span><span class="otg ot-l">Applications Holder</span><span class="otg ot-s">Discord Team</span><span class="otg ot-r">Discord Support</span></div></div>
+    </div>
+  </div>
+</div>
 
 <footer class="footer">
   <p>&copy; 2026 <strong>Eclipse State</strong>. Not affiliated with Rockstar, Take-Two, or Cfx.re.</p>
-  <div class="footer-row"><a data-nav="rulebook" style="cursor:pointer">Rulebook</a><a data-nav="shop" style="cursor:pointer">Shop</a><a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener">Discord</a><a data-nav="owners" style="cursor:pointer">Owners</a></div>
-  <p style="font-size:.7rem;margin-top:6px">Built by <strong>75e0</strong> &amp; <strong>thatsmitzyguy</strong></p>
+  <div class="fr"><a data-nav="wiki">Wiki</a><a data-nav="rulebook">Rules</a><a data-nav="shop">Shop</a><a data-nav="apply">Apply</a><a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener">Discord</a><a data-nav="owners">Owners</a></div>
+  <p style="font-size:.7rem;margin-top:6px">Built by <strong>75e0</strong> &amp; <strong>Travix</strong></p>
 </footer>
 </div>
 
-<!-- MODAL -->
-<div class="modal-mask" id="modal">
-  <div class="modal-box"><h3 id="modalTitle">Confirm</h3><p id="modalDesc"></p><div class="modal-btns"><button class="btn btn--stroke btn--sm" id="modalCancel">Cancel</button><button class="btn btn--fill btn--sm" id="modalOk">Confirm</button></div></div>
-</div>
+<div class="mm" id="modal"><div class="mb"><h3 id="modalTitle">Confirm</h3><p id="modalDesc"></p><div class="mba"><button class="btn btn-s btn-sm" id="modalCancel">Cancel</button><button class="btn btn-f btn-sm" id="modalOk">Confirm</button></div></div></div>
+<div class="tr2" id="toastRack"></div>
 
-<!-- TOAST RACK -->
-<div class="toast-rack" id="toastRack"></div>
-
-<!-- ================================================================
-     APPLICATION LOGIC
-     ================================================================ -->
 <script>
 (function(){
   'use strict';
 
-  var DB={
-    HJF38:{name:'Alex "Shadow" Carter',discord:'shadow#1234',avatar:'',role:'VIP Member',cls:'tag-vip',playtime:'247h',banned:false,warns:1},
-    KLM92:{name:'Jamie Reese',discord:'jreese#5678',avatar:'',role:'Staff',cls:'tag-staff',playtime:'892h',banned:false,warns:2},
-    OWNER:{name:'75e0',discord:'xcq.v',avatar:'https://cdn.discordapp.com/avatars/1147409272087519263/ccd5bed55f2b6b52b21988499b22c4d6.png?size=128',role:'Owner / Developer',cls:'tag-owner',playtime:'1,500h+',banned:false,warns:0},
-    SMITZ:{name:'thatsmitzyguy',discord:'thatsmitzyguy',avatar:'',role:'Owner / Developer',cls:'tag-owner',playtime:'1,200h+',banned:false,warns:0},
-    BANNED:{name:'Cheater123',discord:'cheater#9999',avatar:'',role:'Citizen',cls:'tag-citizen',playtime:'3h',banned:true,warns:6}
-  };
-  var U=null,P=null;
+  // Mobile Detection
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+  }
+  
+  if (isMobile()) {
+    document.getElementById('mobileBlock').style.display = 'flex';
+  }
 
+  (function(){var sb=document.getElementById('sparkleBox');var stb=document.getElementById('starBox');
+    if(sb)for(var i=0;i<60;i++){var s=document.createElement('div');s.className='sparkle-dot';s.style.left=(3+Math.random()*94)+'%';s.style.bottom=(2+Math.random()*38)+'%';s.style.width=s.style.height=(1+Math.random()*3)+'px';s.style.setProperty('--d',(2+Math.random()*5)+'s');s.style.setProperty('--dl',Math.random()*6+'s');sb.appendChild(s)}
+    if(stb)for(var j=0;j<45;j++){var st=document.createElement('div');st.className='star';st.style.left=Math.random()*100+'%';st.style.top=Math.random()*52+'%';st.style.width=st.style.height=(.8+Math.random()*2.2)+'px';st.style.setProperty('--d',(3+Math.random()*6)+'s');st.style.setProperty('--dl',Math.random()*8+'s');stb.appendChild(st)}
+  })();
+
+  var DB={HJF38:{name:'Alex "Shadow" Carter',discord:'shadow#1234',avatar:'',role:'VIP Member',cls:'dt-v',playtime:'247h',banned:false,warns:1},KLM92:{name:'Jamie Reese',discord:'jreese#5678',avatar:'',role:'Staff',cls:'dt-s',playtime:'892h',banned:false,warns:2},OWNER:{name:'75e0',discord:'xcq.v',avatar:'https://cdn.discordapp.com/avatars/1147409272087519263/ccd5bed55f2b6b52b21988499b22c4d6.png?size=128',role:'Owner / Developer',cls:'dt-o',playtime:'1,500h+',banned:false,warns:0},SMITZ:{name:'Travix',discord:'thatsmitzyguy',avatar:'',role:'Owner / Developer',cls:'dt-o',playtime:'1,200h+',banned:false,warns:0},BANNED:{name:'Cheater123',discord:'cheater#9999',avatar:'',role:'Citizen',cls:'dt-c',playtime:'3h',banned:true,warns:6}};
+  var U=null,P=null,COOLDOWN_MS=3600000;
+  var currentAppId=null;
+  var realtimeInterval=null;
   function $(id){return document.getElementById(id)}
 
-  /* ---- NAV ---- */
-  function go(page){
-    if(page==='dashboard'&&!U){toast('Link your account first!','warn','');page='home'}
-    var pages={home:$('pg-home'),dashboard:$('pg-dashboard'),rulebook:$('pg-rulebook'),shop:$('pg-shop'),owners:$('pg-owners')};
-    Object.keys(pages).forEach(function(k){pages[k].classList.remove('page--visible')});
-    pages[page].classList.add('page--visible');
-    document.querySelectorAll('.nav-links a[data-nav]').forEach(function(a){a.classList.remove('active');if(a.getAttribute('data-nav')===page)a.classList.add('active')});
-    if(page==='dashboard'&&U)renderDash();
-    window.scrollTo({top:0,behavior:'smooth'});
+  var pages={};
+  function initPages(){pages={home:$('pg-home'),dashboard:$('pg-dashboard'),wiki:$('pg-wiki'),rulebook:$('pg-rulebook'),shop:$('pg-shop'),apply:$('pg-apply'),owners:$('pg-owners')}}
+  function showPage(name){if(!pages[name])return;Object.keys(pages).forEach(function(k){if(pages[k])pages[k].classList.remove('on')});pages[name].classList.add('on');document.querySelectorAll('.nav-links a[data-nav]').forEach(function(a){a.classList.remove('active');if(a.getAttribute('data-nav')===name)a.classList.add('active')});if(name==='dashboard'&&U)renderDash();if(name==='apply'){checkApply();startRealtimeUpdates()}else{stopRealtimeUpdates()}window.scrollTo({top:0,behavior:'smooth'})}
+  function navigate(page){if(page==='dashboard'&&!U){toast('Link your account first!','warn');page='home'}if(!pages[page])return;showPage(page)}
+  function bindNav(){document.querySelectorAll('[data-nav]').forEach(function(el){if(el._b)return;el._b=1;el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();navigate(el.getAttribute('data-nav'))})})}
+
+  var SI={ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',err:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'};
+  function toast(msg,type){var r=$('toastRack');if(!r)return;type=type||'info';var el=document.createElement('div');el.className='toast toast-'+type;el.innerHTML=(SI[type]||SI.info)+'<span>'+msg+'</span><button class="tc">&times;</button>';el.querySelector('.tc').addEventListener('click',function(){el.remove()});r.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove()},5000)}
+
+  function setupToken(){var input=$('tokenInput'),btn=$('tokenBtn'),err=$('tokenErr');if(!input)return;btn.addEventListener('click',function(){var raw=input.value.trim().toUpperCase(),key=raw.split('-')[0];err.classList.remove('s');input.style.borderColor='';if(!raw){err.textContent='Please paste your code.';err.classList.add('s');return}if(DB[key]){U=DB[key];renderDash();navigate('dashboard');toast('Welcome, '+U.name.split(' ')[0]+'!','ok')}else{err.textContent='Code not recognized.';err.classList.add('s');input.style.borderColor='#e85050';setTimeout(function(){input.style.borderColor=''},2000)}});input.addEventListener('keydown',function(e){if(e.key==='Enter')btn.click()})}
+
+  function renderDash(){if(!U)return;$('dashName').textContent=U.name;$('dashDiscord').textContent=U.discord;var av=$('dashAvatar'),ph=$('dashAvatarPh');if(U.avatar){av.src=U.avatar;av.style.display='';ph.style.display='none'}else{av.style.display='none';ph.style.display='flex'}$('dashTag').textContent=U.role;$('dashTag').className='dt '+(U.cls||'dt-c');$('statPlaytime').textContent=U.playtime;$('statBanned').textContent=U.banned?'YES':'No';$('statBanned').className='sv '+(U.banned?'cr':'cg');var w=U.warns||0;$('statWarns').textContent=w+' / 6';if(w>=6){$('statWarns').className='sv cr';$('statWarnSub').textContent='Ban threshold';$('statWarnSub').style.color='#e85050'}else if(w>=4){$('statWarns').className='sv cgl';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#e2b04a'}else if(w>=2){$('statWarns').className='sv';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#f69a62'}else{$('statWarns').className='sv cg';$('statWarnSub').textContent='Good standing';$('statWarnSub').style.color=''}$('actList').innerHTML='<div class="ar"><span class="ad ok"></span> Account linked — '+U.discord+' <span class="atm">Just now</span></div>'+(U.banned?'<div class="ar"><span class="ad b"></span> BANNED <span class="atm">—</span></div>':'')+(w>0?'<div class="ar"><span class="ad w"></span> '+w+' warning(s) <span class="atm">—</span></div>':'')}
+
+  function setupShop(){document.querySelectorAll('[data-buy]').forEach(function(b){b.addEventListener('click',function(){if(!U){toast('Link account first!','warn');navigate('home');return}P={name:b.getAttribute('data-buy'),price:parseFloat(b.getAttribute('data-price'))};$('modalTitle').textContent='Confirm';$('modalDesc').textContent='Buy "'+P.name+'" for $'+P.price.toFixed(2)+'?';$('modalOk').textContent='Confirm — $'+P.price.toFixed(2);$('modal').classList.add('open')})})}
+  function setupModal(){$('modalOk').addEventListener('click',function(){if(!P)return;toast('Purchased! Check Discord.','ok');P=null;$('modal').classList.remove('open')});$('modalCancel').addEventListener('click',function(){P=null;$('modal').classList.remove('open')});$('modal').addEventListener('click',function(e){if(e.target===$('modal')){P=null;$('modal').classList.remove('open')}})}
+
+  function copyIp(){var ip='connect eclipsestate.com';if(navigator.clipboard){navigator.clipboard.writeText(ip).then(function(){toast('Copied!','info')}).catch(function(){toast('IP: '+ip,'info')})}else{toast('IP: '+ip,'info')}}
+  function setupUtils(){var bc=$('btnCopyIp'),cc=$('copyIpChip'),li=$('liveIp'),bj=$('btnJoin');if(bc)bc.addEventListener('click',copyIp);if(cc)cc.addEventListener('click',copyIp);if(li)li.addEventListener('click',copyIp);if(bj)bj.addEventListener('click',function(){toast('Launching FiveM...','info');window.open('fivem://connect/eclipsestate.com','_blank')})}
+
+  function getApps(){try{return JSON.parse(localStorage.getItem('ec_apps')||'[]')}catch(e){return[]}}
+  function saveApps(apps){try{localStorage.setItem('ec_apps',JSON.stringify(apps))}catch(e){}}
+
+  function getChats(appId){try{return JSON.parse(localStorage.getItem('ec_chat_'+appId)||'[]')}catch(e){return[]}}
+  function saveChats(appId,chats){try{localStorage.setItem('ec_chat_'+appId,JSON.stringify(chats))}catch(e){}}
+
+  // Real-time update checker
+  function startRealtimeUpdates(){
+    stopRealtimeUpdates();
+    realtimeInterval=setInterval(function(){
+      var apps=getApps();
+      if(apps.length===0)return;
+      var last=apps[apps.length-1];
+      if(last.id===currentAppId){
+        renderStatus(last);
+        renderChat(last.id);
+      }
+    },2000); // Check every 2 seconds
+  }
+  
+  function stopRealtimeUpdates(){
+    if(realtimeInterval){
+      clearInterval(realtimeInterval);
+      realtimeInterval=null;
+    }
   }
 
-  document.querySelectorAll('[data-nav]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();go(el.getAttribute('data-nav'))})});
+  function renderStatus(app){
+    var sS=$('stepSent'),lS=$('lineSent'),sR=$('stepReview'),lR=$('lineReview'),sD=$('stepDecision');
+    if(!sS)return;
+    sS.className='apl-step done';lS.className='apl-line '+(app.status!=='sent'?'done':'');
+    sR.className='apl-step '+(app.status==='reviewing'?'active':(app.status!=='sent'?'done':''));
+    lR.className='apl-line '+(app.status==='accepted'||app.status==='denied'?'done':'');
+    sD.className='apl-step '+(app.status==='accepted'?'done':(app.status==='denied'?'denied':''));
 
-  /* ---- TOKEN ---- */
-  $('tokenBtn').addEventListener('click',function(){
-    var raw=$('tokenInput').value.trim().toUpperCase(),err=$('tokenErr'),k=raw.split('-')[0];
-    err.classList.remove('show');$('tokenInput').style.borderColor='';
-    if(!raw){err.textContent='Please paste your in-game code.';err.classList.add('show');return}
-    if(DB[k]){U=DB[k];renderDash();go('dashboard');toast('Welcome, '+U.name.split(' ')[0]+'! Account linked.','ok','')}
-    else{err.textContent='Code not recognized. Copy it from in-game and try again.';err.classList.add('show');$('tokenInput').style.borderColor='#e85050';setTimeout(function(){$('tokenInput').style.borderColor=''},2000)}
-  });
-  $('tokenInput').addEventListener('keydown',function(e){if(e.key==='Enter')$('tokenBtn').click()});
+    var icon=$('asIcon'),title=$('asTitle'),sub=$('asSubtitle'),badge=$('asBadge');
+    var msgTxt=$('asMsgText'),staffNote=$('asStaffNote');
+    var idRow=$('asIdRow'),cdEl=$('asCooldown'),cdNum=$('asCountdown'),reapply=$('asReapply');
+    var chat=$('chatSection');
 
-  /* ---- DASHBOARD ---- */
-  function renderDash(){
-    if(!U)return;
-    $('dashName').textContent=U.name;$('dashDiscord').textContent=U.discord;
-    var av=$('dashAvatar'),ph=$('dashAvatarPh');
-    if(U.avatar){av.src=U.avatar;av.style.display='';ph.style.display='none'}
-    else{av.style.display='none';ph.style.display='flex'}
-    $('dashTag').textContent=U.role;$('dashTag').className='dash-tag '+(U.cls||'tag-citizen');
-    $('statPlaytime').textContent=U.playtime;
-    $('statBanned').textContent=U.banned?'YES':'No';$('statBanned').className='s-val '+(U.banned?'c-red':'c-green');
-    var w=U.warns||0;$('statWarns').textContent=w+' / 6';
-    if(w>=6){$('statWarns').className='s-val c-red';$('statWarnSub').textContent='Ban threshold reached';$('statWarnSub').style.color='#e85050'}
-    else if(w>=4){$('statWarns').className='s-val c-gold';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#e2b04a'}
-    else if(w>=2){$('statWarns').className='s-val';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#f69a62'}
-    else{$('statWarns').className='s-val c-green';$('statWarnSub').textContent='Good standing';$('statWarnSub').style.color=''}
-    $('actList').innerHTML='<div class="act-row"><span class="act-dot ok"></span> Account linked — '+U.discord+' <span class="act-time">Just now</span></div>'+(U.banned?'<div class="act-row"><span class="act-dot bad"></span> BANNED. Purchase an unban in the shop. <span class="act-time">—</span></div>':'')+(w>0?'<div class="act-row"><span class="act-dot warn"></span> '+w+' warning(s). '+(6-w)+' remaining. <span class="act-time">—</span></div>':'');
+    if(app.status==='sent'){
+      if(icon){icon.className='apl-icon-circle apl-icon-sent';icon.textContent='📨'}
+      if(title)title.textContent='Application Sent';if(sub)sub.textContent='Pending review by staff.';
+      if(badge){badge.textContent='Sent';badge.className='apl-badge sent'}
+      if(msgTxt)msgTxt.textContent='Your application has been sent to the staff team. They will review it and contact you via Discord if accepted.';
+      if(staffNote)staffNote.style.display='none';
+      if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
+      if(chat)chat.style.display='block';
+      renderChat(app.id);
+    }else if(app.status==='reviewing'){
+      if(icon){icon.className='apl-icon-circle apl-icon-review';icon.textContent='🔄'}
+      if(title)title.textContent='Under Review';if(sub)sub.textContent='Staff are reviewing your application.';
+      if(badge){badge.textContent='Reviewing';badge.className='apl-badge review'}
+      if(msgTxt)msgTxt.textContent='Your application is being reviewed. Staff may send you messages below — check regularly.';
+      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
+      if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
+      if(chat)chat.style.display='block';
+      renderChat(app.id);
+    }else if(app.status==='accepted'){
+      if(icon){icon.className='apl-icon-circle apl-icon-accept';icon.textContent='✅'}
+      if(title)title.textContent='Accepted!';if(sub)sub.textContent='Congratulations — you have been accepted!';
+      if(badge){badge.textContent='Accepted';badge.className='apl-badge accept'}
+      if(msgTxt)msgTxt.textContent='You will receive a DM shortly from a staff member or owner with onboarding details and next steps. Welcome to the Eclipse State team!';
+      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
+      if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
+      if(chat)chat.style.display='block';
+      renderChat(app.id);
+    }else if(app.status==='denied'){
+      var now=Date.now(),deniedAt=app.deniedAt||now,elapsed=now-deniedAt,remaining=Math.max(0,COOLDOWN_MS-elapsed);
+      if(icon){icon.className='apl-icon-circle apl-icon-deny';icon.textContent='❌'}
+      if(title)title.textContent='Application Denied';if(sub)sub.textContent='Not accepted this time.';
+      if(badge){badge.textContent='Denied';badge.className='apl-badge deny'}
+      if(msgTxt)msgTxt.textContent='After careful review, the staff team has decided not to move forward with your application. You are welcome to improve and apply again after the cooldown.';
+      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff note: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
+      if(chat)chat.style.display='block';
+      renderChat(app.id);
+      if(remaining>0){if(cdEl)cdEl.style.display='flex';if(reapply)reapply.style.display='none';tickCountdown(cdNum,remaining,app)}
+      else{if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()}}
+    }
+    if(idRow)idRow.textContent='ID: '+app.id;
   }
 
-  /* ---- SHOP ---- */
-  document.querySelectorAll('[data-buy]').forEach(function(b){b.addEventListener('click',function(){
-    if(!U){toast('Link your account first!','warn','');go('home');return}
-    P={name:b.getAttribute('data-buy'),price:parseFloat(b.getAttribute('data-price'))};
-    $('modalTitle').textContent='Confirm Purchase';$('modalDesc').textContent='Buy "'+P.name+'" for $'+P.price.toFixed(2)+'? Linked to: '+U.discord;
-    $('modalOk').textContent='Confirm — $'+P.price.toFixed(2);$('modal').classList.add('open');
-  })});
-  $('modalOk').addEventListener('click',function(){if(!P)return;toast('Purchased "'+P.name+'" for $'+P.price.toFixed(2)+'! Check Discord.','ok','');P=null;$('modal').classList.remove('open')});
-  $('modalCancel').addEventListener('click',function(){P=null;$('modal').classList.remove('open')});
-  $('modal').addEventListener('click',function(e){if(e.target===$('modal')){P=null;$('modal').classList.remove('open')}});
-
-  /* ---- UTILS ---- */
-  function copyIp(){var ip='connect eclipsestate.com';navigator.clipboard.writeText(ip).then(function(){toast('Copied! Press F8 in FiveM and paste.','info','')}).catch(function(){toast('Server IP: '+ip,'info','')})}
-  $('btnCopyIp').addEventListener('click',copyIp);$('copyIpChip').addEventListener('click',copyIp);$('liveIp').addEventListener('click',copyIp);
-  $('btnJoin').addEventListener('click',function(){toast('Launching FiveM...','info','');window.open('fivem://connect/eclipsestate.com','_blank')});
-  $('lnkSupport').addEventListener('click',function(){toast('Join Discord → open ticket in #support','info','')});
-
-  /* ---- TOAST ---- */
-  function toast(msg,type,icon){
-    type=type||'info';
-    var svg='';
-    if(type==='ok')svg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-    else if(type==='warn')svg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
-    else if(type==='err')svg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
-    else svg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
-    var el=document.createElement('div');el.className='toast toast-'+type;
-    el.innerHTML=svg+'<span>'+msg+'</span><button class="toast-close">&times;</button>';
-    el.querySelector('.toast-close').addEventListener('click',function(){el.remove()});
-    $('toastRack').appendChild(el);setTimeout(function(){if(el.parentNode)el.remove()},5000);
+  function tickCountdown(el,remaining,app){
+    if(!el)return;
+    var iv=setInterval(function(){
+      var r=remaining-(Date.now()-(app.deniedAt||Date.now()));
+      if(r<=0){el.textContent='00:00';clearInterval(iv);var cd=$('asCooldown'),rp=$('asReapply');if(cd)cd.style.display='none';if(rp)rp.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()};return}
+      var m=Math.floor(r/60000),s=Math.floor((r%60000)/1000);el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    },1000);
+    el._iv=iv;
   }
 
-  /* ---- LIVE FIVEM ---- */
-  function fetchPlayers(){
-    var ip='eclipsestate.com',port='30120';
-    fetch('http://'+ip+':'+port+'/dynamic.json',{signal:AbortSignal.timeout(4000)})
-      .then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){$('liveTxt').textContent=(d.clients||0)+' / '+(d.sv_maxclients||64)+' online';$('liveDot').className='live-dot '+(d.clients>0?'on':'off')})
-      .catch(function(){
-        fetch('http://'+ip+':'+port+'/players.json',{signal:AbortSignal.timeout(4000)})
-          .then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(p){var c=Array.isArray(p)?p.length:0;$('liveTxt').textContent=c+' player'+(c!==1?'s':'')+' online';$('liveDot').className='live-dot '+(c>0?'on':'off')})
-          .catch(function(){$('liveTxt').textContent='Server offline — check back';$('liveDot').className='live-dot off'})
-      });
+  function resetForm(){
+    var fw=$('applyFormWrap'),st=$('applyStatus');
+    if(fw)fw.style.display='';
+    if(st)st.style.display='none';
+    var form=$('applyForm');
+    if(form)form.reset();
+    var cd=$('asCountdown');
+    if(cd&&cd._iv)clearInterval(cd._iv);
+    stopRealtimeUpdates();
+    currentAppId=null;
   }
 
-  /* ---- LIVE DISCORD ---- */
-  function fetchDiscord(){
-    var gid='1525359528659652669';
-    fetch('https://discord.com/api/guilds/'+gid+'/widget.json',{signal:AbortSignal.timeout(5000)})
-      .then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){var txt='🟢 '+(d.presence_count||0)+' online · '+(d.members?d.members.length:0)+' members';setDC(txt)})
-      .catch(function(){
-        fetch('https://discord.com/api/v9/invites/cU3CH7z494?with_counts=true',{signal:AbortSignal.timeout(5000)})
-          .then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){setDC('🟢 '+(d.approximate_presence_count||0)+' online · '+(d.approximate_member_count||0)+' members')})
-          .catch(function(){setDC('Join our Discord!')})
-      });
+  function renderChat(appId){
+    var msgs=$('chatMessages');if(!msgs)return;
+    var chats=getChats(appId);
+    if(chats.length===0){msgs.innerHTML='<div style="color:var(--f);font-size:.82rem;text-align:center;padding:10px">No messages yet. Staff responses will appear here.</div>';return}
+    msgs.innerHTML='';
+    chats.forEach(function(c){
+      var d=document.createElement('div');d.className='chat-msg';
+      var av=document.createElement('div');av.className='chat-msg-avatar '+(c.from==='staff'?'staff':'user');av.textContent=c.from==='staff'?'S':'Y';
+      var b=document.createElement('div');b.className='chat-msg-bubble';
+      b.innerHTML='<div class="chat-author">'+(c.from==='staff'?'Staff':'You')+'</div><div>'+escHtml(c.text)+'</div><div class="chat-time">'+formatTime(c.time)+'</div>';
+      d.appendChild(av);d.appendChild(b);msgs.appendChild(d);
+    });
+    msgs.scrollTop=msgs.scrollHeight;
   }
-  function setDC(txt){var a=$('dcSmall'),b=$('dcBadge');if(a)a.textContent=txt;if(b)b.textContent=txt}
 
-  /* ---- INIT ---- */
-  fetchPlayers();fetchDiscord();setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
-  if(window.location.hash){var h=window.location.hash.replace('#','').toUpperCase(),k=h.split('-')[0];if(DB[k]){$('tokenInput').value=h;U=DB[k];renderDash()}}
+  function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+  function formatTime(ts){var d=new Date(ts);return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+
+  function setupChat(appId){
+    currentAppId=appId;
+    var input=$('chatInput'),send=$('chatSend');if(!input||!send)return;
+    send.onclick=function(){sendChatMsg(appId)};
+    input.onkeydown=function(e){if(e.key==='Enter')sendChatMsg(appId)};
+  }
+
+  function sendChatMsg(appId){
+    var input=$('chatInput');if(!input)return;
+    var txt=input.value.trim();if(!txt)return;
+    var chats=getChats(appId);chats.push({from:'user',text:txt,time:Date.now()});saveChats(appId,chats);
+    input.value='';renderChat(appId);toast('Response sent. Staff will see it in Discord.','ok');
+    var apps=getApps();
+    for(var i=0;i<apps.length;i++){if(apps[i].id===appId){apps[i].lastUserMessage=txt;apps[i].lastUserMessageTime=Date.now();break}}
+    saveApps(apps);
+    var wh='https://discordapp.com/api/webhooks/1525613897569140776/MBDDY2J54ngrz-ZE7lNaNHunI7MjMNsUxSCIVk6IoZfQIDpRr3IKh78Qbp0y6Src605g';
+    fetch(wh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'💬 **New response from applicant** `'+appId+'`\n> '+txt})}).catch(function(){});
+  }
+
+  function checkApply(){
+    var fw=$('applyFormWrap'),st=$('applyStatus');if(!fw||!st)return;
+    var apps=getApps();
+    if(apps.length===0){fw.style.display='';st.style.display='none';stopRealtimeUpdates();currentAppId=null;return}
+    var last=apps[apps.length-1];fw.style.display='none';st.style.display='block';
+    currentAppId=last.id;
+    renderStatus(last);setupChat(last.id);
+    startRealtimeUpdates();
+  }
+
+  function setupApplyForm(){
+    var form=$('applyForm');if(!form)return;
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var apps=getApps();
+      if(apps.length>0){var last=apps[apps.length-1];if(last.status==='denied'){var elapsed=Date.now()-(last.deniedAt||0);if(elapsed<COOLDOWN_MS){var rm=Math.ceil((COOLDOWN_MS-elapsed)/60000);toast('Wait '+rm+' minutes before re-applying.','warn');checkApply();return}}}
+      var pos=$('appPosition').value,du=($('appDiscordUser').value||'').trim();
+      var why=($('appWhy').value||'').trim(),mem=($('appMembers').value||'').trim(),uni=($('appUnique').value||'').trim(),notes=($('appNotes').value||'').trim();
+      if(!pos){toast('Select a position.','warn');return}if(!du){toast('Enter your Discord username.','warn');return}
+      if(!why||why.length<30){toast('Write at least 30 characters about why you want to join.','warn');return}
+      if(!mem||mem.length<20){toast('Write at least 20 characters about gaining members.','warn');return}
+      if(!uni||uni.length<20){toast('Write at least 20 characters about what makes you unique.','warn');return}
+      var wc=function(s){return s.split(/\s+/).filter(function(w){return w.length>1}).length};
+      if(wc(why)<5){toast('Write at least 5 meaningful words about why.','warn');return}
+      if(wc(mem)<4){toast('Write at least 4 meaningful words about gaining members.','warn');return}
+      if(wc(uni)<4){toast('Write at least 4 meaningful words about what makes you unique.','warn');return}
+      var aid='APP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,4).toUpperCase();
+      var embed={title:'📨 New Staff Application',description:'**App ID:** `'+aid+'`\n\nSubmitted via Eclipse State website.',color:0x3cb878,timestamp:new Date().toISOString(),fields:[{name:'🎯 Position',value:pos,inline:true},{name:'👤 Discord',value:du,inline:true},{name:'\u200b',value:'\u200b',inline:false},{name:'❓ Why Join',value:why.length>1024?why.substr(0,1021)+'...':why,inline:false},{name:'📈 Gain Members',value:mem.length>1024?mem.substr(0,1021)+'...':mem,inline:false},{name:'⭐ What They Provide',value:uni.length>1024?uni.substr(0,1021)+'...':uni,inline:false}],footer:{text:'Eclipse State · Application System'}};
+      if(notes)embed.fields.push({name:'📝 Notes',value:notes.length>1024?notes.substr(0,1021)+'...':notes,inline:false});
+      embed.fields.push({name:'\u200b',value:'\u200b',inline:false});
+      embed.fields.push({name:'⚡ Staff Actions',value:'✅ Accept | ❌ Deny | 🔄 Review\n`!respond '+aid+' Review <message>` to update.\nResponses from applicant appear in this channel.',inline:false});
+      var btn=form.querySelector('button[type="submit"]'),ot=btn?btn.textContent:'';if(btn){btn.textContent='Sending…';btn.disabled=true}
+      var wh='https://discordapp.com/api/webhooks/1525613897569140776/MBDDY2J54ngrz-ZE7lNaNHunI7MjMNsUxSCIVk6IoZfQIDpRr3IKh78Qbp0y6Src605g';
+      fetch(wh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({embeds:[embed]})}).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);
+        var appObj={id:aid,position:pos,discord:du,status:'sent',date:new Date().toISOString()};
+        apps.push(appObj);saveApps(apps);saveChats(aid,[]);
+        form.reset();
+        checkApply();
+        toast('Application sent! ID: '+aid,'ok');
+        if(btn){btn.textContent=ot;btn.disabled=false}
+      }).catch(function(err){toast('Failed to send. Try again.','err');if(btn){btn.textContent=ot;btn.disabled=false}});
+    });
+  }
+
+  // Clear application data function (exposed globally)
+  window.clearApplicationData=function(){
+    var apps=getApps();
+    apps.forEach(function(a){localStorage.removeItem('ec_chat_'+a.id)});
+    localStorage.removeItem('ec_apps');
+    toast('Application data cleared!','info');
+    resetForm();
+    checkApply();
+  };
+
+  function fetchPlayers(){var ip='eclipsestate.com',port='30120',lt=$('liveTxt'),ld=$('liveDot');fetch('http://'+ip+':'+port+'/dynamic.json',{signal:AbortSignal.timeout(4000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){if(lt)lt.textContent=(d.clients||0)+' / '+(d.sv_maxclients||64)+' online';if(ld)ld.className='dot '+(d.clients>0?'on':'off')}).catch(function(){fetch('http://'+ip+':'+port+'/players.json',{signal:AbortSignal.timeout(4000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(p){var c=Array.isArray(p)?p.length:0;if(lt)lt.textContent=c+' player'+(c!==1?'s':'')+' online';if(ld)ld.className='dot '+(c>0?'on':'off')}).catch(function(){if(lt)lt.textContent='Server offline';if(ld)ld.className='dot off'})})}
+
+  function fetchDiscord(){function setDC(t){var a=$('dcSmall'),b=$('dcBadge');if(a)a.textContent=t;if(b)b.textContent=t}fetch('https://discord.com/api/guilds/1525359528659652669/widget.json',{signal:AbortSignal.timeout(5000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){setDC('🟢 '+(d.presence_count||0)+' online · '+(d.members?d.members.length:0)+' members')}).catch(function(){fetch('https://discord.com/api/v9/invites/cU3CH7z494?with_counts=true',{signal:AbortSignal.timeout(5000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){setDC('🟢 '+(d.approximate_presence_count||0)+' online · '+(d.approximate_member_count||0)+' members')}).catch(function(){setDC('Join our Discord!')})})}
+
+  document.addEventListener('contextmenu',function(e){e.preventDefault()});
+  document.addEventListener('keydown',function(e){if(e.keyCode===123||(e.ctrlKey&&e.shiftKey&&(e.keyCode===73||e.keyCode===74||e.keyCode===67))||(e.ctrlKey&&e.keyCode===85)){e.preventDefault();return false}});
+
+  function init(){
+    initPages();bindNav();setupToken();setupShop();setupModal();setupUtils();setupApplyForm();checkApply();fetchPlayers();fetchDiscord();setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
+    if (!isMobile()) {
+      showPage('home');
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
 })();
 </script>
 </body>
