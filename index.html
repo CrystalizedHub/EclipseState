@@ -905,7 +905,7 @@ body{
   var U=null,P=null,COOLDOWN_MS=3600000;
   var currentAppId=null;
   var realtimeInterval=null;
-  var BOT_API='http://localhost:5599'; // CHANGE THIS to your bot's public URL in production
+  var BOT_API=(function(){try{if(window.location.origin&&window.location.origin!=='null'&&window.location.origin!=='file://')return window.location.origin}catch(e){}return'http://localhost:5599'})(); // auto-detected from page URL — open http://YOUR-SERVER-IP:5599
   function $(id){return document.getElementById(id)}
 
   var pages={};
@@ -1124,7 +1124,15 @@ body{
         checkApply();
         toast('Application sent! ID: '+data.id,'ok');
         if(btn){btn.textContent=ot;btn.disabled=false}
-      }).catch(function(err){toast('Failed to send. Try again.','err');if(btn){btn.textContent=ot;btn.disabled=false}});
+      }).catch(function(err){
+        var msg='Failed to send. ';
+        if(err.message&&err.message.indexOf('Failed to fetch')!==-1)msg+='Cannot reach bot API at '+BOT_API+'. Make sure the bot is running and you opened this page via http://SERVER-IP:5599';
+        else if(err.message)msg+=err.message;
+        else msg+='Unknown error.';
+        toast(msg,'err');
+        console.error('[Eclipse] Apply error:',err,'BOT_API=',BOT_API);
+        if(btn){btn.textContent=ot;btn.disabled=false}
+      });
     });
   }
 
@@ -1154,5 +1162,5 @@ body{
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
 })();
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19b83122f529833',t:'MTc4MzgxMTc0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
