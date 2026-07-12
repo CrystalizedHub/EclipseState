@@ -659,11 +659,22 @@ body{
 </div>
 
 <div class="page" id="pg-dashboard">
+  <!-- Discord User Card -->
   <div class="card" style="margin-top:28px"><div class="dh">
     <img src="" alt="" class="dpfp" id="dashAvatar" style="display:none"><div class="dpfpp" id="dashAvatarPh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-    <div class="dm"><h2 id="dashName">—</h2><span class="dt" id="dashTag">—</span><div style="font-size:.78rem;color:var(--m);margin-top:4px">Discord: <span id="dashDiscord" style="color:var(--al)">—</span></div></div>
-    <div class="dba"><button class="btn btn-s btn-sm" id="btnCopyIp">Copy IP</button><button class="btn btn-f btn-sm" id="btnJoin">Join Server</button></div>
+    <div class="dm"><h2 id="dashName">—</h2><span class="dt dt-c" id="dashTag">Not logged in</span>
+      <div style="font-size:.78rem;color:var(--m);margin-top:4px">Discord ID: <span id="dashDiscordId" style="color:var(--al)">—</span></div>
+      <div style="font-size:.78rem;color:var(--m)">Username: <span id="dashDiscordUser" style="color:var(--al)">—</span></div>
+    </div>
+    <div class="dba"><button class="btn btn-s btn-sm" id="btnCopyIp">Copy IP</button><button class="btn btn-f btn-sm" onclick="startOAuth2()" id="btnDashLogin">Login with Discord</button><button class="btn btn-s btn-sm" style="display:none" id="btnDashLogout" onclick="logoutDiscord()">Logout</button></div>
   </div></div>
+  <!-- Roles Card -->
+  <div class="card" style="margin-top:14px" id="dashRolesCard">
+    <h3 style="font-size:.95rem;margin-bottom:14px">Discord Roles</h3>
+    <div id="dashRoles" style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px">
+      <span style="color:var(--f);font-size:.82rem">Login with Discord to see your roles</span>
+    </div>
+  </div>
   <div class="sr">
     <div class="card sc2"><div class="sl">Playtime</div><div class="sv ca" id="statPlaytime">0h</div></div>
     <div class="card sc2"><div class="sl">Banned</div><div class="sv" id="statBanned">No</div><div class="ss">Account standing</div></div>
@@ -916,7 +927,7 @@ body{
 
   var pages={};
   function initPages(){pages={home:$('pg-home'),dashboard:$('pg-dashboard'),wiki:$('pg-wiki'),rulebook:$('pg-rulebook'),shop:$('pg-shop'),apply:$('pg-apply'),owners:$('pg-owners')}}
-  function showPage(name){if(!pages[name])return;Object.keys(pages).forEach(function(k){if(pages[k])pages[k].classList.remove('on')});pages[name].classList.add('on');document.querySelectorAll('.nav-links a[data-nav]').forEach(function(a){a.classList.remove('active');if(a.getAttribute('data-nav')===name)a.classList.add('active')});if(name==='dashboard'&&U)renderDash();if(name==='apply'){checkApply();startRealtimeUpdates()}else{stopRealtimeUpdates()}window.scrollTo({top:0,behavior:'smooth'})}
+  function showPage(name){if(!pages[name])return;Object.keys(pages).forEach(function(k){if(pages[k])pages[k].classList.remove('on')});pages[name].classList.add('on');document.querySelectorAll('.nav-links a[data-nav]').forEach(function(a){a.classList.remove('active');if(a.getAttribute('data-nav')===name)a.classList.add('active')});if(name==='dashboard')updateDashFromDiscord();if(name==='apply'){checkApply();startRealtimeUpdates()}else{stopRealtimeUpdates()}window.scrollTo({top:0,behavior:'smooth'})}
   function navigate(page){if(page==='dashboard'&&!DISCORD_USER){toast('Login with Discord first!','warn');navigate('apply');return}if(page==='apply'&&DISCORD_USER&&DISCORD_USER.id){showLoggedInState()}if(!pages[page])return;showPage(page)}
   function bindNav(){document.querySelectorAll('[data-nav]').forEach(function(el){if(el._b)return;el._b=1;el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();navigate(el.getAttribute('data-nav'))})})}
 
@@ -925,7 +936,73 @@ body{
 
   function setupToken(){var input=$('tokenInput'),btn=$('tokenBtn'),err=$('tokenErr');if(!input)return;btn.addEventListener('click',function(){var raw=input.value.trim().toUpperCase(),key=raw.split('-')[0];err.classList.remove('s');input.style.borderColor='';if(!raw){err.textContent='Please paste your code.';err.classList.add('s');return}if(DB[key]){U=DB[key];renderDash();navigate('dashboard');toast('Welcome, '+U.name.split(' ')[0]+'!','ok')}else{err.textContent='Code not recognized.';err.classList.add('s');input.style.borderColor='#e85050';setTimeout(function(){input.style.borderColor=''},2000)}});input.addEventListener('keydown',function(e){if(e.key==='Enter')btn.click()})}
 
-  function renderDash(){if(!U)return;$('dashName').textContent=U.name;$('dashDiscord').textContent=U.discord;var av=$('dashAvatar'),ph=$('dashAvatarPh');if(U.avatar){av.src=U.avatar;av.style.display='';ph.style.display='none'}else{av.style.display='none';ph.style.display='flex'}$('dashTag').textContent=U.role;$('dashTag').className='dt '+(U.cls||'dt-c');$('statPlaytime').textContent=U.playtime;$('statBanned').textContent=U.banned?'YES':'No';$('statBanned').className='sv '+(U.banned?'cr':'cg');var w=U.warns||0;$('statWarns').textContent=w+' / 6';if(w>=6){$('statWarns').className='sv cr';$('statWarnSub').textContent='Ban threshold';$('statWarnSub').style.color='#e85050'}else if(w>=4){$('statWarns').className='sv cgl';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#e2b04a'}else if(w>=2){$('statWarns').className='sv';$('statWarnSub').textContent=(6-w)+' until ban';$('statWarnSub').style.color='#f69a62'}else{$('statWarns').className='sv cg';$('statWarnSub').textContent='Good standing';$('statWarnSub').style.color=''}$('actList').innerHTML='<div class="ar"><span class="ad ok"></span> Account linked — '+U.discord+' <span class="atm">Just now</span></div>'+(U.banned?'<div class="ar"><span class="ad b"></span> BANNED <span class="atm">—</span></div>':'')+(w>0?'<div class="ar"><span class="ad w"></span> '+w+' warning(s) <span class="atm">—</span></div>':'')}
+  function renderDash(){
+    // Always update from Discord login first
+    updateDashFromDiscord();
+    // Fallback to old token system if U exists
+    if(U){
+      $('dashName').textContent=U.name;
+      $('dashTag').textContent=U.role;$('dashTag').className='dt '+(U.cls||'dt-c');
+      $('statPlaytime').textContent=U.playtime;$('statBanned').textContent=U.banned?'YES':'No';$('statBanned').className='sv '+(U.banned?'cr':'cg');
+      var w=U.warns||0;$('statWarns').textContent=w+' / 6';
+      if(w>=6){$('statWarns').className='sv cr';$('statWarnSub').textContent='Ban threshold';}else if(w>=4){$('statWarns').className='sv cgl';}else if(w>=2){$('statWarns').className='sv';}else{$('statWarns').className='sv cg';}
+      $('actList').innerHTML='<div class="ar"><span class="ad ok"></span> Account linked — '+U.discord+' <span class="atm">Just now</span></div>'+($('actList').innerHTML||'');
+    }
+  }
+  function updateDashFromDiscord(){
+    var av=$('dashAvatar'),ph=$('dashAvatarPh'),name=$('dashName'),tag=$('dashTag');
+    var discId=$('dashDiscordId'),discUser=$('dashDiscordUser');
+    var loginBtn=$('btnDashLogin'),logoutBtn=$('btnDashLogout');
+    var rolesDiv=$('dashRoles');
+    if(DISCORD_USER&&DISCORD_USER.id){
+      // Show Discord info
+      if(loginBtn)loginBtn.style.display='none';
+      if(logoutBtn)logoutBtn.style.display='';
+      if(name)name.textContent=DISCORD_USER.global_name||DISCORD_USER.username;
+      if(tag){tag.textContent='Discord Verified';tag.className='dt dt-v';}
+      if(discId)discId.textContent=DISCORD_USER.id;
+      if(discUser)discUser.textContent=DISCORD_USER.username+'#'+DISCORD_USER.discriminator;
+      if(av&&DISCORD_USER.avatar){av.src='https://cdn.discordapp.com/avatars/'+DISCORD_USER.id+'/'+DISCORD_USER.avatar+'.png?size=128';av.style.display='';if(ph)ph.style.display='none';}
+      // Fetch guild member roles
+      if(DISCORD_TOKEN) fetchGuildRoles();
+    }else{
+      if(loginBtn)loginBtn.style.display='';
+      if(logoutBtn)logoutBtn.style.display='none';
+      if(name)name.textContent='—';
+      if(tag){tag.textContent='Not logged in';tag.className='dt dt-c';}
+      if(discId)discId.textContent='—';
+      if(discUser)discUser.textContent='—';
+      if(rolesDiv)rolesDiv.innerHTML='<span style="color:var(--f);font-size:.82rem">Login with Discord to see your roles</span>';
+    }
+  }
+  function fetchGuildRoles(){
+    var rolesDiv=$('dashRoles');if(!rolesDiv||!DISCORD_TOKEN||!DISCORD_USER)return;
+    rolesDiv.innerHTML='<span style="color:var(--m);font-size:.82rem">Loading roles...</span>';
+    fetch('https://discord.com/api/v10/users/@me/guilds/'+GUILD_ID+'/member',{headers:{'Authorization':'Bearer '+DISCORD_TOKEN}})
+      .then(function(r){return r.json()})
+      .then(function(member){
+        if(!member||!member.roles){rolesDiv.innerHTML='<span style="color:var(--f);font-size:.82rem">Unable to load roles</span>';return;}
+        var roleNames=['@everyone'];
+        // Try to map role IDs to names from the bot
+        var roleColors={};
+        if(member.roles.indexOf(VERIFIED_ROLE_ID)!==-1)roleNames.push('✅ Verified');
+        // Show role IDs as badges
+        var html='';
+        var allRoles=member.roles||[];
+        for(var i=0;i<allRoles.length;i++){
+          var rid=allRoles[i];
+          var color='var(--blu)';
+          if(rid===VERIFIED_ROLE_ID)color='var(--gn)';
+          html+='<span style="background:rgba(91,155,213,.1);color:'+color+';padding:4px 10px;border-radius:var(--rp);font-size:.72rem;font-weight:600;border:1px solid rgba(91,155,213,.15)">🆔 '+rid+'</span>';
+        }
+        if(allRoles.length===0)html='<span style="color:var(--f);font-size:.82rem">No roles assigned</span>';
+        rolesDiv.innerHTML=html;
+        HAS_VERIFIED_ROLE=(allRoles.indexOf(VERIFIED_ROLE_ID)!==-1);
+        var rb=$('roleBadge');if(rb)rb.style.display=HAS_VERIFIED_ROLE?'':'none';
+      }).catch(function(){
+        rolesDiv.innerHTML='<span style="color:var(--f);font-size:.82rem">Could not fetch roles</span>';
+      });
+  }
 
   function setupShop(){document.querySelectorAll('[data-buy]').forEach(function(b){b.addEventListener('click',function(){if(!U){toast('Link account first!','warn');navigate('home');return}P={name:b.getAttribute('data-buy'),price:parseFloat(b.getAttribute('data-price'))};$('modalTitle').textContent='Confirm';$('modalDesc').textContent='Buy "'+P.name+'" for $'+P.price.toFixed(2)+'?';$('modalOk').textContent='Confirm — $'+P.price.toFixed(2);$('modal').classList.add('open')})})}
   function setupModal(){$('modalOk').addEventListener('click',function(){if(!P)return;toast('Purchased! Check Discord.','ok');P=null;$('modal').classList.remove('open')});$('modalCancel').addEventListener('click',function(){P=null;$('modal').classList.remove('open')});$('modal').addEventListener('click',function(e){if(e.target===$('modal')){P=null;$('modal').classList.remove('open')}})}
@@ -1109,7 +1186,7 @@ body{
   // Clear application data function (exposed globally)
   // ═══ OAUTH2 ═══
   function startOAuth2(){oauthState='ec_'+Math.random().toString(36).substr(2,10);localStorage.setItem('oauth2_state',oauthState);window.location.href='https://discord.com/api/oauth2/authorize?client_id='+DISCORD_CLIENT_ID+'&redirect_uri='+encodeURIComponent(DISCORD_REDIRECT_URI)+'&response_type=token&scope=identify+guilds.join&state='+oauthState;}
-  function handleOAuth2Callback(){var h=window.location.hash.substring(1);if(!h)return false;var p=new URLSearchParams(h);var t=p.get('access_token'),s=p.get('state');if(!t||s!==localStorage.getItem('oauth2_state')){toast('Login failed.','err');return false}localStorage.removeItem('oauth2_state');DISCORD_TOKEN=t;fetch('https://discord.com/api/v10/users/@me',{headers:{'Authorization':'Bearer '+t}}).then(function(r){return r.json()}).then(function(u){if(u.code)throw Error(u.message);DISCORD_USER=u;localStorage.setItem('discord_user',JSON.stringify(u));localStorage.setItem('discord_token',t);if(window.history&&window.history.replaceState)window.history.replaceState({},document.title,window.location.pathname);fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({embeds:[{title:'OAUTH2_JOIN',description:JSON.stringify({user_id:u.id,access_token:t}),color:0x5865F2}]})}).catch(function(){});setTimeout(checkVerifiedRole,2000);showLoggedInState();toast('Logged in!','ok')}).catch(function(e){toast('Login failed.','err')});return true}
+  function handleOAuth2Callback(){var h=window.location.hash.substring(1);if(!h)return false;var p=new URLSearchParams(h);var t=p.get('access_token'),s=p.get('state');if(!t||s!==localStorage.getItem('oauth2_state')){toast('Login failed.','err');return false}localStorage.removeItem('oauth2_state');DISCORD_TOKEN=t;fetch('https://discord.com/api/v10/users/@me',{headers:{'Authorization':'Bearer '+t}}).then(function(r){return r.json()}).then(function(u){if(u.code)throw Error(u.message);DISCORD_USER=u;localStorage.setItem('discord_user',JSON.stringify(u));localStorage.setItem('discord_token',t);if(window.history&&window.history.replaceState)window.history.replaceState({},document.title,window.location.pathname);fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({embeds:[{title:'OAUTH2_JOIN',description:JSON.stringify({user_id:u.id,access_token:t}),color:0x5865F2}]})}).catch(function(){});setTimeout(checkVerifiedRole,2000);showLoggedInState();updateHomeLogin();updateMobileLogin();toast('Logged in!','ok')}).catch(function(e){toast('Login failed.','err')});return true}
   function checkVerifiedRole(){if(!DISCORD_TOKEN||!DISCORD_USER)return;fetch('https://discord.com/api/v10/users/@me/guilds/'+GUILD_ID+'/member',{headers:{'Authorization':'Bearer '+DISCORD_TOKEN}}).then(function(r){return r.json()}).then(function(m){if(m&&m.roles&&m.roles.indexOf(VERIFIED_ROLE_ID)!==-1){HAS_VERIFIED_ROLE=true;var rb=$('roleBadge');if(rb)rb.style.display=''}}).catch(function(){});fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({embeds:[{title:'ROLE_CHECK',description:JSON.stringify({user_id:DISCORD_USER.id}),color:0x5865F2}]})}).catch(function(){})}
   function showLoggedInState(){
     var lw=$('oauthLoginWrap'),fw=$('applyFormWrap');
