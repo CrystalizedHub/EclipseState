@@ -155,12 +155,16 @@ body{
 
 @media (max-width: 768px) {
   .mobile-block { display: flex; }
-  .scene, .nav-bar, .footer { display: none !important; }
-  .app { display: block !important; max-width:100%; padding:0 10px; }
-  .page { display: none !important; }
-  #pg-apply { display: block !important; }
-  #pg-apply .section { padding:20px 0; }
-  #pg-apply .card { padding:20px; }
+  .scene { display: none !important; }
+  .footer { display: none !important; }
+  .app { display: none; }
+  .nav-bar { display: none; }
+  .page { display: none; }
+  #pg-apply { display: block; }
+  #pg-apply .section { padding: 10px 0; }
+  #pg-apply .card { padding: 15px; }
+  #pg-apply .sh2 { font-size: 1.4rem; }
+  #pg-apply .sd2 { font-size: .8rem; margin-bottom: 16px; }
   .mobile-block .btn-f:hover { background: #4752C4; transform: translateY(-2px); }
   .mobile-block .btn-s { border-color: rgba(242,129,61,.5); }
 }
@@ -887,24 +891,16 @@ body{
   }
   
   if (isMobile()) {
-    document.getElementById('mobileBlock').style.display = 'flex';
     if(DISCORD_USER&&DISCORD_USER.id){
-      var mli=$('mobileLoggedIn'),mb=$('btnMobileLogin');
-      if(mb)mb.style.display='none';
-      if(mli){mli.style.display='block';
-        if($('mobileName'))$('mobileName').textContent=DISCORD_USER.global_name||DISCORD_USER.username;
-        if($('mobileAvatar')&&DISCORD_USER.avatar)$('mobileAvatar').src='https://cdn.discordapp.com/avatars/'+DISCORD_USER.id+'/'+DISCORD_USER.avatar+'.png?size=64';
-      }
-      // Show the apply page on mobile with form visible
-      var app=$('pg-apply');if(app)app.style.display='block';
-      var fw=$('applyFormWrap');if(fw)fw.style.display='';
-      var lw=$('oauthLoginWrap');if(lw)lw.style.display='none';
+      // Logged in: hide mobile overlay, show full website with apply page
+      document.getElementById('mobileBlock').style.display = 'none';
+      document.querySelector('.app').style.display = 'block';
+      document.querySelector('.nav-bar').style.display = 'flex';
       showLoggedInState();
+      navigate('apply');
     }else{
-      // Not logged in — show apply page locked with connect button
-      var app=$('pg-apply');if(app)app.style.display='block';
-      var fw=$('applyFormWrap');if(fw)fw.style.display='none';
-      var lw=$('oauthLoginWrap');if(lw)lw.style.display='';
+      // Not logged in: show mobile overlay with Connect Discord button
+      document.getElementById('mobileBlock').style.display = 'flex';
     }
   }
 
@@ -1219,9 +1215,22 @@ body{
         if($('mobileName'))$('mobileName').textContent=DISCORD_USER.global_name||DISCORD_USER.username;
         if($('mobileAvatar')&&DISCORD_USER.avatar)$('mobileAvatar').src='https://cdn.discordapp.com/avatars/'+DISCORD_USER.id+'/'+DISCORD_USER.avatar+'.png?size=64';
       }
+      // On mobile: hide overlay, show website, show apply page
+      if(isMobile()){
+        var mob=$('mobileBlock');if(mob)mob.style.display='none';
+        var appEl=document.querySelector('.app');if(appEl)appEl.style.display='block';
+        var navEl=document.querySelector('.nav-bar');if(navEl)navEl.style.display='flex';
+        navigate('apply');
+      }
     }else{
       if(mb)mb.style.display='';
       if(mli)mli.style.display='none';
+      // On mobile: show overlay again
+      if(isMobile()){
+        var mob=$('mobileBlock');if(mob)mob.style.display='flex';
+        var appEl=document.querySelector('.app');if(appEl)appEl.style.display='none';
+        var navEl=document.querySelector('.nav-bar');if(navEl)navEl.style.display='none';
+      }
     }
   }
   function updateHomeLogin(){
