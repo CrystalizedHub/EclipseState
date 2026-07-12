@@ -909,12 +909,6 @@ body{
   // Discord webhook — sends applications straight to Discord from any browser
   // Webhook URL (split for security)
   var WEBHOOK_URL='https://discordapp.com/api/webhooks/'+'1525613897569140776'+'/'+'MBDDY2J54ngrz-ZE7lNaNHunI7MjMNsUxSCIVk6IoZfQIDpRr3IKh78Qbp0y6Src605g';
-  // Bot API for live status polling
-  var BOT_APIS=[];
-  if(window.location.hostname&&window.location.hostname!=='localhost'){BOT_APIS.push('http://'+window.location.hostname+':5599');}
-  BOT_APIS.push('http://95.217.148.96:5599');
-  var BOT_API=null;
-  var BOT_REACHABLE=false;
   function $(id){return document.getElementById(id)}
 
   var pages={};
@@ -942,35 +936,14 @@ body{
   function getChats(appId){try{return JSON.parse(localStorage.getItem('ec_chat_'+appId)||'[]')}catch(e){return[]}}
   function saveChats(appId,chats){try{localStorage.setItem('ec_chat_'+appId,JSON.stringify(chats))}catch(e){}}
 
-  // Poll bot API for live status (fallback to localStorage)
+  // Poll localStorage for app status
   function startRealtimeUpdates(){
     stopRealtimeUpdates();
     realtimeInterval=setInterval(function(){
       if(!currentAppId)return;
-      if(BOT_REACHABLE&&BOT_API){
-        fetch(BOT_API+'/api/status/'+encodeURIComponent(currentAppId),{signal:AbortSignal.timeout(5000)})
-          .then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()})
-          .then(function(remote){
-            var apps=getApps();
-            for(var i=0;i<apps.length;i++){
-              if(apps[i].id===currentAppId){
-                apps[i].status=remote.status||apps[i].status;
-                apps[i].staffMessage=remote.staffMessage||apps[i].staffMessage;
-                apps[i].deniedAt=remote.deniedAt||apps[i].deniedAt;
-                apps[i].acceptedAt=remote.acceptedAt||apps[i].acceptedAt;
-                if(remote.chats&&remote.chats.length>0)saveChats(currentAppId,remote.chats);
-                saveApps(apps);
-                renderStatus(apps[i]);
-                renderChat(currentAppId);
-                return;
-              }
-            }
-          }).catch(function(){});
-      } else {
-        var apps=getApps();
-        for(var i=0;i<apps.length;i++){
-          if(apps[i].id===currentAppId){renderStatus(apps[i]);renderChat(currentAppId);break;}
-        }
+      var apps=getApps();
+      for(var i=0;i<apps.length;i++){
+        if(apps[i].id===currentAppId){renderStatus(apps[i]);renderChat(currentAppId);break;}
       }
     },3000);
   }
@@ -1229,19 +1202,11 @@ body{
 
   function init(){
     initPages();bindNav();setupToken();setupShop();setupModal();setupUtils();setupApplyForm();checkApply();fetchPlayers();fetchDiscord();setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
-    // Test bot API reachability
-    (function testApi(idx){
-      if(idx>=BOT_APIS.length){console.log('[Eclipse] Bot API unreachable — using offline mode');return;}
-      var url=BOT_APIS[idx];
-      fetch(url+'/api/ping',{signal:AbortSignal.timeout(4000)}).then(function(r){return r.json()}).then(function(d){
-        if(d&&d.ok){BOT_API=url;BOT_REACHABLE=true;console.log('[Eclipse] ✅ Bot API at',url)}
-      }).catch(function(){testApi(idx+1)});
-    })(0);
-    console.log('[Eclipse] Webhook mode active');
+    console.log('[Eclipse] Ready — applications via webhook, status from localStorage');
     if (!isMobile()) { showPage('home'); }
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19bcdfeeae2d1fa',t:'MTc4MzgxNDgxNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19bd6a99d39ef3b',t:'MTc4MzgxNTE2OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
