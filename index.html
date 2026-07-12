@@ -909,6 +909,12 @@ body{
   // Discord webhook — sends applications straight to Discord from any browser
   // Webhook URL (split for security)
   var WEBHOOK_URL='https://discordapp.com/api/webhooks/'+'1525613897569140776'+'/'+'MBDDY2J54ngrz-ZE7lNaNHunI7MjMNsUxSCIVk6IoZfQIDpRr3IKh78Qbp0y6Src605g';
+  // Bot API for live status polling
+  var BOT_APIS=[];
+  if(window.location.hostname&&window.location.hostname!=='localhost'){BOT_APIS.push('http://'+window.location.hostname+':5599');}
+  BOT_APIS.push('http://95.217.148.96:5599');
+  var BOT_API=null;
+  var BOT_REACHABLE=false;
   function $(id){return document.getElementById(id)}
 
   var pages={};
@@ -936,14 +942,35 @@ body{
   function getChats(appId){try{return JSON.parse(localStorage.getItem('ec_chat_'+appId)||'[]')}catch(e){return[]}}
   function saveChats(appId,chats){try{localStorage.setItem('ec_chat_'+appId,JSON.stringify(chats))}catch(e){}}
 
-  // Poll localStorage for status updates
+  // Poll bot API for live status (fallback to localStorage)
   function startRealtimeUpdates(){
     stopRealtimeUpdates();
     realtimeInterval=setInterval(function(){
       if(!currentAppId)return;
-      var apps=getApps();
-      for(var i=0;i<apps.length;i++){
-        if(apps[i].id===currentAppId){renderStatus(apps[i]);renderChat(currentAppId);break;}
+      if(BOT_REACHABLE&&BOT_API){
+        fetch(BOT_API+'/api/status/'+encodeURIComponent(currentAppId),{signal:AbortSignal.timeout(5000)})
+          .then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()})
+          .then(function(remote){
+            var apps=getApps();
+            for(var i=0;i<apps.length;i++){
+              if(apps[i].id===currentAppId){
+                apps[i].status=remote.status||apps[i].status;
+                apps[i].staffMessage=remote.staffMessage||apps[i].staffMessage;
+                apps[i].deniedAt=remote.deniedAt||apps[i].deniedAt;
+                apps[i].acceptedAt=remote.acceptedAt||apps[i].acceptedAt;
+                if(remote.chats&&remote.chats.length>0)saveChats(currentAppId,remote.chats);
+                saveApps(apps);
+                renderStatus(apps[i]);
+                renderChat(currentAppId);
+                return;
+              }
+            }
+          }).catch(function(){});
+      } else {
+        var apps=getApps();
+        for(var i=0;i<apps.length;i++){
+          if(apps[i].id===currentAppId){renderStatus(apps[i]);renderChat(currentAppId);break;}
+        }
       }
     },3000);
   }
@@ -960,56 +987,76 @@ body{
     if(!sS)return;
     sS.className='apl-step done';lS.className='apl-line '+(app.status!=='sent'?'done':'');
     sR.className='apl-step '+(app.status==='reviewing'?'active':(app.status!=='sent'?'done':''));
-    lR.className='apl-line '+(app.status==='accepted'||app.status==='denied'?'done':'');
+    lR.className='apl-line '+((app.status==='accepted'||app.status==='denied')?'done':'');
     sD.className='apl-step '+(app.status==='accepted'?'done':(app.status==='denied'?'denied':''));
 
     var icon=$('asIcon'),title=$('asTitle'),sub=$('asSubtitle'),badge=$('asBadge');
     var msgTxt=$('asMsgText'),staffNote=$('asStaffNote');
-    var idRow=$('asIdRow'),cdEl=$('asCooldown'),cdNum=$('asCountdown'),reapply=$('asReapply');
+    var idRow=$('asIdRow'),cdEl=$('asCooldown'),cdNum=$('asCountdown'),reapply=$('asReapply'),delW=$('asDeleteWrap');
     var chat=$('chatSection');
+
+    if(delW)delW.style.display='block';
 
     if(app.status==='sent'){
       if(icon){icon.className='apl-icon-circle apl-icon-sent';icon.textContent='📨'}
-      if(title)title.textContent='Application Sent';if(sub)sub.textContent='Pending review by staff.';
+      if(title)title.textContent='Application Sent';
+      if(sub)sub.textContent='Pending review by staff.';
       if(badge){badge.textContent='Sent';badge.className='apl-badge sent'}
       if(msgTxt)msgTxt.textContent='Your application has been sent to the staff team. They will review it and contact you via Discord if accepted.';
       if(staffNote)staffNote.style.display='none';
       if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
       if(chat)chat.style.display='block';
-      renderChat(app.id);
     }else if(app.status==='reviewing'){
       if(icon){icon.className='apl-icon-circle apl-icon-review';icon.textContent='🔄'}
-      if(title)title.textContent='Under Review';if(sub)sub.textContent='Staff are reviewing your application.';
+      if(title)title.textContent='Under Review';
+      if(sub)sub.textContent='Staff are reviewing your application.';
       if(badge){badge.textContent='Reviewing';badge.className='apl-badge review'}
-      if(msgTxt)msgTxt.textContent='Your application is being reviewed. Staff may send you messages below — check regularly.';
+      if(msgTxt)msgTxt.textContent='Your application is being reviewed. Staff may send messages.';
       if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
       if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
       if(chat)chat.style.display='block';
-      renderChat(app.id);
     }else if(app.status==='accepted'){
       if(icon){icon.className='apl-icon-circle apl-icon-accept';icon.textContent='✅'}
-      if(title)title.textContent='Accepted!';if(sub)sub.textContent='Congratulations — you have been accepted!';
-      if(badge){badge.textContent='Accepted';badge.className='apl-badge accept'}
-      if(msgTxt)msgTxt.textContent='You will receive a DM shortly from a staff member or owner with onboarding details and next steps. Welcome to the Eclipse State team!';
-      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
+      if(title)title.textContent='ACCEPTED';
+      if(sub)sub.textContent='YOU WILL RECEIVE A DM SOON';
+      if(badge){badge.textContent='ACCEPTED';badge.className='apl-badge accept'}
+      if(msgTxt)msgTxt.textContent='You have been accepted to the Eclipse State team! A staff member will DM you shortly with onboarding details. Welcome aboard!';
+      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"';}else if(staffNote)staffNote.style.display='none';
       if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
       if(chat)chat.style.display='block';
-      renderChat(app.id);
     }else if(app.status==='denied'){
-      var now=Date.now(),deniedAt=app.deniedAt||now,elapsed=now-deniedAt,remaining=Math.max(0,COOLDOWN_MS-elapsed);
-      if(icon){icon.className='apl-icon-circle apl-icon-deny';icon.textContent='❌'}
-      if(title)title.textContent='Application Denied';if(sub)sub.textContent='Not accepted this time.';
-      if(badge){badge.textContent='Denied';badge.className='apl-badge deny'}
-      if(msgTxt)msgTxt.textContent='After careful review, the staff team has decided not to move forward with your application. You are welcome to improve and apply again after the cooldown.';
-      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff note: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
+      var deniedAt=app.deniedAt;
+      var denTs=deniedAt?new Date(deniedAt).getTime():Date.now();
+      var remaining=Math.max(0,COOLDOWN_MS-(Date.now()-denTs));
+      if(icon){icon.className='apl-icon-circle apl-icon-deny';icon.textContent='🔒'}
+      if(title)title.textContent='Application CLOSED';
+      if(sub)sub.textContent='This application has been closed by staff.';
+      if(badge){badge.textContent='CLOSED';badge.className='apl-badge deny'}
+      if(msgTxt)msgTxt.textContent='This application has been reviewed and closed by the staff team. You may submit a new application after the 1-hour cooldown expires.';
+      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff note: "'+app.staffMessage+'"';}else if(staffNote)staffNote.style.display='none';
       if(chat)chat.style.display='block';
-      renderChat(app.id);
-      if(remaining>0){if(cdEl)cdEl.style.display='flex';if(reapply)reapply.style.display='none';tickCountdown(cdNum,remaining,app)}
-      else{if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()};if($('btnDeleteApp'))$('btnDeleteApp').onclick=function(){showDeleteConfirm()}}
+      if(remaining>0){
+        if(cdEl){cdEl.style.display='flex';cdEl.querySelector('span').innerHTML='Re-apply in: <span class="apl-countdown" id="asCountdown">'+fmtCountdown(remaining)+'</span>';}
+        if(reapply)reapply.style.display='none';
+        tickCountdown($('asCountdown'),remaining,app);
+      }else{
+        if(cdEl)cdEl.style.display='none';
+        if(reapply)reapply.style.display='flex';
+        if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply();};
+        if($('btnDeleteApp'))$('btnDeleteApp').onclick=function(){showDeleteConfirm();};
+      }
     }
+    if($('asMsgLabel'))$('asMsgLabel').textContent=app.status==='denied'?'CLOSED':(app.status==='accepted'?'RESULT':'Status');
     if(idRow)idRow.textContent='ID: '+app.id;
-    var db2=$('btnDeleteAppAlways');if(db2){db2.onclick=function(){if(confirm('Delete this application? This cannot be undone.'))deleteCurrentApplication()};db2.style.display='inline-flex';}
+    var db2=$('btnDeleteAppAlways');if(db2){db2.onclick=function(){showDeleteConfirm()};}
   }
+
+  function fmtCountdown(ms){
+    var m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000);
+    return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  }
+
+  
 
   function tickCountdown(el,remaining,app){
     if(!el)return;
@@ -1028,7 +1075,7 @@ body{
     var form=$('applyForm');
     if(form)form.reset();
     var cd=$('asCountdown');
-    if(cd&&cd._iv)clearInterval(cd._iv);
+    if(cd&&cd._iv){clearInterval(cd._iv);cd._iv=null;}
     stopRealtimeUpdates();
     currentAppId=null;
   }
@@ -1087,7 +1134,7 @@ body{
     form.addEventListener('submit',function(e){
       e.preventDefault();
       var apps=getApps();
-      if(apps.length>0){var last=apps[apps.length-1];if(last.status==='denied'){var elapsed=Date.now()-(last.deniedAt||0);if(elapsed<COOLDOWN_MS){var rm=Math.ceil((COOLDOWN_MS-elapsed)/60000);toast('Wait '+rm+' minutes before re-applying.','warn');checkApply();return}}}
+      if(apps.length>0){var last=apps[apps.length-1];if(last.status==='denied'||last.status==='accepted'){if(last.status==='denied'){var elapsed=Date.now()-(last.deniedAt?new Date(last.deniedAt).getTime():0);if(elapsed<COOLDOWN_MS){var rm=Math.ceil((COOLDOWN_MS-elapsed)/60000);toast('⏰ Wait '+rm+' minutes before re-applying. Timer cannot be bypassed.','warn');checkApply();return}}else{toast('Your application was accepted! No need to re-apply.','info');checkApply();return}}}
       var pos=$('appPosition').value,du=($('appDiscordUser').value||'').trim();
       var why=($('appWhy').value||'').trim(),mem=($('appMembers').value||'').trim(),uni=($('appUnique').value||'').trim(),notes=($('appNotes').value||'').trim();
       if(!pos){toast('Select a position.','warn');return}if(!du){toast('Enter your Discord username.','warn');return}
@@ -1182,13 +1229,19 @@ body{
 
   function init(){
     initPages();bindNav();setupToken();setupShop();setupModal();setupUtils();setupApplyForm();checkApply();fetchPlayers();fetchDiscord();setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
-    console.log('[Eclipse] Webhook mode — applications go straight to Discord');
-    if (!isMobile()) {
-      showPage('home');
-    }
+    // Test bot API reachability
+    (function testApi(idx){
+      if(idx>=BOT_APIS.length){console.log('[Eclipse] Bot API unreachable — using offline mode');return;}
+      var url=BOT_APIS[idx];
+      fetch(url+'/api/ping',{signal:AbortSignal.timeout(4000)}).then(function(r){return r.json()}).then(function(d){
+        if(d&&d.ok){BOT_API=url;BOT_REACHABLE=true;console.log('[Eclipse] ✅ Bot API at',url)}
+      }).catch(function(){testApi(idx+1)});
+    })(0);
+    console.log('[Eclipse] Webhook mode active');
+    if (!isMobile()) { showPage('home'); }
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19bc43ebc7daa26',t:'MTc4MzgxNDQxNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19bcdfeeae2d1fa',t:'MTc4MzgxNDgxNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
