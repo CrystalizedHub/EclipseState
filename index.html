@@ -706,8 +706,8 @@ body{
         <li><strong>Join Our Discord</strong><span class="rr">First, join our Discord server at <a href="https://discord.gg/cU3CH7z494" target="_blank" rel="noopener" style="color:var(--blu)">discord.gg/cU3CH7z494</a>. This is where you'll get support and updates.</span></li>
         <li><strong>Open FiveM Console</strong><span class="rr">Open FiveM and press <strong>F8</strong> to open the game console.</span></li>
         <li><strong>Connect to Server</strong><span class="rr">In the console, type: <code style="background:rgba(242,129,61,.15);padding:4px 10px;border-radius:6px;font-family:'SF Mono','Fira Code',monospace;color:var(--al)">connect eclipsestate.com</code></span></li>
-        <li><strong>Get Your Token</strong><span class="rr">Once connected in-game, press <strong>F8</strong> again and type <code style="background:rgba(242,129,61,.15);padding:4px 10px;border-radius:6px;font-family:'SF Mono','Fira Code',monospace;color:var(--al)">token</code> to receive your unique linking code.</span></li>
-        <li><strong>Link Your Account</strong><span class="rr">Copy the code from in-game, paste it on the Home page of this website, and click "Link Account" to access your dashboard.</span></li>
+        <li><strong>Connect Your Discord</strong><span class="rr">Click <strong>Connect with Discord</strong> on the Home page or Apply page. This will automatically add you to our Discord server and give you the Verified member role.</span></li>
+        <li><strong>Get Verified</strong><span class="rr">Once in the server, head to the verify channel and follow the steps to get full access to the server and the website dashboard.</span></li>
       </div>
     </div>
 
@@ -826,7 +826,7 @@ body{
     <div class="card al2" id="oauthLoginWrap" style="text-align:center;padding:40px">
       <div style="font-size:4rem;margin-bottom:16px">🔐</div><h3 style="margin-bottom:8px;font-size:1.3rem">Connect with Discord</h3>
       <p style="color:var(--m);margin-bottom:20px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6">Verify to apply. You'll auto-join the server and get dashboard access.</p>
-      <div style="text-align:left;max-width:360px;margin:0 auto 24px;line-height:2;font-size:.9rem;color:var(--t)"><div>✅ Auto-join Eclipse State Discord</div><div>✅ Get Verified role for dashboard</div><div>✅ Receive DM updates on your app</div></div>
+      <div style="text-align:left;max-width:360px;margin:0 auto 24px;line-height:2;font-size:.9rem;color:var(--t)"><div>✅ You will automatically join the Discord</div><div>✅ Get Verified role for dashboard</div><div>✅ Receive Updates / Application forms</div></div>
       <button class="btn btn-f" id="btnDiscordLogin" style="font-size:1rem;padding:14px 32px;background:#5865F2;box-shadow:0 4px 20px rgba(88,101,242,.4);margin-bottom:12px"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg> Connect with Discord</button>
       <p style="font-size:.75rem;color:var(--f)">Only username and avatar are shared.</p>
     </div>
@@ -842,6 +842,7 @@ body{
         <div class="fs"><label>Why do you want to be part of the team?</label><textarea id="appWhy" placeholder="Tell us about your motivation… (min 30 chars)" required></textarea></div>
         <div class="fs"><label>Will you help us gain members? How?</label><textarea id="appMembers" placeholder="What strategies? (min 20 chars)" required></textarea></div>
         <div class="fs"><label>What will you bring that others won't?</label><textarea id="appUnique" placeholder="What makes you stand out? (min 20 chars)" required></textarea></div>
+        <div class="fs"><label>Date of Birth <span class="lh">(required — 16+)</span></label><input type="date" id="appAge" required max="2010-07-12" min="1900-01-01"></div>
         <div class="fs"><label>Additional Notes <span class="lh">(optional)</span></label><textarea id="appNotes" placeholder="Anything else…"></textarea></div>
         <div class="fn2"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><strong>All updates via Discord DM.</strong> You'll be notified when accepted, denied, or when staff respond.</div></div>
         <div class="fsr"><button type="submit" class="btn btn-gn">Submit Application</button></div>
@@ -1166,19 +1167,20 @@ body{
       var pos=$('appPosition').value,du=($('appDiscordUser').value||'').trim();
       var why=($('appWhy').value||'').trim(),mem=($('appMembers').value||'').trim(),uni=($('appUnique').value||'').trim(),notes=($('appNotes').value||'').trim();
       if(!pos){toast('Select a position.','warn');return}
+      var ageVal=$('appAge').value;if(!ageVal){toast('Enter your date of birth.','warn');return}var birth=new Date(ageVal);var now2=new Date();var age=now2.getFullYear()-birth.getFullYear();var m=now2.getMonth()-birth.getMonth();if(m<0||(m===0&&now2.getDate()<birth.getDate()))age--;if(age<16){toast('You must be 16 or older to apply.','warn');return}
       if(!why||why.length<30){toast('Write at least 30 chars.','warn');return}
       if(!mem||mem.length<20){toast('Write at least 20 chars.','warn');return}
       if(!uni||uni.length<20){toast('Write at least 20 chars.','warn');return}
       var aid='APP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,4).toUpperCase();
       var btn=form.querySelector('button[type="submit"]'),ot=btn?btn.textContent:'';if(btn){btn.textContent='Sending…';btn.disabled=true}
-      var embed={title:'📨 New Staff Application',description:'**App ID:** `'+aid+'`',color:0x3cb878,timestamp:new Date().toISOString(),fields:[{name:'🎯 Position',value:pos,inline:true},{name:'👤 Discord',value:du,inline:true},{name:'🆔 Discord ID',value:DISCORD_USER.id,inline:true},{name:'❓ Why Join',value:why.length>1024?why.substr(0,1021)+'...':why,inline:false},{name:'📈 Gain Members',value:mem.length>1024?mem.substr(0,1021)+'...':mem,inline:false},{name:'⭐ What They Provide',value:uni.length>1024?uni.substr(0,1021)+'...':uni,inline:false}],footer:{text:'Eclipse State'}};
+      var embed={title:'📨 New Staff Application',description:'**App ID:** `'+aid+'`',color:0x3cb878,timestamp:new Date().toISOString(),fields:[{name:'🎯 Position',value:pos,inline:true},{name:'👤 Discord',value:du,inline:true},{name:'🆔 Discord ID',value:DISCORD_USER.id,inline:true},{name:'🎂 Date of Birth',value:ageVal,inline:true},{name:'❓ Why Join',value:why.length>1024?why.substr(0,1021)+'...':why,inline:false},{name:'📈 Gain Members',value:mem.length>1024?mem.substr(0,1021)+'...':mem,inline:false},{name:'⭐ What They Provide',value:uni.length>1024?uni.substr(0,1021)+'...':uni,inline:false}],footer:{text:'Eclipse State'}};
       if(notes)embed.fields.push({name:'📝 Notes',value:notes.length>1024?notes.substr(0,1021)+'...':notes,inline:false});
       fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({embeds:[embed]})})
         .then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.text()})
         .then(function(){
           var appObj={id:aid,position:pos,discord:du,status:'sent',date:new Date().toISOString()};
           apps.push(appObj);saveApps(apps);saveChats(aid,[]);form.reset();checkApply();
-          toast('✅ Sent! Check Discord DMs for updates.','ok');
+          toast('✅ Your request is handled on the Discord bot. Check DMs!','ok');
           if(btn){btn.textContent=ot;btn.disabled=false}
         }).catch(function(err){toast('Failed: '+(err.message||'Check internet.'),'err');if(btn){btn.textContent=ot;btn.disabled=false}});
     });
@@ -1226,7 +1228,23 @@ body{
     }
   }
   window.logoutDiscord=function(){
+    // Force clear ALL state
     DISCORD_USER=null;DISCORD_TOKEN=null;HAS_VERIFIED_ROLE=false;
+    localStorage.removeItem('discord_user');localStorage.removeItem('discord_token');
+    // Reset every UI element
+    var els=['appDiscordUser','loggedInName','homeName','mobileName','dashName','dashDiscordId','dashDiscordUser','dashRoles'];
+    for(var i=0;i<els.length;i++){var el=document.getElementById(els[i]);if(el)el.textContent=el.value='—';}
+    var imgs=['loggedInAvatar','homeAvatar','mobileAvatar','dashAvatar'];for(var i=0;i<imgs.length;i++){var el=document.getElementById(imgs[i]);if(el)el.src='';}
+    var hides=['homeLoggedIn','mobileLoggedIn','applyFormWrap','applyStatus'];for(var i=0;i<hides.length;i++){var el=document.getElementById(hides[i]);if(el)el.style.display='none';}
+    var shows=['oauthLoginWrap','btnHomeLogin','btnMobileLogin','btnDashLogin'];for(var i=0;i<shows.length;i++){var el=document.getElementById(shows[i]);if(el)el.style.display='';}
+    var dashLogout=document.getElementById('btnDashLogout');if(dashLogout)dashLogout.style.display='none';
+    var dashTag=document.getElementById('dashTag');if(dashTag){dashTag.textContent='Not logged in';dashTag.className='dt dt-c';}
+    // Reload page to fully reset
+    stopRealtimeUpdates();currentAppId=null;
+    var form=$('applyForm');if(form)form.reset();
+    toast('Logged out.','info');
+    setTimeout(function(){location.reload();},500);
+    return;DISCORD_USER=null;DISCORD_TOKEN=null;HAS_VERIFIED_ROLE=false;
     localStorage.removeItem('discord_user');localStorage.removeItem('discord_token');
     // Reset apply page
     var lw=$('oauthLoginWrap'),fw=$('applyFormWrap'),st=$('applyStatus');
@@ -1240,7 +1258,7 @@ body{
     // Reset mobile
     var mli=$('mobileLoggedIn'),mb=$('btnMobileLogin');
     if(mb)mb.style.display='';if(mli)mli.style.display='none';
-    navigate('home');toast('Logged out.','info');
+    toast('Logged out.','info');setTimeout(function(){location.reload();},300);
   }
   function checkDiscordLogin(){var s=localStorage.getItem('discord_user');if(s){try{DISCORD_USER=JSON.parse(s);DISCORD_TOKEN=localStorage.getItem('discord_token')}catch(e){DISCORD_USER=null}}if(DISCORD_USER&&DISCORD_USER.id){showLoggedInState();setTimeout(checkVerifiedRole,1000);updateHomeLogin();return true}updateHomeLogin();return false}
   window.deleteCurrentApplication=function(){if(!currentAppId){toast('Nothing to delete.','warn');return}var apps=getApps();var f=apps.filter(function(a){return a.id!==currentAppId});if(f.length===apps.length){toast('Not found.','warn');return}saveApps(f);localStorage.removeItem('ec_chat_'+currentAppId);fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'🗑 Deleted by applicant `'+currentAppId+'`'})}).catch(function(){});toast('Deleted.','info');currentAppId=null;resetForm();checkApply()}
