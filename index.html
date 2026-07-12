@@ -957,56 +957,68 @@ body{
 
   function renderStatus(app){
     var sS=$('stepSent'),lS=$('lineSent'),sR=$('stepReview'),lR=$('lineReview'),sD=$('stepDecision');
-    if(!sS)return;
-    sS.className='apl-step done';lS.className='apl-line '+(app.status!=='sent'?'done':'');
-    sR.className='apl-step '+(app.status==='reviewing'?'active':(app.status!=='sent'?'done':''));
-    lR.className='apl-line '+((app.status==='accepted'||app.status==='denied')?'done':'');
-    sD.className='apl-step '+(app.status==='accepted'?'done':(app.status==='denied'?'denied':''));
-
     var icon=$('asIcon'),title=$('asTitle'),sub=$('asSubtitle'),badge=$('asBadge');
-    var msgTxt=$('asMsgText'),staffNote=$('asStaffNote');
+    var msgTxt=$('asMsgText'),staffNote=$('asStaffNote'),msgLabel=$('asMsgLabel');
     var idRow=$('asIdRow'),cdEl=$('asCooldown'),cdNum=$('asCountdown'),reapply=$('asReapply'),delW=$('asDeleteWrap');
     var chat=$('chatSection');
 
+    // Delete button always visible
     if(delW)delW.style.display='block';
 
     if(app.status==='sent'){
+      if(sS)sS.className='apl-step done';if(lS)lS.className='apl-line';
+      if(sR)sR.className='apl-step active';if(lR)lR.className='apl-line';
+      if(sD)sD.className='apl-step';
       if(icon){icon.className='apl-icon-circle apl-icon-sent';icon.textContent='📨'}
       if(title)title.textContent='Application Sent';
       if(sub)sub.textContent='Pending review by staff.';
       if(badge){badge.textContent='Sent';badge.className='apl-badge sent'}
+      if(msgLabel)msgLabel.textContent='Status';
       if(msgTxt)msgTxt.textContent='Your application has been sent to the staff team. They will review it and contact you via Discord if accepted.';
       if(staffNote)staffNote.style.display='none';
       if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
       if(chat)chat.style.display='block';
     }else if(app.status==='reviewing'){
+      if(sS)sS.className='apl-step done';if(lS)lS.className='apl-line done';
+      if(sR)sR.className='apl-step active';if(lR)lR.className='apl-line';
+      if(sD)sD.className='apl-step';
       if(icon){icon.className='apl-icon-circle apl-icon-review';icon.textContent='🔄'}
       if(title)title.textContent='Under Review';
       if(sub)sub.textContent='Staff are reviewing your application.';
       if(badge){badge.textContent='Reviewing';badge.className='apl-badge review'}
-      if(msgTxt)msgTxt.textContent='Your application is being reviewed. Staff may send messages.';
+      if(msgLabel)msgLabel.textContent='Status';
+      if(msgTxt)msgTxt.textContent='Your application is being reviewed. Staff may send you messages below. Check Discord for updates.';
       if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
       if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
       if(chat)chat.style.display='block';
     }else if(app.status==='accepted'){
+      if(sS)sS.className='apl-step done';if(lS)lS.className='apl-line done';
+      if(sR)sR.className='apl-step done';if(lR)lR.className='apl-line done';
+      if(sD)sD.className='apl-step done';
       if(icon){icon.className='apl-icon-circle apl-icon-accept';icon.textContent='✅'}
-      if(title)title.textContent='ACCEPTED';
+      if(title)title.textContent='ACCEPTED!';
       if(sub)sub.textContent='YOU WILL RECEIVE A DM SOON';
       if(badge){badge.textContent='ACCEPTED';badge.className='apl-badge accept'}
-      if(msgTxt)msgTxt.textContent='You have been accepted to the Eclipse State team! A staff member will DM you shortly with onboarding details. Welcome aboard!';
-      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"';}else if(staffNote)staffNote.style.display='none';
+      if(msgLabel)msgLabel.textContent='RESULT';
+      if(msgTxt)msgTxt.textContent='Congratulations! You have been accepted to the Eclipse State team. A staff member will DM you shortly with onboarding details. Welcome aboard! 🎉';
+      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
       if(cdEl)cdEl.style.display='none';if(reapply)reapply.style.display='none';
       if(chat)chat.style.display='block';
     }else if(app.status==='denied'){
-      var deniedAt=app.deniedAt;
-      var denTs=deniedAt?new Date(deniedAt).getTime():Date.now();
-      var remaining=Math.max(0,COOLDOWN_MS-(Date.now()-denTs));
+      if(sS)sS.className='apl-step done';if(lS)lS.className='apl-line done';
+      if(sR)sR.className='apl-step done';if(lR)lR.className='apl-line done';
+      if(sD)sD.className='apl-step denied';
       if(icon){icon.className='apl-icon-circle apl-icon-deny';icon.textContent='🔒'}
       if(title)title.textContent='Application CLOSED';
       if(sub)sub.textContent='This application has been closed by staff.';
       if(badge){badge.textContent='CLOSED';badge.className='apl-badge deny'}
-      if(msgTxt)msgTxt.textContent='This application has been reviewed and closed by the staff team. You may submit a new application after the 1-hour cooldown expires.';
-      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff note: "'+app.staffMessage+'"';}else if(staffNote)staffNote.style.display='none';
+      if(msgLabel)msgLabel.textContent='CLOSED';
+      if(msgTxt)msgTxt.textContent='This application has been reviewed and closed. You may submit a new application after the 1-hour cooldown timer expires.';
+      if(app.staffMessage&&staffNote){staffNote.style.display='block';staffNote.textContent='Staff note: "'+app.staffMessage+'"'}else if(staffNote)staffNote.style.display='none';
+      // Countdown
+      var deniedAt=app.deniedAt;
+      var denTs=deniedAt?new Date(deniedAt).getTime():Date.now();
+      var remaining=Math.max(0,COOLDOWN_MS-(Date.now()-denTs));
       if(chat)chat.style.display='block';
       if(remaining>0){
         if(cdEl){cdEl.style.display='flex';cdEl.querySelector('span').innerHTML='Re-apply in: <span class="apl-countdown" id="asCountdown">'+fmtCountdown(remaining)+'</span>';}
@@ -1019,8 +1031,8 @@ body{
         if($('btnDeleteApp'))$('btnDeleteApp').onclick=function(){showDeleteConfirm();};
       }
     }
-    if($('asMsgLabel'))$('asMsgLabel').textContent=app.status==='denied'?'CLOSED':(app.status==='accepted'?'RESULT':'Status');
     if(idRow)idRow.textContent='ID: '+app.id;
+    // Refresh delete button handler
     var db2=$('btnDeleteAppAlways');if(db2){db2.onclick=function(){showDeleteConfirm()};}
   }
 
@@ -1028,19 +1040,7 @@ body{
     var m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000);
     return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
   }
-
   
-
-  function tickCountdown(el,remaining,app){
-    if(!el)return;
-    var iv=setInterval(function(){
-      var r=remaining-(Date.now()-(app.deniedAt||Date.now()));
-      if(r<=0){el.textContent='00:00';clearInterval(iv);var cd=$('asCooldown'),rp=$('asReapply');if(cd)cd.style.display='none';if(rp)rp.style.display='flex';if($('btnReapply'))$('btnReapply').onclick=function(){resetForm();checkApply()};if($('btnDeleteApp'))$('btnDeleteApp').onclick=function(){showDeleteConfirm()};return}
-      var m=Math.floor(r/60000),s=Math.floor((r%60000)/1000);el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-    },1000);
-    el._iv=iv;
-  }
-
   function resetForm(){
     var fw=$('applyFormWrap'),st=$('applyStatus');
     if(fw)fw.style.display='';
@@ -1208,5 +1208,5 @@ body{
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19bd6a99d39ef3b',t:'MTc4MzgxNTE2OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a19be7cdcf48cd3d',t:'MTc4MzgxNTg3MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
