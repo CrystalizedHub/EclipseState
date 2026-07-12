@@ -843,7 +843,7 @@ body{
       <form id="applyForm" autocomplete="off">
         <div class="fs"><label>Position <span class="lh">(required)</span></label><div class="fs"><label>Positions <span class="lh">(select one or more — click to open list)</span></label>
         <div id="posDropdown" style="position:relative">
-          <div id="posDropdownBtn" style="width:100%;background:rgba(2,8,16,.7);border:2px solid var(--b);border-radius:var(--rs);padding:13px 16px;color:var(--m);font-size:.9rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none" id="posDropdownBtnClick">
+          <div id="posDropdownBtn" style="width:100%;background:rgba(2,8,16,.7);border:2px solid var(--b);border-radius:var(--rs);padding:13px 16px;color:var(--m);font-size:.9rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none">
             <span id="posDropdownText">Click to select positions…</span>
             <span id="posDropdownArrow" style="font-size:.7rem;transition:.2s">▼</span>
           </div>
@@ -1403,7 +1403,7 @@ body{
     if(!checkDiscordLogin()){var fw=$('applyFormWrap');if(fw)fw.style.display='none';var lw=$('oauthLoginWrap');if(lw)lw.style.display='';}
     setupApplyForm();restoreFormProgress();
     // Wire dropdown
-    var pdb=document.getElementById('posDropdownBtnClick');if(pdb)pdb.onclick=function(){togglePosDropdown();};
+    var pdb=document.getElementById('posDropdownBtn');if(pdb)pdb.onclick=function(){togglePosDropdown();};
     var cbs=document.querySelectorAll('.app-pos-cb');for(var i=0;i<cbs.length;i++)cbs[i].onchange=function(){updatePosDropdown();};checkApply();fetchPlayers();fetchDiscord();
     setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
     if(!isMobile())showPage('home');
