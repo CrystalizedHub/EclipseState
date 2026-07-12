@@ -160,7 +160,7 @@ body{
   .app { display: none; }
   .nav-bar { display: none; }
   .page { display: none; }
-  #pg-apply { display: block; }
+  .page.on { display: block; }
   #pg-apply .section { padding: 10px 0; }
   #pg-apply .card { padding: 15px; }
   #pg-apply .sh2 { font-size: 1.4rem; }
@@ -836,11 +836,33 @@ body{
         <button class="btn btn-s btn-sm" style="margin-left:auto" onclick="logoutDiscord()">Logout</button>
       </div>
       <form id="applyForm" autocomplete="off">
-        <div class="fs"><label>Position <span class="lh">(required)</span></label><select id="appPosition" required><option value="" disabled selected>Select a position…</option><option value="ANTI-HACK TEAM">🛡️ ANTI-HACK TEAM</option><option value="Gangs Leader">👑 Gangs Leader</option><option value="Gangs Team">🔫 Gangs Team</option><option value="Culture Manager">🎭 Culture Manager</option><option value="General Manager">📋 General Manager</option><option value="Commercial Team">💼 Commercial Team</option><option value="Actions Leader">⚡ Actions Leader</option><option value="Actions Team">🔧 Actions Team</option><option value="Calls Team">📞 Calls Team</option><option value="Tickets Leader">🎫 Tickets Leader</option><option value="Tickets Support">🎟️ Tickets Support</option><option value="Order Leader">📦 Order Leader</option><option value="Orders Team">📬 Orders Team</option><option value="Knowlage Leader">📚 Knowlage Leader</option><option value="Knowlage Team">📖 Knowlage Team</option><option value="Discord Mod">🛡️ Discord Mod</option><option value="Head Mod">👮 Head Mod</option><option value="Car-Developer">🚗 Car-Developer</option><option value="Builder-Developer">🏗️ Builder-Developer</option><option value="Nature-Developer">🌿 Nature-Developer</option></select></div>
+        <div class="fs"><label>Position <span class="lh">(required)</span></label><div class="fs"><label>Positions <span class="lh">(select all that apply — you can pick multiple)</span></label>
+        <div id="appPositionContainer" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;max-height:280px;overflow-y:auto;background:rgba(2,8,16,.6);border:2px solid var(--b);border-radius:var(--rs);padding:12px">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="ANTI-HACK TEAM" class="app-pos-cb"> 🛡️ ANTI-HACK TEAM</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Gangs Leader" class="app-pos-cb"> 👑 Gangs Leader</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Gangs Team" class="app-pos-cb"> 🔫 Gangs Team</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Culture Manager" class="app-pos-cb"> 🎭 Culture Manager</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="General Manager" class="app-pos-cb"> 📋 General Manager</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Commercial Team" class="app-pos-cb"> 💼 Commercial Team</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Actions Leader" class="app-pos-cb"> ⚡ Actions Leader</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Actions Team" class="app-pos-cb"> 🔧 Actions Team</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Calls Team" class="app-pos-cb"> 📞 Calls Team</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Tickets Leader" class="app-pos-cb"> 🎫 Tickets Leader</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Tickets Support" class="app-pos-cb"> 🎟️ Tickets Support</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Order Leader" class="app-pos-cb"> 📦 Order Leader</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Orders Team" class="app-pos-cb"> 📬 Orders Team</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Knowlage Leader" class="app-pos-cb"> 📚 Knowlage Leader</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Knowlage Team" class="app-pos-cb"> 📖 Knowlage Team</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Discord Mod" class="app-pos-cb"> 🛡️ Discord Mod</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Head Mod" class="app-pos-cb"> 👮 Head Mod</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Car-Developer" class="app-pos-cb"> 🚗 Car-Developer</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Builder-Developer" class="app-pos-cb"> 🏗️ Builder-Developer</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;padding:4px 0;color:var(--t)"><input type="checkbox" value="Nature-Developer" class="app-pos-cb"> 🌿 Nature-Developer</label>
+        </div></div>
         <div class="fs"><label>Discord Username <span class="lh">(auto-filled)</span></label><input type="text" id="appDiscordUser" placeholder="Login first" readonly maxlength="64" style="background:rgba(88,101,242,.06);border-color:rgba(88,101,242,.25)"></div>
         <div class="fs"><label>Why do you want to be part of the team? <span class="lh">(minimum 100 characters)</span></label><textarea id="appWhy" placeholder="Tell us about your motivation… (minimum 100 characters)" required></textarea></div>
-        <div class="fs"><label>Will you help us gain members? How?</label><textarea id="appMembers" placeholder="What strategies? (min 20 chars)" required></textarea></div>
-        <div class="fs"><label>What will you bring that others won't?</label><textarea id="appUnique" placeholder="What makes you stand out? (min 20 chars)" required></textarea></div>
+        <div class="fs"><label>Will you help us gain members? How? <span class="lh">(minimum 100 characters)</span></label><textarea id="appMembers" placeholder="What strategies do you have? (minimum 100 characters)" required></textarea></div>
+        <div class="fs"><label>What will you bring that others won't? <span class="lh">(minimum 100 characters)</span></label><textarea id="appUnique" placeholder="What makes you stand out? Be specific. (minimum 100 characters)" required></textarea></div>
         <div class="fs"><label>Date of Birth <span class="lh">(required — 16+)</span></label><input type="date" id="appAge" required max="2010-07-12" min="1900-01-01"></div>
         <div class="fs"><label>Additional Notes <span class="lh">(optional)</span></label><textarea id="appNotes" placeholder="Anything else…"></textarea></div>
         <div class="fn2"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><strong>All updates via Discord DM.</strong> You'll be notified when accepted, denied, or when staff respond.</div></div>
@@ -897,7 +919,6 @@ body{
       document.querySelector('.app').style.display = 'block';
       document.querySelector('.nav-bar').style.display = 'flex';
       showLoggedInState();
-      navigate('apply');
     }else{
       // Not logged in: show mobile overlay with Connect Discord button
       document.getElementById('mobileBlock').style.display = 'flex';
@@ -1149,23 +1170,58 @@ body{
     var dbx=$('btnDeleteApp');if(dbx)dbx.onclick=function(){showDeleteConfirm()};
   }
 
+  // Auto-save form fields
+  function saveFormProgress(){
+    try{
+      var data={};
+      var els=document.querySelectorAll('#applyForm input, #applyForm textarea, #applyForm .app-pos-cb');
+      els.forEach(function(el){
+        if(el.type==='checkbox'){if(el.checked){if(!data[el.className])data[el.className]=[];data[el.className].push(el.value);}}
+        else data[el.id]=el.value;
+      });
+      localStorage.setItem('ec_form_progress',JSON.stringify(data));
+    }catch(e){}
+  }
+  function restoreFormProgress(){
+    try{
+      var data=JSON.parse(localStorage.getItem('ec_form_progress')||'null');if(!data)return;
+      Object.keys(data).forEach(function(k){
+        if(k==='app-pos-cb'){
+          var cbs=document.querySelectorAll('.app-pos-cb');
+          var vals=data[k]||[];
+          cbs.forEach(function(cb){if(vals.indexOf(cb.value)!==-1)cb.checked=true;});
+        }else{
+          var el=document.getElementById(k);if(el)el.value=data[k];
+        }
+      });
+    }catch(e){}
+  }
+  function clearFormProgress(){localStorage.removeItem('ec_form_progress');}
+
   function setupApplyForm(){
     var form=$('applyForm');if(!form)return;
+    // Restore saved progress
+    if(!DISCORD_USER||!DISCORD_USER.id)restoreFormProgress();
+    // Auto-save on input
+    var inputs=document.querySelectorAll('#applyForm input, #applyForm textarea, #applyForm .app-pos-cb');
+    for(var i=0;i<inputs.length;i++)inputs[i].addEventListener('input',saveFormProgress);
+    for(var i=0;i<inputs.length;i++)inputs[i].addEventListener('change',saveFormProgress);
     form.addEventListener('submit',function(e){
       e.preventDefault();
+      clearFormProgress();
       if(!DISCORD_USER||!DISCORD_USER.id){toast('Connect with Discord first!','warn');return}
       var apps=getApps();
       if(apps.length>0){var last=apps[apps.length-1];
         if(last.status==='denied'){var elapsed=Date.now()-(last.deniedAt?new Date(last.deniedAt).getTime():0);if(elapsed<COOLDOWN_MS){var rm=Math.ceil((COOLDOWN_MS-elapsed)/60000);toast('Wait '+rm+' min.','warn');checkApply();return}}
         if(last.status==='accepted'){toast('Already accepted!','info');checkApply();return}
       }
-      var pos=$('appPosition').value,du=($('appDiscordUser').value||'').trim();
+      var cbs=document.querySelectorAll('.app-pos-cb:checked');var pos=[];for(var i=0;i<cbs.length;i++)pos.push(cbs[i].value);pos=pos.join(', '),du=($('appDiscordUser').value||'').trim();
       var why=($('appWhy').value||'').trim(),mem=($('appMembers').value||'').trim(),uni=($('appUnique').value||'').trim(),notes=($('appNotes').value||'').trim();
-      if(!pos){toast('Select a position.','warn');return}
+      if(pos.length===0){toast('Select at least one position.','warn');return}
       var ageVal=$('appAge').value;if(!ageVal){toast('Enter your date of birth.','warn');return}var birth=new Date(ageVal);var now2=new Date();var age=now2.getFullYear()-birth.getFullYear();var m=now2.getMonth()-birth.getMonth();if(m<0||(m===0&&now2.getDate()<birth.getDate()))age--;if(age<16){toast('You must be 16 or older to apply.','warn');return}
       if(!why||why.length<100){toast('Write at least 100 characters about why you want to join.','warn');return}
-      if(!mem||mem.length<20){toast('Write at least 20 chars.','warn');return}
-      if(!uni||uni.length<20){toast('Write at least 20 chars.','warn');return}
+      if(!mem||mem.length<20){toast('Write at least 100 characters.','warn');return}
+      if(!uni||uni.length<20){toast('Write at least 100 characters.','warn');return}
       var aid='APP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,4).toUpperCase();
       var btn=form.querySelector('button[type="submit"]'),ot=btn?btn.textContent:'';if(btn){btn.textContent='Sending…';btn.disabled=true}
       var embed={title:'📨 New Staff Application',description:'**App ID:** `'+aid+'`',color:0x3cb878,timestamp:new Date().toISOString(),fields:[{name:'🎯 Position',value:pos,inline:true},{name:'👤 Discord',value:du,inline:true},{name:'🆔 Discord ID',value:DISCORD_USER.id,inline:true},{name:'🎂 Date of Birth',value:ageVal,inline:true},{name:'❓ Why Join',value:why.length>1024?why.substr(0,1021)+'...':why,inline:false},{name:'📈 Gain Members',value:mem.length>1024?mem.substr(0,1021)+'...':mem,inline:false},{name:'⭐ What They Provide',value:uni.length>1024?uni.substr(0,1021)+'...':uni,inline:false}],footer:{text:'Eclipse State'}};
@@ -1215,12 +1271,11 @@ body{
         if($('mobileName'))$('mobileName').textContent=DISCORD_USER.global_name||DISCORD_USER.username;
         if($('mobileAvatar')&&DISCORD_USER.avatar)$('mobileAvatar').src='https://cdn.discordapp.com/avatars/'+DISCORD_USER.id+'/'+DISCORD_USER.avatar+'.png?size=64';
       }
-      // On mobile: hide overlay, show website, show apply page
+      // On mobile: hide overlay, show website
       if(isMobile()){
         var mob=$('mobileBlock');if(mob)mob.style.display='none';
         var appEl=document.querySelector('.app');if(appEl)appEl.style.display='block';
         var navEl=document.querySelector('.nav-bar');if(navEl)navEl.style.display='flex';
-        navigate('apply');
       }
     }else{
       if(mb)mb.style.display='';
@@ -1307,7 +1362,7 @@ body{
     var mb=$('btnMobileLogin');if(mb)mb.onclick=startOAuth2;
     if(window.location.hash.indexOf('access_token=')!==-1)handleOAuth2Callback();
     if(!checkDiscordLogin()){var fw=$('applyFormWrap');if(fw)fw.style.display='none';var lw=$('oauthLoginWrap');if(lw)lw.style.display='';}
-    setupApplyForm();checkApply();fetchPlayers();fetchDiscord();
+    setupApplyForm();restoreFormProgress();checkApply();fetchPlayers();fetchDiscord();
     setInterval(fetchPlayers,30000);setInterval(fetchDiscord,60000);
     if(!isMobile())showPage('home');
   }
