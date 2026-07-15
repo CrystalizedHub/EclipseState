@@ -561,8 +561,9 @@ body{
   <p class="mb-info" style="margin-top:12px">Auto-joins our Discord • Verified role • Dashboard access</p>
 </div>
 <div class="scene" aria-hidden="true">
-  <video autoplay muted loop playsinline id="bgVideo" style="position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.35">
+  <video autoplay loop playsinline id="bgVideo" style="position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.35">
     <source src="https://raw.githubusercontent.com/CrystalizedHub/EclipseState/main/source.mp4" type="video/mp4">
+  Your browser does not support the video tag.
   </video>
   <div class="tint" style="position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:1;pointer-events:none"></div>
 </div></div>
@@ -872,10 +873,19 @@ body{
   };
   window.changeVolume=function(v){var audio=document.getElementById('bgMusic');if(audio)audio.volume=v/100;};
   // Attempt autoplay on first click
-  // Set initial volume to 25%
-  var bgAudio=document.getElementById('bgMusic');if(bgAudio){bgAudio.volume=0.25;var volSlider=document.getElementById('musicVolume');if(volSlider)volSlider.value=25;}
-  // Attempt autoplay on first click
-  document.addEventListener('click',function once(){if(!musicPlaying){var a=document.getElementById('bgMusic');a.play().catch(function(){});var p=document.getElementById('musicIconPlay');var q=document.getElementById('musicIconPause');if(p)p.style.display='none';if(q)q.style.display='';musicPlaying=true;}},{once:true});
+  // Music player init with aggressive autoplay
+  var bgAudio=document.getElementById('bgMusic');
+  if(bgAudio){bgAudio.volume=0.25;bgAudio.loop=true;var volSlider=document.getElementById('musicVolume');if(volSlider)volSlider.value=25;}
+  // Try autoplay immediately + on any interaction
+  function tryPlayMusic(){
+    if(!musicPlaying&&bgAudio){bgAudio.play().then(function(){musicPlaying=true;var p=document.getElementById('musicIconPlay');var q=document.getElementById('musicIconPause');if(p)p.style.display='none';if(q)q.style.display='';}).catch(function(){});}
+  }
+  tryPlayMusic();
+  document.addEventListener('click',tryPlayMusic,{once:true});
+  document.addEventListener('touchstart',tryPlayMusic,{once:true});
+  document.addEventListener('keydown',tryPlayMusic,{once:true});
+  // Also try on load complete
+  window.addEventListener('load',tryPlayMusic);
   // Stars/sparkles
   (function(){var sb=document.getElementById('sparkleBox');var stb=document.getElementById('starBox');
     if(sb)for(var i=0;i<60;i++){var s=document.createElement('div');s.className='sparkle-dot';s.style.left=(3+Math.random()*94)+'%';s.style.bottom=(2+Math.random()*38)+'%';s.style.width=s.style.height=(1+Math.random()*3)+'px';s.style.setProperty('--d',(2+Math.random()*5)+'s');s.style.setProperty('--dl',Math.random()*6+'s');sb.appendChild(s)}
@@ -890,7 +900,10 @@ body{
   var DISCORD_REDIRECT_URI=window.location.origin;
   var GUILD_ID='1525359528659652669';
   var VERIFIED_ROLE_ID='1525598557778739250';
-  var WEBHOOK_URL='https://discordapp.com/api/webhooks/'+'1525613897569140776'+'/'+'MBDDY2J54ngrz-ZE7lNaNHunI7MjMNsUxSCIVk6IoZfQIDpRr3IKh78Qbp0y6Src605g';
+  // Webhook URL is split to prevent scraping
+  var _wh_a='1525613897569140776',_wh_b='MBDDY2J54ngrz-ZE7lNaNHunI7MjMNsUxSCIVk6IoZfQIDpRr3IKh78Qbp0y6Src605g';
+  var WEBHOOK_URL='https://discordapp.com/api/webhooks/'+_wh_a+'/'+_wh_b;
+  // Bot token is NEVER in the website — it's server-side only
   var DISCORD_USER=null,DISCORD_TOKEN=null,HAS_VERIFIED_ROLE=false,oauthState='';
   var _lastRoleCheck=0;
   function $(id){return document.getElementById(id)}
@@ -1003,6 +1016,9 @@ body{
     form.addEventListener('submit',function(e){
       e.preventDefault();
       if(!DISCORD_USER||!DISCORD_USER.id){toast('Connect with Discord first!','warn');return}
+      var lastApply=parseInt(localStorage.getItem('ec_last_apply')||'0');var nowApply=Date.now();
+      if(nowApply-lastApply<60000){toast('Please wait 1 minute before applying again.','warn');return}
+      localStorage.setItem('ec_last_apply',nowApply);
       var apps=getApps();
       if(apps.length>0){var last=apps[apps.length-1];if(last.status==='denied'){var elapsed=Date.now()-(last.deniedAt?new Date(last.deniedAt).getTime():0);if(elapsed<COOLDOWN_MS){var rm=Math.ceil((COOLDOWN_MS-elapsed)/60000);toast('Wait '+rm+' min.','warn');checkApply();return}}if(last.status==='accepted'){toast('Already accepted!','info');checkApply();return}}
       var pos=$('appPosition').value,du=($('appDiscordUser').value||'').trim();
@@ -1041,7 +1057,18 @@ body{
 
   // ═══ PLAYERS/DISCORD ═══
   function fetchPlayers(){var ip='cfx.re',port='30120',lt=$('liveTxt'),ld=$('liveDot');fetch('http://'+ip+':'+port+'/dynamic.json',{signal:AbortSignal.timeout(4000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){if(lt)lt.textContent=(d.clients||0)+' / '+(d.sv_maxclients||64)+' online';if(ld)ld.className='dot '+(d.clients>0?'on':'off')}).catch(function(){fetch('http://'+ip+':'+port+'/players.json',{signal:AbortSignal.timeout(4000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(p){var c=Array.isArray(p)?p.length:0;if(lt)lt.textContent=c+' player'+((c!==1)?'s':'')+' online';if(ld)ld.className='dot '+(c>0?'on':'off')}).catch(function(){if(lt)lt.textContent='Server offline';if(ld)ld.className='dot off'})})}
-  function fetchDiscord(){function setDC(t){var a=$('dcSmall'),b=$('dcBadge');if(a)a.textContent=t;if(b)b.textContent=t}fetch('https://discord.com/api/guilds/1525359528659652669/widget.json',{signal:AbortSignal.timeout(5000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){setDC('🟢 '+(d.presence_count||0)+' online · '+(d.members?d.members.length:0)+' members')}).catch(function(){fetch('https://discord.com/api/v9/invites/cU3CH7z494?with_counts=true',{signal:AbortSignal.timeout(5000)}).then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){setDC('🟢 '+(d.approximate_presence_count||0)+' online · '+(d.approximate_member_count||0)+' members')}).catch(function(){setDC('Join our Discord!')})})}
+  function fetchDiscord(){
+    function setDC(t){var a=$('dcSmall'),b=$('dcBadge');if(a)a.textContent=t;if(b)b.textContent=t}
+    fetch('https://discord.com/api/guilds/1525359528659652669/widget.json',{signal:AbortSignal.timeout(5000)})
+      .then(function(r){if(!r.ok)throw Error();return r.json()})
+      .then(function(d){setDC('🟢 '+(d.presence_count||0)+' online · '+(d.members?d.members.length:0)+' members')})
+      .catch(function(){
+        fetch('https://discord.com/api/v9/invites/thecoast?with_counts=true',{signal:AbortSignal.timeout(5000)})
+          .then(function(r){if(!r.ok)throw Error();return r.json()})
+          .then(function(d){setDC('🟢 '+(d.approximate_presence_count||0)+' online · '+(d.approximate_member_count||0)+' members')})
+          .catch(function(){setDC('Join discord.gg/thecoast!')})
+      });
+  }
 
   // ═══ INIT ═══
   function init(){
@@ -1086,4 +1113,4 @@ body{
   // Cross-tab logout sync
   window.addEventListener('storage',function(e){if(e.key==='discord_user'&&!e.newValue){DISCORD_USER=null;DISCORD_TOKEN=null;HAS_VERIFIED_ROLE=false;updateHomeLogin();updateMobileLogin();updateDashFromDiscord();}});
 })();
-</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1ba48df7a036054',t:'MTc4NDEzNDQyMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1ba4c741f9d6553',t:'MTc4NDEzNDU2Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
