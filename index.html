@@ -285,7 +285,7 @@ body{
 .nav-bar{background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;padding:8px 18px;margin-top:14px;background:rgba(0,0,0,.4);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--b);border-radius:var(--rp);gap:6px;flex-wrap:wrap;box-shadow:var(--sh)}
 .nav-logo{cursor:pointer;display:flex;align-items:center;flex-shrink:0}
 .nav-logo img{height:42px;width:auto;border-radius:9px;box-shadow:0 0 18px rgba(242,129,61,.3)}
-.nav-links{display:flex;gap:1px;flex-wrap:wrap}
+.nav-links{display:flex;flex:1;align-items:center;gap:5px;flex-wrap:wrap}
 .nav-links a{display:inline-flex;align-items:center;gap:4px;color:#eeeeee;text-decoration:none;padding:8px 12px;border-radius:var(--rp);font-size:.82rem;font-weight:500;transition:var(--e);cursor:pointer;white-space:nowrap}
 .nav-links a svg{width:14px;height:14px;opacity:.7;transition:var(--e)}
 .nav-links a:hover{color:#fff;background:rgba(255,255,255,.1)}
@@ -296,7 +296,7 @@ body{
 .nav-links a[data-nav="rulebook"].active{background:rgba(255,68,68,.24);color:#ff6868;box-shadow:inset 0 0 0 2px #ff4444,0 0 12px rgba(255,68,68,.22)}
 .nav-links a[data-nav="shop"]{background:rgba(255,213,74,.16);color:#ffd54a;font-weight:600}
 .nav-links a[data-nav="shop"].active{background:rgba(255,213,74,.24);color:#ffd54a;box-shadow:inset 0 0 0 2px #ffd54a,0 0 12px rgba(255,213,74,.22)}
-.nav-links .nav-connect{margin-left:8px;background:#5865f2;color:#fff;font-weight:800;box-shadow:0 5px 18px rgba(88,101,242,.32);border:1px solid rgba(255,255,255,.16)}
+.nav-links .nav-connect{margin-left:auto;background:#5865f2;color:#fff;font-weight:800;box-shadow:0 5px 18px rgba(88,101,242,.32);border:1px solid rgba(255,255,255,.16)}
 .nav-links .nav-connect:hover{background:#4752c4;color:#fff;transform:translateY(-1px);box-shadow:0 8px 24px rgba(88,101,242,.42)}
 .nav-links .nav-connect.logged-in{background:#243047;border-color:#3cb878;box-shadow:inset 0 0 0 1px rgba(60,184,120,.22)}
 .nav-connect-avatar{display:none;width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.65)}
@@ -684,7 +684,7 @@ body{
 </div><div class="page" id="pg-wiki">
   <div class="section">
     <h2 class="sh2" style="text-align:center">Getting Started</h2>
-    <p class="sd2">Everything you need to join The Coast Roleplay and start playing.</p>
+    <p class="sd2" style="text-align:center">Everything you need to join The Coast Roleplay and start playing.</p>
     
     <div class="card" style="margin-bottom:30px">
       <h3 style="font-size:1.3rem;margin-bottom:20px;color:var(--a)">📥 How to Install FiveM</h3>
@@ -728,7 +728,7 @@ body{
 </div>
 
 <div class="page" id="pg-rulebook">
-  <div class="section"><h2 class="sh2" style="text-align:center">Server Rulebook</h2><p class="sd2">Every player must follow these rules. Breaking rules leads to warnings. <strong>6 warnings = automatic permanent ban.</strong> If you have never played FiveM before, please read each rule carefully — the explanations will help you understand what is expected.</p>
+  <div class="section"><h2 class="sh2" style="text-align:center">Server Rulebook</h2><p class="sd2" style="text-align:center">Every player must follow these rules. Breaking rules leads to warnings. <strong>6 warnings = automatic permanent ban.</strong> If you have never played FiveM before, please read each rule carefully — the explanations will help you understand what is expected.</p>
     <nav class="rtoc"><a href="#r-gen">General</a><a href="#r-rp">Roleplay</a><a href="#r-vdm">VDM/RDM</a><a href="#r-meta">Metagaming</a><a href="#r-combat">Combat</a><a href="#r-veh">Vehicles</a><a href="#r-econ">Economy</a><a href="#r-staff">Staff</a><a href="#r-dc">Discord</a></nav>
     <article class="rb" id="r-gen"><h3><span class="rlvl lc">Critical</span> General Conduct</h3><ul class="rlst">
       <li><strong>Respect everyone at all times.</strong><span class="rr">Racism, homophobia, hate speech, sexism, or any form of discrimination or harassment is <strong>zero tolerance</strong>. You will be permanently banned instantly with no warning and no appeal. This includes voice chat, text chat, and any form of communication.</span></li>
@@ -1231,4 +1231,4 @@ body{
   window.addEventListener('storage',function(e){if(e.key==='discord_user'&&!e.newValue){DISCORD_USER=null;DISCORD_TOKEN=null;HAS_VERIFIED_ROLE=false;updateHomeLogin();updateMobileLogin();updateDashFromDiscord();}});
 })();
 </script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1ba53539a07ede2',t:'MTc4NDEzNDg0OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1bbf94b1ad9c0d8',t:'MTc4NDE1MjEzMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1bbfd0d5891955f',t:'MTc4NDE1MjI4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
